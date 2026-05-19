@@ -8,355 +8,547 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/feather-icons"></script>
   <script src="js/config.js"></script>
+  <style>
+    /* Advanced Flip Card Styles */
+    .card-container {
+      perspective: 1500px;
+      height: 320px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .card-container:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .card-front {
+      background: linear-gradient(145deg, #111111, #0a0a0a);
+    }
+
+    .card-back {
+      background: linear-gradient(145deg, #0a0a0a, #161616);
+      transform: rotateY(180deg);
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .float-icon {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    /* Glow Effects */
+    .glow-yellow:hover .card-back { border-color: rgba(250, 204, 21, 0.4); box-shadow: 0 0 40px rgba(250, 204, 21, 0.1); }
+    .glow-blue:hover .card-back { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 0 40px rgba(59, 130, 246, 0.1); }
+    .glow-purple:hover .card-back { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 0 40px rgba(168, 85, 247, 0.1); }
+    .glow-pink:hover .card-back { border-color: rgba(236, 72, 153, 0.4); box-shadow: 0 0 40px rgba(236, 72, 153, 0.1); }
+    .glow-green:hover .card-back { border-color: rgba(34, 197, 94, 0.4); box-shadow: 0 0 40px rgba(34, 197, 94, 0.1); }
+    .glow-orange:hover .card-back { border-color: rgba(251, 146, 60, 0.4); box-shadow: 0 0 40px rgba(251, 146, 60, 0.1); }
+    .glow-cyan:hover .card-back { border-color: rgba(6, 182, 212, 0.4); box-shadow: 0 0 40px rgba(6, 182, 212, 0.1); }
+    .glow-amber:hover .card-back { border-color: rgba(251, 191, 36, 0.4); box-shadow: 0 0 40px rgba(251, 191, 36, 0.1); }
+    .glow-red:hover .card-back { border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 0 40px rgba(239, 68, 68, 0.1); }
+    .glow-indigo:hover .card-back { border-color: rgba(99, 102, 241, 0.4); box-shadow: 0 0 40px rgba(99, 102, 241, 0.1); }
+    .glow-teal:hover .card-back { border-color: rgba(20, 184, 166, 0.4); box-shadow: 0 0 40px rgba(20, 184, 166, 0.1); }
+    .glow-lime:hover .card-back { border-color: rgba(132, 204, 22, 0.4); box-shadow: 0 0 40px rgba(132, 204, 22, 0.1); }
+
+    /* Reveal Animation on Swipe */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
-<body class="antialiased">
+<body class="antialiased bg-[#050505]">
 
-  <!-- Navigation (Shared) -->
-  <nav class="glass-nav sticky top-0 z-50 w-full">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-20">
-        <a href="index.html" class="flex-shrink-0 flex items-center group">
-          <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 object-contain mr-3 group-hover:scale-105 transition-transform">
-          <div class="hidden sm:block">
-            <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
-            <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
-          </div>
-        </a>
-        <div class="hidden md:flex space-x-8">
-          <a href="index.html" class="text-gray-300 hover:text-white transition">Home</a>
-          <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
-          <a href="services.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Our Services</a>
-          <a href="pricing.html" class="text-gray-300 hover:text-white transition">Pricing</a>
-          <a href="partner.html" class="text-gray-300 hover:text-white transition">Partner Program</a>
-          <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+<!-- Navigation (Original Styling) -->
+<nav class="glass-nav sticky top-0 z-50 w-full">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <a href="index.html" class="flex-shrink-0 flex items-center group">
+        <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 object-contain mr-3 group-hover:scale-105 transition-transform">
+        <div class="hidden sm:block">
+          <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
+          <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
         </div>
-        <div class="hidden md:flex items-center space-x-4">
-          <a href="login.html" class="btn-primary-theme">Login</a>
-        </div>
+      </a>
+      <div class="hidden md:flex space-x-8">
+        <a href="index.html" class="text-gray-300 hover:text-white transition">Home</a>
+        <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
+        <a href="services.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Our Services</a>
+        <a href="pricing.html" class="text-gray-300 hover:text-white transition">Pricing</a>
+        <a href="partner.html" class="text-gray-300 hover:text-white transition">Partner Program</a>
+        <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+      </div>
+      <div class="hidden md:flex items-center space-x-4">
+        <a href="login.html" class="btn-primary-theme">Login</a>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <main class="py-24 relative z-10 bg-[#0A0A0A]">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <!-- Section Heading -->
-      <h2 class="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.5em] mb-4">THE VELVORAX ECOSYSTEM</h2>
-      <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 mb-6 leading-tight">Elevate Your Digital Frontier</h1>
-      <p class="text-xl text-gray-300 mb-20 max-w-2xl mx-auto font-light">Strategic innovation and autonomous solutions designed for the modern visionary.</p>
+<main class="py-24 relative z-10 bg-[#0A0A0A]">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <!-- Section Heading -->
+    <h2 class="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.5em] mb-4">THE VELVORAX ECOSYSTEM</h2>
+    <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 mb-6 leading-tight">Elevate Your Digital Frontier</h1>
+    <p class="text-xl text-gray-300 mb-20 max-w-2xl mx-auto font-light">Strategic innovation and autonomous solutions designed for the modern visionary.</p>
 
-      <!-- Services Grid (Attractive Layout) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- 1. Website & Web Development -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-yellow-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,215,0,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="layout" class="text-yellow-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Website & Web Development</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Website Development</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Business & E-Commerce</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Landing Pages & Portfolios</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Custom Web Applications</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Redesign & Maintenance</li>
-          </ul>
-        </div>
+    <!-- Services Grid (12 Advanced Animated Cards) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <!-- 2. Mobile App Development -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-blue-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-blue-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="smartphone" class="text-blue-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Mobile App Development</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> Android & iOS Apps</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> Hybrid & Flutter Apps</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> React Native Solutions</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> App Maintenance</li>
-          </ul>
-        </div>
-
-        <!-- 3. Software Development -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-purple-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-purple-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="code" class="text-purple-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Software Development</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Custom Software / CRM / ERP</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Billing & Inventory Systems</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> HR Management (HRMS)</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Educational Software</li>
-          </ul>
-        </div>
-
-        <!-- 4. UI/UX & Design -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-pink-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(236,72,153,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-pink-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="pen-tool" class="text-pink-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">UI/UX & Design</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> UI/UX for Web & Mobile</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Graphic & Logo Design</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Brand Identity Systems</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Social Media Creatives</li>
-          </ul>
-        </div>
-
-        <!-- 5. Digital Marketing -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-green-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-green-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="trending-up" class="text-green-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Digital Marketing</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> SEO & Content Marketing</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Google, FB & Insta Ads</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Social Media & YouTube</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Lead Generation</li>
-          </ul>
-        </div>
-
-        <!-- 6. Business Automation -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-orange-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(251,146,60,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-orange-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="zap" class="text-orange-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Business Automation</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> CRM & Sales Funnels</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Email & WhatsApp Automation</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Marketing Automation</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Lead Tracking Systems</li>
-          </ul>
-        </div>
-
-        <!-- 7. IT & Technical Services -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-cyan-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-cyan-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="server" class="text-cyan-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">IT & Technical Services</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> Cloud Solutions & Hosting</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> Server Setup & API Dev</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> System Integration</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> IT Consulting</li>
-          </ul>
-        </div>
-
-        <!-- 8. Advanced Technologies -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-indigo-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(129,140,248,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-indigo-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="cpu" class="text-indigo-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Advanced Technologies</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> AI Integration & ML</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Chatbot Development</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Data Analytics</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Automation Tools</li>
-          </ul>
-        </div>
-
-        <!-- 9. Testing & Support -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-red-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(239,68,68,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-red-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="shield" class="text-red-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Testing & Support</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Software & QA Testing</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Bug Fixing</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Technical Support</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Maintenance & Support</li>
-          </ul>
-        </div>
-
-        <!-- 10. E-Commerce & Sales Systems -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-amber-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(251,191,36,0.05)] text-left flex flex-col">
-          <div class="w-11 h-11 bg-amber-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="shopping-cart" class="text-amber-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">E-Commerce & Sales</h3>
-          <ul class="text-xs text-gray-400 space-y-2 flex-1">
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> E-Commerce Setup</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Payment Integrations</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Order Management</li>
-            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Marketplace Integration</li>
-          </ul>
-        </div>
-
-        <!-- 11. Branding & Growth -->
-        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-yellow-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,215,0,0.05)] text-left flex flex-col lg:col-span-2">
-          <div class="w-11 h-11 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-            <i data-feather="award" class="text-yellow-400 w-6 h-6"></i>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-4">Branding & Growth</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <ul class="text-xs text-gray-400 space-y-2">
-              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Brand Strategy</li>
-              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Business Consulting</li>
-            </ul>
-            <ul class="text-xs text-gray-400 space-y-2">
-              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Startup & Growth Support</li>
-              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Performance Optimization</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-  
-  
-
-  
-
-
-  
-
-
-  
-  
-
-
-  <!-- PREMIER FOOTER -->
-  
-  
-
-
-  <!-- WORLD CLASS PREMIER FOOTER -->
-  
-  
-
-
-  <!-- COMPACT MODERN FOOTER -->
-  
-  
-
-
-  <!-- COMPACT MODERN FOOTER -->
-  
-  <!-- COMPACT MODERN FOOTER -->
-  
-
-  <script>feather.replace();</script>
-
-  <!-- COMPACT MODERN FOOTER -->
-    
-    
-
-
-    <!-- Enterprise Multi-Column Footer -->
-    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
-      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
-      
-      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
-        <!-- Brand Column -->
-        <div class="lg:col-span-1">
-          <div class="flex items-center mb-6">
-            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
-            <div>
-              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
-              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+      <!-- 1. Web Development -->
+      <div class="card-container glow-yellow">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-yellow-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="layout" class="text-yellow-400 w-8 h-8"></i>
             </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Web Development</h3>
+            <p class="text-[10px] text-yellow-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
           </div>
-          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
-            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
-          </p>
-          <div class="flex space-x-4 text-gray-600">
-            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
-            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
-              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
-            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
-            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Solutions</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-yellow-400 mr-3"></i> Full-stack Websites</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-yellow-400 mr-3"></i> E-Commerce Engines</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-yellow-400 mr-3"></i> Landing Pages</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-yellow-400 mr-3"></i> Custom Web Apps</li>
+            </ul>
           </div>
         </div>
+      </div>
 
-        <!-- Product Column -->
-        <div>
-          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
-          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
-            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
-            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
-            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
-            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
-          </ul>
+      <!-- 2. Mobile Applications -->
+      <div class="card-container glow-blue">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-blue-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon" style="animation-delay: 0.5s">
+              <i data-feather="smartphone" class="text-blue-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Mobile Applications</h3>
+            <p class="text-[10px] text-blue-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Mobile Tech</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-blue-400 mr-3"></i> Native iOS & Android</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-blue-400 mr-3"></i> Flutter Apps</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-blue-400 mr-3"></i> React Native</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-blue-400 mr-3"></i> UI/UX Design</li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <!-- Solutions Column -->
-        <div>
-          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
-          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
-            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
-            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
-            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
-          </ul>
+      <!-- 3. Software Engineering -->
+      <div class="card-container glow-purple">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-purple-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon" style="animation-delay: 1s">
+              <i data-feather="code" class="text-purple-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Software Engineering</h3>
+            <p class="text-[10px] text-purple-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Enterprise</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-purple-400 mr-3"></i> Custom CRM & ERP</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-purple-400 mr-3"></i> Billing Systems</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-purple-400 mr-3"></i> HRMS Platforms</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-purple-400 mr-3"></i> API Architecture</li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <!-- Contact Column -->
-        <div class="lg:col-span-1">
-          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
-          <ul class="space-y-4 text-[11px]">
-            <li>
-              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
-                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
-                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
-              </a>
-            </li>
-            <li>
-              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
-                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
-                <span class="font-bold tracking-widest">+91 9985201116</span>
-              </a>
-            </li>
-            <li>
-              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
-                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
-                <span class="font-bold tracking-widest leading-relaxed">
+      <!-- 4. UI/UX Design -->
+      <div class="card-container glow-pink">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-pink-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon" style="animation-delay: 1.5s">
+              <i data-feather="pen-tool" class="text-pink-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">UI/UX Design</h3>
+            <p class="text-[10px] text-pink-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Visuals</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-pink-400 mr-3"></i> Product Design</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-pink-400 mr-3"></i> Branding & Logos</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-pink-400 mr-3"></i> Motion Graphics</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-pink-400 mr-3"></i> Design Systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Growth Marketing -->
+      <div class="card-container glow-green">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-green-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="trending-up" class="text-green-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Growth Marketing</h3>
+            <p class="text-[10px] text-green-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Marketing</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-green-400 mr-3"></i> SEO Mastery</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-green-400 mr-3"></i> Paid Ad Campaigns</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-green-400 mr-3"></i> Content Strategy</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-green-400 mr-3"></i> Lead Generation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Business Automation -->
+      <div class="card-container glow-orange">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-orange-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="zap" class="text-orange-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Automation</h3>
+            <p class="text-[10px] text-orange-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Efficiency</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-orange-400 mr-3"></i> AI Workflow Dev</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-orange-400 mr-3"></i> WhatsApp Bots</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-orange-400 mr-3"></i> CRM Automations</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-orange-400 mr-3"></i> Funnel Optimization</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Advanced Technologies -->
+      <div class="card-container glow-cyan">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-cyan-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="cpu" class="text-cyan-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">AI & Analytics</h3>
+            <p class="text-[10px] text-cyan-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Future Tech</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-cyan-400 mr-3"></i> Machine Learning</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-cyan-400 mr-3"></i> Chatbot Dev</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-cyan-400 mr-3"></i> Data Analytics</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-cyan-400 mr-3"></i> Neural Networks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. IT Infrastructure -->
+      <div class="card-container glow-amber">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-amber-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="server" class="text-amber-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">IT Infrastructure</h3>
+            <p class="text-[10px] text-amber-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Systems</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-amber-400 mr-3"></i> Cloud Hosting</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-amber-400 mr-3"></i> Server Setup</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-amber-400 mr-3"></i> System Integration</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-amber-400 mr-3"></i> IT Consulting</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Cybersecurity -->
+      <div class="card-container glow-red">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-red-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="shield" class="text-red-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Cybersecurity</h3>
+            <p class="text-[10px] text-red-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Protection</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-red-400 mr-3"></i> Threat Detection</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-red-400 mr-3"></i> Penetration Testing</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-red-400 mr-3"></i> SSL & Encryption</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-red-400 mr-3"></i> Security Audits</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. E-Commerce Solutions -->
+      <div class="card-container glow-indigo">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-indigo-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="shopping-cart" class="text-indigo-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">E-Commerce</h3>
+            <p class="text-[10px] text-indigo-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Commerce</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-indigo-400 mr-3"></i> Multi-vendor Setup</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-indigo-400 mr-3"></i> Payment Gateways</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-indigo-400 mr-3"></i> Inventory Systems</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-indigo-400 mr-3"></i> B2B Platforms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. QA & Testing -->
+      <div class="card-container glow-teal">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-teal-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="layers" class="text-teal-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">QA & Testing</h3>
+            <p class="text-[10px] text-teal-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Quality</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-teal-400 mr-3"></i> Unit Testing</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-teal-400 mr-3"></i> UI/UX Audits</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-teal-400 mr-3"></i> Load Performance</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-teal-400 mr-3"></i> Manual/Auto QA</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Branding & Identity -->
+      <div class="card-container glow-lime">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="w-16 h-16 bg-lime-400/10 rounded-2xl flex items-center justify-center mb-6 float-icon">
+              <i data-feather="award" class="text-lime-400 w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white tracking-tight">Branding</h3>
+            <p class="text-[10px] text-lime-500 font-black uppercase tracking-widest mt-4">Hover to explore</p>
+          </div>
+          <div class="card-back">
+            <h3 class="text-md font-black text-white mb-6 uppercase tracking-widest border-b border-white/10 pb-2 w-full text-left">Identity</h3>
+            <ul class="space-y-3 text-xs text-gray-400 font-bold text-left">
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-lime-400 mr-3"></i> Brand Strategy</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-lime-400 mr-3"></i> Logo Creation</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-lime-400 mr-3"></i> Style Guides</li>
+              <li class="flex items-center"><i data-feather="check-circle" class="w-3 h-3 text-lime-400 mr-3"></i> Market Positioning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+
+
+
+<!-- PREMIER FOOTER -->
+
+
+
+
+<!-- WORLD CLASS PREMIER FOOTER -->
+
+
+
+
+<!-- COMPACT MODERN FOOTER -->
+
+
+
+
+<!-- COMPACT MODERN FOOTER -->
+
+<!-- COMPACT MODERN FOOTER -->
+
+
+<script>feather.replace();</script>
+
+<!-- COMPACT MODERN FOOTER -->
+
+
+
+
+<!-- Enterprise Multi-Column Footer -->
+<footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+  <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+
+  <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+    <!-- Brand Column -->
+    <div class="lg:col-span-1">
+      <div class="flex items-center mb-6">
+        <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+        <div>
+          <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+          <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+        </div>
+      </div>
+      <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+        Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+      </p>
+      <div class="flex space-x-4 text-gray-600">
+        <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+        <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+
+    <!-- Product Column -->
+    <div>
+      <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+      <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+        <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+        <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+        <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+        <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+      </ul>
+    </div>
+
+    <!-- Solutions Column -->
+    <div>
+      <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+      <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+        <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+        <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+        <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact Column -->
+    <div class="lg:col-span-1">
+      <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+      <ul class="space-y-4 text-[11px]">
+        <li>
+          <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+            <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+            <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+          </a>
+        </li>
+        <li>
+          <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+            <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+            <span class="font-bold tracking-widest">+91 9985201116</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+            <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+            <span class="font-bold tracking-widest leading-relaxed">
                   Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
                   Miyapur, Hyderabad, Telangana - 500049
                 </span>
-              </a>
-            </li>
-          </ul>
-        </div>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-        <!-- Company Column -->
-        <div>
-          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
-          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
-            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
-            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
-            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
-            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
-          </ul>
-        </div>
-      </div>
+    <!-- Company Column -->
+    <div>
+      <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+      <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+        <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+        <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+        <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+        <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+      </ul>
+    </div>
+  </div>
 
-      <!-- Bottom Bar -->
-      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
-          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
-        </p>
-        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
-          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
-          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
-          <span class="text-green-500 flex items-center">
+  <!-- Bottom Bar -->
+  <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+    <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+      &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+    </p>
+    <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+      <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+      <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+      <span class="text-green-500 flex items-center">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
             SYSTEMS OPERATIONAL
           </span>
-        </div>
-      </div>
-    </footer>
-    <script>if(window.feather) feather.replace();</script>
+    </div>
+  </div>
+</footer>
+<script>if(window.feather) feather.replace();</script>
 
-</body>
-</html>
+<script>
+  feather.replace();
 
+  // Scroll Reveal Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card-container').forEach(card => {
+    card.classList.add('reveal');
+    observer.observe(card);
+  });
+</script>
 </body>
 </html>
