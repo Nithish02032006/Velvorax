@@ -63,7 +63,9 @@ const sendRegistrationNotification = async (registrationData, pdfPath) => {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p>Please log in to the Super Admin dashboard to <b>Accept</b> or <b>Decline</b> this registration. The full details are attached as a PDF.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="http://localhost:5000/accounts.html" style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Registration</a>
+                    // <a href="http://localhost:5000/accounts.html" 
+                   <a href="https://velvorax.onrender.com/accounts.html"
+                    style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Registration</a>
                 </div>
                 <p style="font-size: 12px; color: #777; margin-top: 30px;">Automated by Velvorax Backend Services</p>
             </div>
@@ -138,7 +140,9 @@ const sendApprovalNotification = async (toEmail, userName, status) => {
                 ${isApproved ? `
                 <p>You can now log in to your dashboard to start managing your projects and data.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="http://localhost:5000/login.html" style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Login to Dashboard</a>
+                    // <a href="http://localhost:5000/login.html" 
+                  <a href="https://velvorax.onrender.com/login.html"
+                    style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Login to Dashboard</a>
                 </div>
                 ` : `
                 <p>If you believe this is a mistake or would like to provide more information, please reply to this email.</p>
