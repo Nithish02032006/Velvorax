@@ -54,7 +54,7 @@ const sendRegistrationNotification = async (registrationData, pdfPath) => {
             <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
                 <h2 style="color: #FFD700; text-align: center;">New Lead: Action Required</h2>
                 <p>Hello Super Admin,</p>
-                <p>A new client has just completed the <b>Get Started</b> form on Velvorax.AI and is <b>awaiting your approval</b>.</p>
+                <p>A new client has just completed the <b>Get Started</b> form on Velvorax Software Solutions and is <b>awaiting your approval</b>.</p>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p><b>Client Name:</b> ${registrationData.name}</p>
                 <p><b>Company:</b> ${registrationData.companyName}</p>
@@ -63,8 +63,8 @@ const sendRegistrationNotification = async (registrationData, pdfPath) => {
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p>Please log in to the Super Admin dashboard to <b>Accept</b> or <b>Decline</b> this registration. The full details are attached as a PDF.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    // <a href="http://localhost:5000/accounts.html" 
-                   <a href="https://velvorax.onrender.com/accounts.html"
+                    <a href="http://localhost:5000/accounts.html" 
+                //    <a href="https://velvorax.onrender.com/accounts.html"
                     style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Registration</a>
                 </div>
                 <p style="font-size: 12px; color: #777; margin-top: 30px;">Automated by Velvorax Backend Services</p>
@@ -125,14 +125,14 @@ const sendApprovalNotification = async (toEmail, userName, status) => {
         to: toEmail,
         subject: subject,
         text: isApproved 
-            ? `Hello ${userName}, Great news! Your account on Velvorax.AI has been approved. You can now log in to access your dashboard.`
-            : `Hello ${userName}, We regret to inform you that your registration request on Velvorax.AI has been declined at this time.`,
+            ? `Hello ${userName}, Great news! Your account on Velvorax Software Solutions has been approved. You can now log in to access your dashboard.`
+            : `Hello ${userName}, We regret to inform you that your registration request on Velvorax Software Solutions has been declined at this time.`,
         html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
                 <h2 style="color: ${isApproved ? '#FFD700' : '#ef4444'}; text-align: center;">${isApproved ? 'Account Approved!' : 'Account Update'}</h2>
                 <p>Hello ${userName},</p>
                 <p>${isApproved 
-                    ? 'Great news! Your account on <b>Velvorax.AI</b> has been reviewed and <b>approved</b> by our team.' 
+                    ? 'Great news! Your account on <b>Velvorax Software Solutions</b> has been reviewed and <b>approved</b> by our team.'
                     : 'Thank you for your interest in Velvorax. We have reviewed your registration request, and unfortunately, we are unable to approve your account at this time.'}</p>
                 <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
                 <p><b>Status:</b> <span style="color: ${isApproved ? '#10b981' : '#ef4444'}; font-weight: bold;">${status}</span></p>
@@ -140,8 +140,8 @@ const sendApprovalNotification = async (toEmail, userName, status) => {
                 ${isApproved ? `
                 <p>You can now log in to your dashboard to start managing your projects and data.</p>
                 <div style="text-align: center; margin-top: 30px;">
-                    // <a href="http://localhost:5000/login.html" 
-                  <a href="https://velvorax.onrender.com/login.html"
+                    <a href="http://localhost:5000/login.html" 
+                //   <a href="https://velvorax.onrender.com/login.html"
                     style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Login to Dashboard</a>
                 </div>
                 ` : `

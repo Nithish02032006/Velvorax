@@ -121,6 +121,37 @@ const VelvoraxAuth = {
 
     },
 
+    async clearSessions(email, password, selectedRole) {
+        try {
+            let clearUrl = '/api/auth/clear-sessions';
+            if (selectedRole === 'staff') {
+                clearUrl = '/api/user-auth/clear-sessions';
+            }
+
+            const response = await fetch(
+                CONFIG.API_BASE_URL + clearUrl,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+                return { success: true, message: result.msg };
+            }
+
+            return { success: false, message: result.msg || 'Failed to clear sessions.' };
+        } catch (err) {
+            console.error('Clear sessions error:', err);
+            return { success: false, message: 'Server connection failed.' };
+        }
+    },
+
     logout() {
 
         localStorage.clear();

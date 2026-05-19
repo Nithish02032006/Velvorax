@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const StandardUser = require('../models/StandardUser');
-const { sendRegistrationConfirmation } = require('../utils/emailService');
+const { sendRegistrationConfirmation, sendApprovalNotification } = require('../utils/emailService');
 
 // Helper to find the Company/Business model dynamically
 const getCompanyModel = () => {
@@ -76,17 +76,31 @@ router.post('/login', async (req, res) => {
             }
         };
 
-        // if (user.isLoggedIn && user.activeToken) {
-        //     try {
-        //         jwt.verify(user.activeToken, process.env.JWT_SECRET);
-        //         return res.status(403).json({ msg: 'User already logged in on another device' });
-        //     } catch (verifyErr) {
-        //         console.log('Stale staff session detected, clearing stored login state:', verifyErr.message);
-        //         user.isLoggedIn = false;
-        //         user.activeToken = null;
-        //         await user.save();
-        //     }
-        // }
+    if (user.isLoggedIn && user.activeToken) {
+    try {
+        jwt.verify(user.activeToken, process.env.JWT_SECRET);
+
+        // If last activity older than 15 mins → clear stale session
+        const lastActive = user.updatedAt || user.createdAt;
+        const diff = Date.now() - new Date(lastActive).getTime();
+
+        if (diff < 15 * 60 * 1000) {
+            return res.status(403).json({
+                msg: 'User already logged in on another device'
+            });
+        }
+
+        // stale session
+        user.isLoggedIn = false;
+        user.activeToken = null;
+        await user.save();
+
+    } catch (verifyErr) {
+        user.isLoggedIn = false;
+        user.activeToken = null;
+        await user.save();
+    }
+}
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
         user.isLoggedIn = true;
@@ -125,6 +139,12 @@ router.put('/approve/:id', async (req, res) => {
         if (!user) return res.status(404).json({ msg: 'User not found' });
         user.status = 'approved';
         await user.save();
+
+        // Send approval email
+        sendApprovalNotification(user.email, user.name, 'Approved').catch(err =>
+            console.error('Approval email error:', err.message)
+        );
+
         res.json({ msg: 'User approved successfully' });
     } catch (err) {
         res.status(500).json({ msg: 'Server Error' });
@@ -135,6 +155,12 @@ router.delete('/reject/:id', async (req, res) => {
     try {
         const user = await StandardUser.findById(req.params.id);
         if (!user) return res.status(404).json({ msg: 'User not found' });
+
+        // Send rejection email before deleting
+        sendApprovalNotification(user.email, user.name, 'Rejected').catch(err =>
+            console.error('Rejection email error:', err.message)
+        );
+
         await user.deleteOne();
         res.json({ msg: 'User rejected successfully' });
     } catch (err) {
@@ -151,6 +177,26 @@ router.post('/logout', auth, async (req, res) => {
             await user.save();
         }
         res.json({ msg: 'Logged out successfully' });
+    } catch (err) {
+        res.status(500).json({ msg: 'Server Error' });
+    }
+});
+
+// @route   POST api/user-auth/clear-sessions
+router.post('/clear-sessions', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await StandardUser.findOne({ email });
+        if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
+
+        user.isLoggedIn = false;
+        user.activeToken = null;
+        await user.save();
+
+        res.json({ msg: 'All sessions cleared successfully. You can now login.' });
     } catch (err) {
         res.status(500).json({ msg: 'Server Error' });
     }

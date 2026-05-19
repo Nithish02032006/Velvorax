@@ -85,6 +85,8 @@ app.use('/api/tickets', require('./routes/tickets'));
 app.use('/api/cases', require('./routes/cases'));
 app.use('/api/user-auth', require('./routes/userAuth'));
 app.use('/api/admin', require('./routes/admin-users'));
+app.use('/api/reports', require('./routes/reports'));
+app.use('/api/partners', require('./routes/partners'));
 const accountsRoute = require('./routes/accounts');
 app.use('/api/accounts', accountsRoute);
 

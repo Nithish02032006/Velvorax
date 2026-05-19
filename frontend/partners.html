@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Partners - Velvorax</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = VelvoraxAuth.getUser();
+        if (!VelvoraxAuth.isAuthenticated() || user?.role !== 'super_admin') {
+          window.location.href = 'login.html';
+        }
+    </script>
+    <script src="js/config.js"></script>
+    <style>
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
+        }
+        .sidebar-link.active {
+          background: rgba(250, 204, 21, 0.1);
+          color: #facc15;
+          border-right: 2px solid #facc15;
+        }
+    </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+<!-- Sidebar -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+        <a href="dashboard-super.html" class="flex items-center group">
+            <div class="brand-logo-box group-hover:scale-105 transition-transform">
+                <img src="assets/logo.jpg" class="w-8 h-8 rounded-full" alt="Logo">
+            </div>
+            <div class="ml-3">
+                <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+                <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+            </div>
+        </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+        <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+        <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+        <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+        <a href="user-approvals.html" class="sidebar-link">
+            <i data-feather="user-check" class="w-4 h-4 mr-3"></i>
+            User Approvals
+        </a>
+        <a href="client-accounts.html" class="sidebar-link">
+            <i data-feather="briefcase" class="w-4 h-4 mr-3"></i>
+            Client Accounts
+        </a>
+        <a href="partners.html" class="sidebar-link active">
+            <i data-feather="award" class="w-4 h-4 mr-3"></i>
+            Program Partners
+        </a>
+        <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+        <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+        <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+        <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+        <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+        <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+            <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+        </button>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-8">
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <i data-feather="award" class="w-6 h-6 text-yellow-400"></i>
+                <h1 class="text-3xl font-black text-white tracking-tight">Program Partners</h1>
+            </div>
+            <p class="text-sm text-gray-500">Partner applications from the 'Partner Program' page</p>
+        </div>
+        <button id="refreshPartnersBtn" onclick="fetchPartners()" class="px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-bold transition flex items-center">
+            <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh
+        </button>
+    </div>
+
+    <div class="glass-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-white/[0.02] border-b border-white/5">
+                    <tr class="text-[11px] uppercase tracking-widest text-gray-500">
+                        <th class="px-6 py-5">Partner Name</th>
+                        <th class="px-6 py-5">Company / Website</th>
+                        <th class="px-6 py-5">Program Type</th>
+                        <th class="px-6 py-5">Status</th>
+                        <th class="px-6 py-5 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="partners-table-body">
+                    <tr><td colspan="5" class="text-center py-20 text-gray-500">Fetching partners...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Details Modal -->
+<div id="detailsModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden z-[100] flex items-center justify-center p-4">
+    <div class="glass-card p-8 w-full max-w-2xl border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-start mb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 bg-yellow-400/10 rounded-2xl flex items-center justify-center border border-yellow-400/20">
+                    <i data-feather="award" class="w-8 h-8 text-yellow-400"></i>
+                </div>
+                <div>
+                    <h3 id="detailPartnerName" class="text-2xl font-black text-white">Partner Name</h3>
+                    <p id="detailProgramType" class="text-sm text-yellow-400 uppercase font-bold tracking-widest">Program Type</p>
+                </div>
+            </div>
+            <button onclick="toggleModal('detailsModal', true)" class="text-gray-500 hover:text-white transition"><i data-feather="x"></i></button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 mb-8">
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Company Details</p>
+                    <p id="detailCompanyName" class="text-white font-bold text-lg">Company Name</p>
+                    <a id="detailWebsite" href="#" target="_blank" class="text-xs text-yellow-500 hover:underline">www.website.com</a>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Contact Info</p>
+                    <p id="detailEmail" class="text-white text-sm">email@test.com</p>
+                    <p id="detailPhone" class="text-white text-sm">Phone</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Application Date</p>
+                    <p id="detailDate" class="text-white text-sm">Date</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Current Status</p>
+                    <span id="detailStatus" class="px-3 py-1 rounded-full font-bold text-[10px] uppercase">Status</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/5 rounded-2xl p-6 border border-white/5 mb-8">
+            <p class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest mb-3">Business Brief / Message</p>
+            <p id="detailMessage" class="text-gray-400 text-sm leading-relaxed italic italic">"No message provided."</p>
+        </div>
+
+        <div class="flex gap-4">
+            <button class="flex-1 py-4 bg-yellow-400 text-black font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition shadow-lg shadow-yellow-500/20">Accept Partner</button>
+            <button class="flex-1 py-4 bg-white/5 text-gray-400 font-black uppercase tracking-widest rounded-2xl border border-white/10 hover:bg-white/10 transition">Reject Application</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    feather.replace();
+    let currentPartners = [];
+
+    async function fetchPartners() {
+        const refreshBtn = document.getElementById('refreshPartnersBtn');
+        const refreshIcon = refreshBtn?.querySelector('svg') || refreshBtn?.querySelector('i');
+        if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(CONFIG.API_BASE_URL + '/api/partners', {
+                headers: { 'x-auth-token': token }
+            });
+
+            if (!res.ok) throw new Error('Failed to fetch partners');
+
+            currentPartners = await res.json();
+            const tbody = document.getElementById('partners-table-body');
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(currentPartners) || currentPartners.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-20 text-gray-500">No partner applications found.</td></tr>';
+                return;
+            }
+
+            currentPartners.forEach(p => {
+                const status = p.status || 'Pending';
+                const statusClass = status === 'Accepted' ? 'bg-green-500/10 text-green-400' : status === 'Pending' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-red-400';
+
+                tbody.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
+                        <td class="px-6 py-5">
+                            <div class="font-bold text-white text-lg">${p.name}</div>
+                            <div class="text-xs text-gray-500">${p.email}</div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="text-white font-black">${p.companyName}</div>
+                            <div class="text-[10px] text-yellow-500 hover:underline cursor-pointer">${p.website || 'No website'}</div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <span class="text-xs font-bold text-gray-400 bg-white/5 px-3 py-1 rounded-lg border border-white/5">${p.programType}</span>
+                        </td>
+                        <td class="px-6 py-5">
+                            <span class="px-3 py-1 rounded-full font-bold text-[10px] uppercase ${statusClass}">${status}</span>
+                        </td>
+                        <td class="px-6 py-5 text-center">
+                            <button onclick="viewDetails('${p._id}')" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition" title="View Details">
+                                <i data-feather="eye" class="w-4 h-4 text-yellow-400"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            feather.replace();
+        } catch (err) {
+            console.error(err);
+            document.getElementById('partners-table-body').innerHTML = '<tr><td colspan="5" class="text-center py-20 text-red-500">Error loading partners.</td></tr>';
+        } finally {
+            if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 500);
+        }
+    }
+
+    function viewDetails(id) {
+        const p = currentPartners.find(partner => partner._id === id);
+        if (!p) return;
+
+        document.getElementById('detailPartnerName').textContent = p.name;
+        document.getElementById('detailProgramType').textContent = p.programType;
+        document.getElementById('detailCompanyName').textContent = p.companyName;
+        document.getElementById('detailWebsite').textContent = p.website || 'No website';
+        document.getElementById('detailWebsite').href = p.website || '#';
+        document.getElementById('detailEmail').textContent = p.email;
+        document.getElementById('detailPhone').textContent = p.phone;
+        document.getElementById('detailDate').textContent = new Date(p.createdAt).toLocaleDateString();
+        document.getElementById('detailMessage').textContent = p.message ? `"${p.message}"` : "No message provided.";
+
+        const status = p.status || 'Pending';
+        const statusClass = status === 'Accepted' ? 'bg-green-500/10 text-green-400' : status === 'Pending' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-red-400';
+
+        const statusEl = document.getElementById('detailStatus');
+        statusEl.textContent = status;
+        statusEl.className = `px-3 py-1 rounded-full font-bold text-[10px] uppercase ${statusClass}`;
+
+        toggleModal('detailsModal');
+    }
+
+    function toggleModal(id, forceHide = false) {
+        const el = document.getElementById(id);
+        if (forceHide) el.classList.add('hidden');
+        else el.classList.remove('hidden');
+    }
+
+    fetchPartners();
+</script>
+</body>
+</html>

@@ -105,7 +105,8 @@ router.patch('/:id/:status', auth, async (req, res) => {
     const company = await Company.findByIdAndUpdate(id, { approvalStatus: status }, { new: true });
     if (!company) return res.status(404).json({ msg: 'Company not found' });
 
-    const user = await User.findOne({ companyId: id, role: 'admin' });
+    // Find the primary user (Business Client) for this company
+    const user = await User.findOne({ companyId: id, role: 'client' });
     if (user && (status === 'Approved' || status === 'Rejected')) {
       sendApprovalNotification(user.email, user.name, status).catch(err => {
         console.error('Failed to send approval email:', err.message);

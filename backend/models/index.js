@@ -3,6 +3,7 @@ const Deal = require('./Deal');
 const Lead = require('./Lead');
 const Task = require('./Task');
 const Ticket = require('./Ticket');
+const Account = require('./Account');
 
 // Internal CRM users (admin/staff)
 const User = require('./User');
@@ -16,6 +17,7 @@ module.exports = {
   Lead,
   Task,
   Ticket,
+  Account,
   User,
   StandardUser
 };

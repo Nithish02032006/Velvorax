@@ -79,6 +79,14 @@
     <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
     <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
     <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+    <a href="user-approvals.html" class="sidebar-link">
+        <i data-feather="user-check" class="w-4 h-4 mr-3"></i>
+        User Approvals
+    </a>
+    <a href="client-accounts.html" class="sidebar-link">
+        <i data-feather="briefcase" class="w-4 h-4 mr-3"></i>
+        Client Accounts
+    </a>
     <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
     <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
     <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
@@ -108,7 +116,10 @@
     </div>
     <div class="flex gap-3">
       <button onclick="exportToExcel()" class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-sm font-bold flex items-center gap-2 hover:bg-white/10 transition text-yellow-400">
-        <i data-feather="download" class="w-4 h-4"></i> Excel
+        <i data-feather="download" class="w-4 h-4"></i> Export Leads
+      </button>
+      <button onclick="exportAllTasks()" class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-sm font-bold flex items-center gap-2 hover:bg-white/10 transition text-blue-400">
+        <i data-feather="download-cloud" class="w-4 h-4"></i> Export Tasks
       </button>
       <button onclick="loadReportData()" class="px-8 py-3 rounded-xl bg-yellow-400 text-black text-sm font-bold shadow-lg shadow-yellow-400/20 hover:scale-105 transition">
         Refresh Data
@@ -149,13 +160,36 @@
           <th class="text-center">Pend</th>
           <th class="text-center">Priority</th>
           <th style="width: 25%">Recent Activity</th>
-          <th>Assigned By</th> <!-- New Column Header -->
+          <th>Assigned By</th>
           <th class="text-right">Progress</th>
           <th class="text-right">Actions</th>
         </tr>
         </thead>
         <tbody id="report-table-body">
         <tr><td colspan="9" class="text-center py-20 text-gray-500 italic text-lg">Fetching analytics...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="glass-card overflow-hidden mt-10">
+    <div class="p-8 border-b border-white/5 flex justify-between items-center">
+      <h4 class="text-xl font-bold text-white">All Company Tasks</h4>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+        <tr class="bg-white/[0.02]">
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold">Task Detail</th>
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold">Related Lead</th>
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold">Assignee</th>
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold text-center">Priority</th>
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold text-center">Status</th>
+          <th class="px-6 py-4 text-xs uppercase tracking-wider font-bold text-right">Due Date</th>
+        </tr>
+        </thead>
+        <tbody id="task-report-table-body">
+        <tr><td colspan="6" class="text-center py-10 text-gray-500 italic">No tasks found.</td></tr>
         </tbody>
       </table>
     </div>
@@ -175,26 +209,33 @@
 
   async function loadReportData() {
     try {
+      const refreshBtn = document.querySelector('button[onclick="loadReportData()"]');
+      if (refreshBtn) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<i data-feather="loader" class="w-4 h-4 animate-spin"></i> Refreshing...';
+        feather.replace();
+      }
+
       const token = localStorage.getItem('token');
       const user = VelvoraxAuth.getUser();
       const myId = user._id || user.id;
-
-      const isAdmin = user.role === 'super_admin' || user.role === 'admin';
 
       const [lRes, tRes] = await Promise.all([
         fetch(`${CONFIG.API_BASE_URL}/api/leads`, { headers: { 'Authorization': `Bearer ${token}` } }),
         fetch(`${CONFIG.API_BASE_URL}/api/tasks`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
 
+      if (!lRes.ok || !tRes.ok) throw new Error("Failed to fetch data");
+
       const leads = await lRes.json();
       const tasks = await tRes.json();
 
-      const targetLeads = isAdmin ? leads : leads.filter(l => String(l.assignedTo?._id || l.assignedTo) === String(myId));
-      const targetTasks = isAdmin ? tasks : tasks.filter(t => String(t.assignedTo?._id || t.assignedTo) === String(myId));
+      const targetLeads = Array.isArray(leads) ? leads : [];
+      const targetTasks = Array.isArray(tasks) ? tasks : [];
 
       leadAnalyticsData = targetLeads.map(lead => {
-        const leadTasks = tasks.filter(t => String(t.leadId?._id || t.leadId) === String(lead._id));
-        const done = leadTasks.filter(t => t.status === 'Completed').length;
+        const leadTasks = targetTasks.filter(t => String(t.leadId?._id || t.leadId) === String(lead._id));
+        const done = leadTasks.filter(t => t.status === 'Completed' || t.status === 'Done').length;
         const pend = leadTasks.length - done;
         const health = leadTasks.length > 0 ? Math.round((done / leadTasks.length) * 100) : 0;
 
@@ -226,7 +267,7 @@
           const header = `<div class="flex justify-between internal-header"><span>Task Title</span><span>Priority</span></div>`;
           const rows = list.map(t => `
             <div class="flex items-center justify-between text-[13px] py-1.5 border-b border-white/5 last:border-0">
-              <span class="text-gray-300 truncate w-40"><span class="status-dot ${t.status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500'}"></span>${t.title}</span>
+              <span class="text-gray-300 truncate w-40"><span class="status-dot ${t.status === 'Completed' || t.status === 'Done' ? 'bg-green-500' : 'bg-yellow-500'}"></span>${t.title}</span>
               <span class="text-[10px] px-2 py-0.5 rounded bg-white/5 ${t.priority === 'High' ? 'text-red-400 border border-red-900/50' : 'text-gray-500'} font-bold">${t.priority}</span>
             </div>
           `).join('');
@@ -237,7 +278,7 @@
 
         tbody.innerHTML += `
           <tr class="hover:bg-white/[0.02] transition">
-            <td>
+            <td class="px-6 py-4">
               <div class="font-bold text-white text-lg">${item.name}</div>
               <div class="text-xs text-gray-500 mt-1">${item.leadId || 'N/A'}</div>
             </td>
@@ -245,7 +286,7 @@
             <td class="text-center font-mono text-green-400 font-bold text-lg">${item.done}</td>
             <td class="text-center font-mono text-yellow-400 font-bold text-lg">${item.pend}</td>
             <td class="text-center"><span class="priority-pill ${prioClass}">${item.priority}</span></td>
-            <td class="py-6">
+            <td class="py-6 px-4">
               <div id="${uniqueId}-preview" class="space-y-1">
                 ${item.leadTasks.length > 0 ? taskListHtml(item.leadTasks.slice(0, 3)) : '<span class="text-gray-600 italic text-sm">No tasks</span>'}
                 ${item.leadTasks.length > 3 ? `<button onclick="toggleTasks('${uniqueId}')" class="text-yellow-500 text-xs font-bold mt-2 hover:underline">+ Show All</button>` : ''}
@@ -255,8 +296,8 @@
                 <button onclick="toggleTasks('${uniqueId}')" class="text-gray-500 text-xs font-bold mt-2 hover:underline">Collapse</button>
               </div>
             </td>
-            <td class="text-xs text-gray-400 italic">${item.assignedByNames || 'N/A'}</td> <!-- New Column Data -->
-            <td>
+            <td class="text-xs text-gray-400 italic px-4">${item.assignedByNames || 'N/A'}</td>
+            <td class="px-4">
               <div class="flex items-center justify-center gap-4">
                 <div class="w-24 h-2 bg-white/5 rounded-full overflow-hidden">
                   <div class="h-full ${item.health > 70 ? 'bg-green-500' : item.health > 30 ? 'bg-yellow-500' : 'bg-red-500'}" style="width: ${item.health}%"></div>
@@ -264,7 +305,7 @@
                 <span class="text-sm font-bold font-mono text-white">${item.health}%</span>
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-right px-6">
               <button onclick="exportSingleLead('${item._id}')" class="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-yellow-400 hover:text-black transition-colors group">
                 <i data-feather="download" class="w-4 h-4"></i>
               </button>
@@ -273,16 +314,59 @@
         `;
       });
 
+      // --- ALL TASKS TABLE POPULATION ---
+      const taskTbody = document.getElementById('task-report-table-body');
+      taskTbody.innerHTML = '';
+      if (targetTasks.length === 0) {
+        taskTbody.innerHTML = '<tr><td colspan="6" class="text-center py-20 text-gray-500 italic text-lg">No tasks found for the company.</td></tr>';
+      } else {
+        targetTasks.forEach(t => {
+          const statusClass = (t.status === 'Completed' || t.status === 'Done') ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500';
+          const prioClass = t.priority === 'High' ? 'bg-red-500/10 text-red-500' : t.priority === 'Medium' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-blue-500/10 text-blue-500';
+
+          taskTbody.innerHTML += `
+            <tr class="hover:bg-white/[0.02] transition border-b border-white/5">
+              <td class="px-6 py-4">
+                <div class="font-bold text-white">${t.title}</div>
+                <div class="text-[10px] text-gray-500 uppercase mt-0.5">Assigned By: ${t.assignedBy?.name || 'System'}</div>
+              </td>
+              <td class="px-6 py-4 text-sm">${t.leadId?.name || '<span class="text-gray-600 italic">None</span>'}</td>
+              <td class="px-6 py-4 text-sm font-medium text-gray-300">${t.assignedTo?.name || 'Unassigned'}</td>
+              <td class="px-6 py-4 text-center">
+                <span class="text-[10px] px-2 py-1 rounded font-bold ${prioClass}">${t.priority}</span>
+              </td>
+              <td class="px-6 py-4 text-center">
+                <span class="text-[10px] px-2 py-1 rounded font-bold ${statusClass}">${t.status}</span>
+              </td>
+              <td class="px-6 py-4 text-right text-sm text-gray-500 font-mono">
+                ${t.dueDate ? new Date(t.dueDate).toLocaleDateString() : '---'}
+              </td>
+            </tr>
+          `;
+        });
+      }
+
       document.getElementById('stat-leads').textContent = targetLeads.length;
-      document.getElementById('stat-tasks').textContent = targetTasks.filter(t => t.status !== 'Completed').length;
+      document.getElementById('stat-tasks').textContent = targetTasks.filter(t => t.status !== 'Completed' && t.status !== 'Done').length;
       const totalTasks = targetTasks.length;
       const completedTasks = targetTasks.filter(t => t.status === 'Completed').length;
       const eff = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
       document.getElementById('stat-efficiency').textContent = eff + '%';
       document.getElementById('avg-health').textContent = targetLeads.length > 0 ? Math.round(totalHealthSum / targetLeads.length) + '%' : '0%';
 
+      if (refreshBtn) {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = 'Refresh Data';
+      }
       feather.replace();
-    } catch (err) { console.error("Report Load Error:", err); }
+    } catch (err) {
+      console.error("Report Load Error:", err);
+      const refreshBtn = document.querySelector('button[onclick="loadReportData()"]');
+      if (refreshBtn) {
+        refreshBtn.disabled = false;
+        refreshBtn.textContent = 'Refresh Data';
+      }
+    }
   }
 
   function exportSingleLead(id) {
@@ -324,7 +408,8 @@
 
   function downloadCSV(filename, dataArray) {
     const csvContent = dataArray.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    // Add UTF-8 BOM for Excel compatibility
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `${filename}_${new Date().toLocaleDateString()}.csv`;
@@ -333,6 +418,40 @@
 
   function exportToExcel() {
       exportAllLeads();
+  }
+
+  async function exportAllTasks() {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/reports/tasks`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      const tasks = data.tasks;
+
+      if (!tasks || tasks.length === 0) return alert("No task data found");
+
+      const headers = ["Task Title", "Lead Name", "Status", "Priority", "Assigned To", "Assigned By", "Due Date", "Created At"];
+      const rows = [headers];
+
+      tasks.forEach(t => {
+        rows.push([
+          t.title,
+          t.leadId?.name || "N/A",
+          t.status,
+          t.priority,
+          t.assignedTo?.name || "N/A",
+          t.assignedBy?.name || "System",
+          t.dueDate ? new Date(t.dueDate).toLocaleDateString() : "N/A",
+          new Date(t.createdAt).toLocaleDateString()
+        ]);
+      });
+
+      downloadCSV(`Velvorax_Task_Report`, rows);
+    } catch (err) {
+      console.error("Export Tasks Error:", err);
+      alert("Failed to export tasks");
+    }
   }
 
   loadReportData();

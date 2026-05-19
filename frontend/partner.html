@@ -31,8 +31,83 @@
     }
   </style>
   <script src="js/config.js"></script>
+  <style>
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px); display: none; z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .glass-input {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: white;
+      width: 100%;
+      outline: none;
+      transition: all 0.3s;
+    }
+    .glass-input:focus {
+      border-color: #FFD700;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  </style>
 </head>
 <body class="antialiased bg-[#020205] text-gray-300">
+
+  <!-- Application Modal -->
+  <div id="partnerModal" class="modal-overlay">
+    <div class="glass-card p-10 border-white/10 border max-w-2xl w-full mx-4 relative">
+      <button onclick="closePartnerModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white transition">
+        <i data-feather="x"></i>
+      </button>
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-white tracking-tight">Partner Application</h2>
+        <p class="text-gray-500 text-sm">Join the Velvorax ecosystem and scale your business.</p>
+      </div>
+
+      <form id="partnerForm" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label for="pName" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Full Name</label>
+            <input type="text" id="pName" required placeholder="John Doe" class="glass-input">
+          </div>
+          <div class="space-y-2">
+            <label for="pEmail" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Email Address</label>
+            <input type="email" id="pEmail" required placeholder="john@company.com" class="glass-input">
+          </div>
+          <div class="space-y-2">
+            <label for="pPhone" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Phone Number</label>
+            <input type="tel" id="pPhone" required placeholder="+1 (555) 000-0000" class="glass-input">
+          </div>
+          <div class="space-y-2">
+            <label for="pCompany" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Company Name</label>
+            <input type="text" id="pCompany" required placeholder="Acme Inc." class="glass-input">
+          </div>
+          <div class="space-y-2">
+            <label for="pWebsite" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Website URL</label>
+            <input type="url" id="pWebsite" placeholder="https://acme.inc" class="glass-input">
+          </div>
+          <div class="space-y-2">
+            <label for="pProgram" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Partner Program</label>
+            <select id="pProgram" required class="glass-input bg-[#111115]">
+              <option value="Referral">Referral Partner</option>
+              <option value="Agency">Agency Partner</option>
+              <option value="Technology">Technology Partner</option>
+            </select>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label for="pMessage" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Business Brief / Message</label>
+          <textarea id="pMessage" rows="3" placeholder="Tell us about your business..." class="glass-input"></textarea>
+        </div>
+        <button type="submit" class="btn-primary-theme w-full py-4 text-lg shadow-2xl shadow-yellow-400/20">
+          Submit Application
+        </button>
+      </form>
+    </div>
+  </div>
 
   <!-- Navigation (Shared) -->
   <nav class="glass-nav sticky top-0 z-50 w-full">
@@ -70,7 +145,7 @@
         Join a world-class network of agencies, consultants, and developers. Together, we deliver high-performance enterprise automation that scales.
       </p>
       <div class="flex flex-col sm:flex-row justify-center gap-4">
-        <a href="#apply" class="btn-primary-theme px-10 py-4 text-lg">Apply to Join</a>
+        <button onclick="openPartnerModal()" class="btn-primary-theme px-10 py-4 text-lg">Apply to Join</button>
         <a href="#programs" class="btn-outline-primary-theme px-10 py-4 text-lg border-white/10 hover:border-yellow-400">Explore Programs</a>
       </div>
     </div>
@@ -223,16 +298,70 @@
       <div class="absolute inset-0 bg-yellow-400/5 pointer-events-none"></div>
       <h2 class="text-4xl font-bold text-white mb-6">Ready to Scale with Velvorax?</h2>
       <p class="text-gray-400 mb-10">Our team is reviewing applications for the Q3 partner cohort. Secure your spot today.</p>
-      <a href="signup.html" class="btn-primary-theme px-12 py-5 text-xl inline-flex items-center shadow-2xl shadow-yellow-400/20">
+      <button onclick="openPartnerModal()" class="btn-primary-theme px-12 py-5 text-xl inline-flex items-center shadow-2xl shadow-yellow-400/20">
         Become a Partner <i data-feather="arrow-right" class="ml-3"></i>
-      </a>
+      </button>
     </div>
   </section>
 
   <!-- Footer (Shared) -->
   
 
-  <script>feather.replace();</script>
+  <script>
+    feather.replace();
+
+    function openPartnerModal() {
+      document.getElementById('partnerModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePartnerModal() {
+      document.getElementById('partnerModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close on overlay click
+    document.getElementById('partnerModal').addEventListener('click', function(e) {
+      if (e.target === this) closePartnerModal();
+    });
+
+    document.getElementById('partnerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        name: document.getElementById('pName').value,
+        email: document.getElementById('pEmail').value,
+        phone: document.getElementById('pPhone').value,
+        companyName: document.getElementById('pCompany').value,
+        website: document.getElementById('pWebsite').value,
+        programType: document.getElementById('pProgram').value,
+        message: document.getElementById('pMessage').value
+      };
+
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/partners/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert('Application submitted successfully! Our team will contact you soon.');
+          document.getElementById('partnerForm').reset();
+          closePartnerModal();
+        } else {
+          alert(data.msg || 'Submission failed. Please try again.');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Server connection error. Please try again later.');
+      }
+    });
+  </script>
 
   <!-- COMPACT MODERN FOOTER -->
     

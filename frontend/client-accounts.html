@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Accounts - Velvorax</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = VelvoraxAuth.getUser();
+        if (!VelvoraxAuth.isAuthenticated() || user?.role !== 'super_admin') {
+          window.location.href = 'login.html';
+        }
+    </script>
+    <script src="js/config.js"></script>
+    <style>
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
+        }
+        .sidebar-link.active {
+          background: rgba(250, 204, 21, 0.1);
+          color: #facc15;
+          border-right: 2px solid #facc15;
+        }
+    </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+<!-- Sidebar -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+        <a href="dashboard-super.html" class="flex items-center group">
+            <div class="brand-logo-box group-hover:scale-105 transition-transform">
+                <img src="assets/logo.jpg" class="w-8 h-8 rounded-full" alt="Logo">
+            </div>
+            <div class="ml-3">
+                <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+                <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+            </div>
+        </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+        <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+        <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+        <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+        <a href="user-approvals.html" class="sidebar-link">
+            <i data-feather="user-check" class="w-4 h-4 mr-3"></i>
+            User Approvals
+        </a>
+        <a href="client-accounts.html" class="sidebar-link active">
+            <i data-feather="briefcase" class="w-4 h-4 mr-3"></i>
+            Client Accounts
+        </a>
+        <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+        <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+        <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+        <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+        <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+        <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+            <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+        </button>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-8">
+
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <div>
+            <div class="flex items-center gap-3 mb-2">
+                <i data-feather="award" class="w-6 h-6 text-yellow-400"></i>
+                <h1 class="text-3xl font-black text-white tracking-tight">Client Accounts</h1>
+            </div>
+            <p class="text-sm text-gray-500">Business clients registered via 'Get Started'</p>
+        </div>
+        <button id="refreshClientsBtn" onclick="fetchClients()" class="px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-bold transition flex items-center">
+            <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh
+        </button>
+    </div>
+
+    <div class="glass-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-white/[0.02] border-b border-white/5">
+                    <tr class="text-[11px] uppercase tracking-widest text-gray-500">
+                        <th class="px-6 py-5">Client Details</th>
+                        <th class="px-6 py-5">Company</th>
+                        <th class="px-6 py-5">Contact</th>
+                        <th class="px-6 py-5">Status</th>
+                        <th class="px-6 py-5 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="clients-table-body">
+                    <tr><td colspan="4" class="text-center py-20 text-gray-500">Fetching clients...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Details Modal -->
+<div id="detailsModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl hidden z-[100] flex items-center justify-center p-4">
+    <div class="glass-card p-8 w-full max-w-2xl border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-start mb-8">
+            <div class="flex items-center gap-4">
+                <div id="detailLogo" class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden">
+                    <i data-feather="briefcase" class="w-8 h-8 text-yellow-400"></i>
+                </div>
+                <div>
+                    <h3 id="detailCompanyName" class="text-2xl font-black text-white">Company Name</h3>
+                    <p id="detailWebsite" class="text-sm text-yellow-400">www.website.com</p>
+                </div>
+            </div>
+            <button onclick="toggleModal('detailsModal')" class="text-gray-500 hover:text-white"><i data-feather="x"></i></button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 mb-8">
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Point of Contact</p>
+                    <p id="detailClientName" class="text-white font-bold">Name</p>
+                    <p id="detailClientRole" class="text-xs text-gray-400">Role</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Contact Info</p>
+                    <p id="detailEmail" class="text-white text-sm">email@test.com</p>
+                    <p id="detailPhone" class="text-white text-sm">Phone</p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Company Metrics</p>
+                    <p id="detailIndustry" class="text-white text-sm">Industry</p>
+                    <p id="detailEmployees" class="text-white text-sm">Employees</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Account Settings</p>
+                    <p id="detailLanguage" class="text-white text-sm">Language</p>
+                    <p id="detailTimezone" class="text-white text-sm">Timezone</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/5 rounded-2xl p-6 border border-white/5 mb-8">
+            <p class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest mb-3">Business Requirements</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Services Needed</p>
+                    <div id="detailServices" class="flex flex-wrap gap-1 text-[10px] text-white"></div>
+                </div>
+                <div>
+                    <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Budget Range</p>
+                    <p id="detailBudget" class="text-sm font-bold text-green-400">Budget</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-4" id="modalActions">
+            <!-- Dynamic Actions -->
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden z-[110] flex items-center justify-center p-4">
+    <div class="glass-card p-8 w-full max-w-4xl border-white/10 shadow-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h3 class="text-3xl font-bold text-white tracking-tight">Edit Client Details</h3>
+                <p class="text-xs text-gray-500 mt-2">Modify client and company information.</p>
+            </div>
+            <button onclick="toggleModal('editModal')" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center text-gray-500 hover:text-white transition-all border border-white/10"><i data-feather="x" class="w-5 h-5"></i></button>
+        </div>
+        <form id="editClientForm" class="space-y-6">
+            <input type="hidden" id="editClientId">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- User Details -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-yellow-500 uppercase tracking-widest">Personal Details</h4>
+                    <div class="space-y-2">
+                        <label for="editName" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Full Name</label>
+                        <input type="text" id="editName" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editRole" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Role in Company</label>
+                        <input type="text" id="editRole" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editEmail" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Email Address</label>
+                        <input type="email" id="editEmail" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editPhone" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Phone Number</label>
+                        <input type="text" id="editPhone" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                </div>
+
+                <!-- Company Details -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-yellow-500 uppercase tracking-widest">Company Details</h4>
+                    <div class="space-y-2">
+                        <label for="editCompanyName" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Company Name</label>
+                        <input type="text" id="editCompanyName" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editIndustry" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Industry</label>
+                        <select id="editIndustry" class="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                            <option value="Technology">Technology</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Education">Education</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Retail">Retail</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editEmployees" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Employee Count</label>
+                        <input type="text" id="editEmployees" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="editWebsite" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Website</label>
+                        <input type="text" id="editWebsite" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+                    </div>
+                </div>
+            </div>
+            <div class="pt-6">
+                <button type="submit" class="w-full bg-yellow-400 text-black py-5 rounded-xl text-xs font-bold uppercase tracking-[0.2em] shadow-2xl shadow-yellow-400/20">Update Client & Company Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    feather.replace();
+    let currentClients = [];
+
+    async function fetchClients() {
+        const refreshBtn = document.getElementById('refreshClientsBtn');
+        const refreshIcon = refreshBtn?.querySelector('svg') || refreshBtn?.querySelector('i');
+        if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(CONFIG.API_BASE_URL + '/api/admin/clients', {
+                headers: { 'x-auth-token': token }
+            });
+
+            if (!res.ok) throw new Error('Failed to fetch clients');
+
+            currentClients = await res.json();
+            const tbody = document.getElementById('clients-table-body');
+            tbody.innerHTML = '';
+
+            if (!Array.isArray(currentClients) || currentClients.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-20 text-gray-500">No client accounts found.</td></tr>';
+                return;
+            }
+
+            currentClients.forEach(c => {
+                const status = c.companyId?.approvalStatus || 'Pending';
+                const statusClass = status === 'Approved' ? 'bg-green-500/10 text-green-400' : status === 'Pending' ? 'bg-yellow-500/10 text-yellow-400' : 'bg-red-500/10 text-red-400';
+
+                tbody.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/[0.01] transition">
+                        <td class="px-6 py-5">
+                            <div class="font-bold text-white text-lg">${c.name}</div>
+                            <div class="text-[10px] text-yellow-500 font-black uppercase tracking-wider">${c.roleInCompany || 'Business Owner'}</div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="text-yellow-400 font-black">${c.companyId?.name || 'N/A'}</div>
+                            <div class="text-xs text-gray-500">${c.companyId?.industry || 'General'} • ${c.companyId?.employeesCount || '?'} Employees</div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="text-white font-medium">${c.email}</div>
+                            <div class="text-xs text-gray-400 font-bold">${c.phone || 'No Mobile'}</div>
+                        </td>
+                        <td class="px-6 py-5">
+                            <span class="px-3 py-1 rounded-full font-bold text-[10px] uppercase ${statusClass}">${status}</span>
+                        </td>
+                        <td class="px-6 py-5">
+                            <div class="flex items-center justify-center gap-3">
+                                <button onclick="viewDetails('${c._id}')" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition" title="View Details">
+                                    <i data-feather="eye" class="w-4 h-4 text-yellow-400"></i>
+                                </button>
+                                <button onclick="openEditModal('${c._id}')" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition" title="Edit Client">
+                                    <i data-feather="edit-2" class="w-4 h-4 text-blue-400"></i>
+                                </button>
+                                <button onclick="updateClientStatus('${c._id}', 'Approved')" class="px-4 py-2 rounded-lg bg-green-500 text-black text-xs font-bold hover:scale-105 transition">Approve</button>
+                                <button onclick="updateClientStatus('${c._id}', 'Rejected')" class="px-4 py-2 rounded-lg bg-red-500/10 text-red-500 text-xs font-bold hover:bg-red-500/20 transition">Reject</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            feather.replace();
+        } catch (err) {
+            console.error(err);
+            document.getElementById('clients-table-body').innerHTML = '<tr><td colspan="5" class="text-center py-20 text-red-500">Failed to load clients. Please try again.</td></tr>';
+        } finally {
+            if (refreshIcon) setTimeout(() => refreshIcon.classList.remove('animate-spin'), 500);
+        }
+    }
+
+    function viewDetails(id) {
+        const c = currentClients.find(client => client._id === id);
+        if (!c) return;
+
+        document.getElementById('detailCompanyName').textContent = c.companyId?.name || 'N/A';
+        document.getElementById('detailWebsite').textContent = c.companyId?.website || 'No website provided';
+        document.getElementById('detailClientName').textContent = c.name;
+        document.getElementById('detailClientRole').textContent = c.roleInCompany || 'Business Owner';
+        document.getElementById('detailEmail').textContent = c.email;
+        document.getElementById('detailPhone').textContent = c.phone || 'N/A';
+        document.getElementById('detailIndustry').textContent = c.companyId?.industry || 'N/A';
+        document.getElementById('detailEmployees').textContent = `${c.companyId?.employeesCount || 'Unknown'} Employees`;
+        document.getElementById('detailLanguage').textContent = c.preferredLanguage || 'English';
+        document.getElementById('detailTimezone').textContent = c.timezone || 'UTC';
+        document.getElementById('detailBudget').textContent = c.companyId?.budgetRange || 'Contact for Quote';
+
+        const services = c.companyId?.servicesNeeded || [];
+        document.getElementById('detailServices').innerHTML = services.map(s => `<span class="px-2 py-0.5 bg-yellow-400/10 border border-yellow-400/20 rounded-md">${s}</span>`).join('');
+
+        if (c.companyId?.logo) {
+            document.getElementById('detailLogo').innerHTML = `<img src="${c.companyId.logo}" class="w-full h-full object-cover">`;
+        } else {
+            document.getElementById('detailLogo').innerHTML = `<i data-feather="briefcase" class="w-8 h-8 text-yellow-400"></i>`;
+            feather.replace();
+        }
+
+        document.getElementById('modalActions').innerHTML = `
+            <button onclick="updateClientStatus('${c._id}', 'Approved')" class="flex-1 py-4 bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl hover:bg-green-400 transition shadow-lg shadow-green-500/20">Authorize Account</button>
+            <button onclick="updateClientStatus('${c._id}', 'Rejected')" class="flex-1 py-4 bg-red-500/10 text-red-500 font-black uppercase tracking-widest rounded-2xl border border-red-500/20 hover:bg-red-500/20 transition">Decline Request</button>
+        `;
+
+        toggleModal('detailsModal');
+    }
+
+    async function updateClientStatus(id, status) {
+        if (!confirm(`Are you sure you want to ${status.toLowerCase()} this client account?`)) return;
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(CONFIG.API_BASE_URL + `/api/admin/clients/${id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token
+                },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) {
+                toggleModal('detailsModal', true); // Force hide
+                fetchClients();
+            }
+            else alert('Failed to update status');
+        } catch (err) { console.error(err); }
+    }
+
+    function toggleModal(id, forceHide = false) {
+        const el = document.getElementById(id);
+        if (forceHide) el.classList.add('hidden');
+        else el.classList.toggle('hidden');
+    }
+
+    function openEditModal(id) {
+        const c = currentClients.find(client => client._id === id);
+        if (!c) return;
+
+        document.getElementById('editClientId').value = c._id;
+        document.getElementById('editName').value = c.name || '';
+        document.getElementById('editRole').value = c.roleInCompany || '';
+        document.getElementById('editEmail').value = c.email || '';
+        document.getElementById('editPhone').value = c.phone || '';
+        document.getElementById('editCompanyName').value = c.companyId?.name || '';
+        document.getElementById('editIndustry').value = c.companyId?.industry || 'Technology';
+        document.getElementById('editEmployees').value = c.companyId?.employeesCount || '';
+        document.getElementById('editWebsite').value = c.companyId?.website || '';
+
+        toggleModal('editModal');
+    }
+
+    document.getElementById('editClientForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editClientId').value;
+        const data = {
+            name: document.getElementById('editName').value,
+            roleInCompany: document.getElementById('editRole').value,
+            email: document.getElementById('editEmail').value,
+            phone: document.getElementById('editPhone').value,
+            company: {
+                name: document.getElementById('editCompanyName').value,
+                industry: document.getElementById('editIndustry').value,
+                employeesCount: document.getElementById('editEmployees').value,
+                website: document.getElementById('editWebsite').value
+            }
+        };
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(CONFIG.API_BASE_URL + `/api/admin/clients/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': token
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                toggleModal('editModal', true);
+                fetchClients();
+            } else {
+                const result = await res.json();
+                alert(result.msg || 'Failed to update client details');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error updating client details');
+        }
+    });
+
+    fetchClients();
+</script>
+</body>
+</html>

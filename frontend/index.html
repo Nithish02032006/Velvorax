@@ -9,7 +9,83 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="js/config.js"></script>
+  <style>
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+      height: 380px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2.5rem;
+    }
+    .flip-card-front {
+      background: rgba(17, 24, 39, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .flip-card-back {
+      background: linear-gradient(135deg, #111827 0%, #0A0A0A 100%);
+      border: 1px solid rgba(250, 204, 21, 0.2);
+      transform: rotateY(180deg);
+    }
+    .hero-swiper {
+      width: 100%;
+      padding-bottom: 40px;
+    }
+    .hero-swiper .swiper-slide img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      border-radius: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+    .float-anim {
+      animation: float 6s ease-in-out infinite;
+    }
+    /* Swiper Pagination Customization */
+    .hero-swiper .swiper-pagination-bullet {
+      background: rgba(255, 255, 255, 0.3) !important;
+      opacity: 1 !important;
+    }
+    .hero-swiper .swiper-pagination-bullet-active {
+      background: #ffffff !important;
+      width: 30px !important;
+      border-radius: 5px !important;
+      transition: all 0.3s ease;
+    }
+  </style>
 </head>
 <body class="antialiased">
 
@@ -57,6 +133,33 @@
     </div>
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <!-- Carousel Area -->
+      <div class="mb-12">
+        <div class="swiper hero-swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="assets/dashboard_hero.png" alt="Velvorax Enterprise" class="shadow-2xl">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" alt="Data Analytics">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2340&auto=format&fit=crop" alt="Business Strategy">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2340&auto=format&fit=crop" alt="Tech Collaboration">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2340&auto=format&fit=crop" alt="Team Brainstorming">
+            </div>
+            <div class="swiper-slide">
+              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2340&auto=format&fit=crop" alt="Global Connectivity">
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <!-- Left Text -->
         <div>
@@ -64,37 +167,48 @@
             We help <span class="text-yellow-400">businesses generate customers</span> using websites, apps, and smart systems.
           </h2>
           <p class="text-lg text-gray-300 mb-8 max-w-xl">
-            Automate follow-ups, track leads, and close more deals with our all-in-one platform.
+            Automate follow-ups, track leads, and close more deals with our all-in-one platform. Strategic innovation designed for the modern visionary.
           </p>
-          <div class="flex space-x-4">
+          <div class="flex flex-wrap gap-4">
             <a href="signup.html" class="btn-primary-theme text-lg px-8 py-3">Start Your Project</a>
             <a href="https://wa.me/919985201116" target="_blank" class="btn-outline-primary-theme text-lg px-8 py-3">Talk to Our Team</a>
           </div>
         </div>
         
-        <!-- Right Dashboard Mockup (8K High Fidelity) -->
-        <div class="relative group">
-          <!-- Background Glow -->
-          <div class="absolute -inset-10 bg-yellow-400/10 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
-          
-          <!-- Image Frame -->
-          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#050510] shadow-[0_0_80px_rgba(0,0,0,0.8)] transform lg:rotate-2 hover:rotate-0 transition-all duration-700">
-            <img src="assets/dashboard_hero.png" alt="Velvorax Enterprise Dashboard" class="w-full h-auto block high-res-logo">
-            
-            <!-- Floating Settings Icon -->
-            <div class="absolute right-[-15px] top-1/2 -translate-y-1/2 w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center text-black shadow-2xl shadow-yellow-400/50 transform rotate-12 group-hover:rotate-0 transition-all duration-500">
-              <i data-feather="settings" class="w-6 h-6"></i>
+        <!-- Right Image (Floating) -->
+        <div class="relative group hidden lg:block">
+          <div class="absolute -inset-10 bg-yellow-400/5 rounded-[3rem] blur-3xl opacity-50"></div>
+          <div class="relative float-anim">
+            <div class="glass-card p-4 border-white/10 bg-white/5 backdrop-blur-3xl rounded-[2.5rem] transform rotate-3">
+               <img src="assets/dashboard_hero.png" class="w-full h-auto rounded-[2rem] shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000">
             </div>
-
-            <!-- Floating Logo Icon -->
-            <div class="absolute left-[-20px] top-[-20px] w-16 h-16 bg-[#0a0a0a] border-2 border-yellow-400 rounded-full flex items-center justify-center shadow-2xl shadow-yellow-400/30 p-2">
-              <img src="assets/logo.jpg" class="w-full h-full rounded-full object-cover high-res-logo">
-            </div>
+            <!-- Decorative Elements -->
+            <div class="absolute -top-6 -right-6 w-20 h-20 bg-yellow-400 rounded-full blur-2xl opacity-20"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-10"></div>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <script>
+    const swiper = new Swiper('.hero-swiper', {
+      loop: true,
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 'auto',
+      coverflowEffect: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true,
+      },
+    });
+  </script>
 
   <!-- Services Overview Section -->
   <section class="py-24 bg-[#0A0A0A] relative z-10 border-t border-white/5">
@@ -103,41 +217,93 @@
       <h3 class="text-4xl font-bold text-white mb-6">Expertise & Innovation</h3>
       <p class="text-gray-400 mb-16 max-w-2xl mx-auto">Strategic innovation and autonomous solutions designed for the modern visionary.</p>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- 1. Web Development -->
-        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
-          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
-            <i data-feather="layout" class="text-yellow-400 w-5 h-5"></i>
+        <div class="flip-card group">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-yellow-400/20">
+                <i data-feather="layout" class="text-black w-8 h-8"></i>
+              </div>
+              <h4 class="text-xl font-black text-white tracking-tight uppercase">Web Development</h4>
+              <p class="text-sm text-gray-400 mt-4">Custom business websites and high-converting landing pages.</p>
+            </div>
+            <div class="flip-card-back">
+              <h4 class="text-lg font-bold text-yellow-400 mb-4 uppercase">Advanced Solutions</h4>
+              <ul class="text-xs text-gray-300 space-y-3 text-left">
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Responsive UI/UX</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Speed Optimization</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> E-commerce Ready</li>
+              </ul>
+              <button class="mt-8 px-6 py-2 bg-yellow-400 text-black text-[10px] font-black uppercase rounded-full tracking-widest">Learn More</button>
+            </div>
           </div>
-          <h4 class="text-lg font-bold text-white mb-2">Web Development</h4>
-          <p class="text-sm text-gray-500">Custom business websites and high-converting landing pages.</p>
         </div>
         
         <!-- 2. AI Automation -->
-        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
-          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
-            <i data-feather="cpu" class="text-yellow-400 w-5 h-5"></i>
+        <div class="flip-card group">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-yellow-400/20">
+                <i data-feather="cpu" class="text-black w-8 h-8"></i>
+              </div>
+              <h4 class="text-xl font-black text-white tracking-tight uppercase">AI Automation</h4>
+              <p class="text-sm text-gray-400 mt-4">Autonomous systems and intelligent business workflows.</p>
+            </div>
+            <div class="flip-card-back">
+              <h4 class="text-lg font-bold text-yellow-400 mb-4 uppercase">Smart Efficiency</h4>
+              <ul class="text-xs text-gray-300 space-y-3 text-left">
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Workflow Logic</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Data Processing</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> 24/7 Autonomy</li>
+              </ul>
+              <button class="mt-8 px-6 py-2 bg-yellow-400 text-black text-[10px] font-black uppercase rounded-full tracking-widest">Learn More</button>
+            </div>
           </div>
-          <h4 class="text-lg font-bold text-white mb-2">AI Automation</h4>
-          <p class="text-sm text-gray-500">Autonomous systems and intelligent business workflows.</p>
         </div>
 
         <!-- 3. Digital Marketing -->
-        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
-          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
-            <i data-feather="trending-up" class="text-yellow-400 w-5 h-5"></i>
+        <div class="flip-card group">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-yellow-400/20">
+                <i data-feather="trending-up" class="text-black w-8 h-8"></i>
+              </div>
+              <h4 class="text-xl font-black text-white tracking-tight uppercase">Digital Marketing</h4>
+              <p class="text-sm text-gray-400 mt-4">Scale leads through precision SEO and multi-channel ads.</p>
+            </div>
+            <div class="flip-card-back">
+              <h4 class="text-lg font-bold text-yellow-400 mb-4 uppercase">Growth Hacking</h4>
+              <ul class="text-xs text-gray-300 space-y-3 text-left">
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> SEO Strategy</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Social Ads</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> ROI Focus</li>
+              </ul>
+              <button class="mt-8 px-6 py-2 bg-yellow-400 text-black text-[10px] font-black uppercase rounded-full tracking-widest">Learn More</button>
+            </div>
           </div>
-          <h4 class="text-lg font-bold text-white mb-2">Digital Marketing</h4>
-          <p class="text-sm text-gray-500">Scale leads through precision SEO and multi-channel ads.</p>
         </div>
 
         <!-- 4. CRM Solutions -->
-        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
-          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
-            <i data-feather="users" class="text-yellow-400 w-5 h-5"></i>
+        <div class="flip-card group">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-yellow-400/20">
+                <i data-feather="users" class="text-black w-8 h-8"></i>
+              </div>
+              <h4 class="text-xl font-black text-white tracking-tight uppercase">CRM Solutions</h4>
+              <p class="text-sm text-gray-400 mt-4">Streamlined customer relationships and automated conversion pipelines.</p>
+            </div>
+            <div class="flip-card-back">
+              <h4 class="text-lg font-bold text-yellow-400 mb-4 uppercase">Sales Pipeline</h4>
+              <ul class="text-xs text-gray-300 space-y-3 text-left">
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Lead Tracking</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Auto Follow-up</li>
+                <li class="flex items-center"><i data-feather="check" class="w-3 h-3 mr-2 text-green-500"></i> Data Insights</li>
+              </ul>
+              <button class="mt-8 px-6 py-2 bg-yellow-400 text-black text-[10px] font-black uppercase rounded-full tracking-widest">Learn More</button>
+            </div>
           </div>
-          <h4 class="text-lg font-bold text-white mb-2">CRM Solutions</h4>
-          <p class="text-sm text-gray-500">Automated sales funnels and lead tracking ecosystems.</p>
         </div>
       </div>
 

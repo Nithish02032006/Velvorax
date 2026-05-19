@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const { Invoice, Opportunity } = require('../models');
+const { Invoice, Opportunity, Task, Lead, User, StandardUser } = require('../models');
 
 // @route   GET api/reports/invoice
 router.get('/invoice', auth, async (req, res) => {
   try {
-    const invoices = await Invoice.find();
+    const { role, companyId } = req.user;
+    let query = {};
+
+    if (role !== 'super_admin') {
+      if (!companyId) return res.status(403).json({ message: 'Unauthorized' });
+      query.companyId = companyId;
+    }
+
+    const invoices = await Invoice.find(query);
     
     // Total Invoiced, Collected, Outstanding
     const totalInvoiced = invoices.reduce((acc, curr) => acc + curr.total, 0);
@@ -36,6 +44,44 @@ router.get('/invoice', auth, async (req, res) => {
       revenueOverTime
     });
   } catch (err) {
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/reports/tasks
+// For business client: company tasks
+// For super admin: all tasks
+router.get('/tasks', auth, async (req, res) => {
+  try {
+    const { role, companyId, id } = req.user;
+    let query = {};
+
+    if (role !== 'super_admin') {
+      if (!companyId) return res.status(403).json({ message: 'Unauthorized' });
+      query.companyId = companyId;
+    }
+
+    const tasks = await Task.find(query)
+      .populate('leadId', 'leadId name')
+      .populate('assignedTo', 'name email role')
+      .populate('assignedBy', 'name email role')
+      .sort({ createdAt: -1 });
+
+    // Summary statistics for the report
+    const stats = {
+      total: tasks.length,
+      completed: tasks.filter(t => t.status === 'Completed' || t.status === 'Done').length,
+      pending: tasks.filter(t => t.status === 'Pending' || t.status === 'In Progress').length,
+      highPriority: tasks.filter(t => t.priority === 'High' || t.priority === 'Urgent').length,
+      myTasks: tasks.filter(t => t.assignedTo?._id?.toString() === id).length
+    };
+
+    res.json({
+      stats,
+      tasks
+    });
+  } catch (err) {
+    console.error("TASK REPORT ERROR:", err);
     res.status(500).send('Server Error');
   }
 });

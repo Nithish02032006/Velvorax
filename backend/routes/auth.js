@@ -124,17 +124,31 @@ router.post('/login', async (req, res) => {
 
     console.log('Result: PASSWORD MATCH SUCCESS');
 
-    // if (user.isLoggedIn && user.activeToken) {
-    //   try {
-    //     jwt.verify(user.activeToken, process.env.JWT_SECRET);
-    //     return res.status(403).json({ msg: 'User already logged in on another device' });
-    //   } catch (verifyErr) {
-    //     console.log('Stale session detected, clearing stored login state:', verifyErr.message);
-    //     user.isLoggedIn = false;
-    //     user.activeToken = null;
-    //     await user.save();
-    //   }
-    // }
+    if (user.isLoggedIn && user.activeToken) {
+    try {
+        jwt.verify(user.activeToken, process.env.JWT_SECRET);
+
+        // If last activity older than 15 mins → clear stale session
+        const lastActive = user.updatedAt || user.createdAt;
+        const diff = Date.now() - new Date(lastActive).getTime();
+
+        if (diff < 15 * 60 * 1000) {
+            return res.status(403).json({
+                msg: 'User already logged in on another device'
+            });
+        }
+
+        // stale session
+        user.isLoggedIn = false;
+        user.activeToken = null;
+        await user.save();
+
+    } catch (verifyErr) {
+        user.isLoggedIn = false;
+        user.activeToken = null;
+        await user.save();
+    }
+}
 
     const payload = { user: { id: user.id, role: user.role, companyId: user.companyId, type: 'User' } };
 
@@ -185,6 +199,26 @@ router.post('/logout', auth, async (req, res) => {
     res.json({ msg: 'Logged out successfully' });
   } catch (err) {
     console.error(err.message);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+});
+
+// @route   POST api/auth/clear-sessions
+router.post('/clear-sessions', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
+
+    user.isLoggedIn = false;
+    user.activeToken = null;
+    await user.save();
+
+    res.json({ msg: 'All sessions cleared successfully. You can now login.' });
+  } catch (err) {
     res.status(500).json({ msg: 'Server Error' });
   }
 });

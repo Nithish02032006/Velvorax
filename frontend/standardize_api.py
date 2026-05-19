@@ -1,7 +1,7 @@
 import os
 import re
 
-frontend_dir = r'c:\Users\nithi\OneDrive\Desktop\Velvorax.AI\frontend'
+frontend_dir = r'c:\Users\nithi\OneDrive\Desktop\Velvorax Software Solutions\frontend'
 
 def process_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
