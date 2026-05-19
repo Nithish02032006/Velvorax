@@ -76,9 +76,17 @@ router.post('/login', async (req, res) => {
             }
         };
 
-        if (user.isLoggedIn && user.activeToken) {
-            return res.status(403).json({ msg: 'User already logged in on another device' });
-        }
+        // if (user.isLoggedIn && user.activeToken) {
+        //     try {
+        //         jwt.verify(user.activeToken, process.env.JWT_SECRET);
+        //         return res.status(403).json({ msg: 'User already logged in on another device' });
+        //     } catch (verifyErr) {
+        //         console.log('Stale staff session detected, clearing stored login state:', verifyErr.message);
+        //         user.isLoggedIn = false;
+        //         user.activeToken = null;
+        //         await user.save();
+        //     }
+        // }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
         user.isLoggedIn = true;
