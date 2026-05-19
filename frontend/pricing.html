@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing - Velvorax Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#02020a] text-gray-300">
+
+  <!-- Navigation (Shared) -->
+  <nav class="glass-nav sticky top-0 z-50 w-full">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex-shrink-0 flex items-center group">
+          <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 object-contain mr-3 group-hover:scale-105 transition-transform">
+          <div class="hidden sm:block">
+            <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
+            <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
+          </div>
+        </a>
+        <div class="hidden md:flex space-x-8">
+          <a href="index.html" class="text-gray-300 hover:text-white transition">Home</a>
+          <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
+          <a href="services.html" class="text-gray-300 hover:text-white transition">Our Services</a>
+          <a href="pricing.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Pricing</a>
+          <a href="partner.html" class="text-gray-300 hover:text-white transition">Partner Program</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="login.html" class="btn-primary-theme">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-20 relative z-10">
+    <div class="max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-16 text-center">
+      <h1 class="text-4xl font-bold text-yellow-400 mb-4">Transparent Pricing for Growing Businesses</h1>
+      <p class="text-xl text-gray-300 mb-12">Choose the plan that fits your needs.</p>
+
+      <!-- Toggle Currency -->
+      <div class="flex justify-center mb-12">
+        <div class="bg-gray-900 rounded-lg p-1 flex border border-yellow-400/30">
+          <button id="toggleUSD" onclick="setCurrency('USD')" class="px-6 py-2 rounded-md bg-yellow-400 text-black font-semibold transition-all">USD</button>
+          <button id="toggleINR" onclick="setCurrency('INR')" class="px-6 py-2 rounded-md text-gray-300 hover:text-white transition-all">INR</button>
+        </div>
+      </div>
+
+      <!-- Pricing Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        
+        <!-- Basic -->
+        <div class="glass-card p-8 text-left border-white/5 bg-[#030308]/40">
+          <h3 class="text-2xl font-bold text-white mb-1">Basic</h3>
+          <p class="text-xs text-gray-500 mb-4 uppercase tracking-widest font-semibold">Up to 2 Users</p>
+          <div class="mb-6">
+            <div class="flex items-baseline">
+              <span class="text-5xl font-black text-white price-val" data-usd="120" data-inr="10000">₹10,000</span>
+              <span class="text-gray-500 ml-2 font-bold uppercase text-[10px]">/month</span>
+            </div>
+            <p class="text-[10px] text-gray-600 mt-1 font-bold price-approx">(≈ $120 USD)</p>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Basic CRM Access
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Lead Management
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Email Automation
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Basic Reporting
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Email Support
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> 1 GB Storage
+            </li>
+            <li class="mt-4 pt-4 border-t border-white/5 text-[10px] text-yellow-500/80 font-black tracking-widest uppercase">
+              + ₹1,000 Per Additional User
+            </li>
+          </ul>
+          <a href="checkout.html?plan=Basic" class="btn-outline-primary-theme w-full text-center block py-4 text-xs font-black uppercase tracking-[0.2em]">Get Started</a>
+        </div>
+
+        <!-- Growth (Most Popular) -->
+        <div class="glass-card p-8 text-left border-yellow-400/50 bg-[#030308]/60 transform scale-105 relative shadow-[0_0_40px_rgba(250,204,21,0.1)]">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-black text-[10px] font-black px-6 py-1.5 rounded-full shadow-lg flex items-center uppercase tracking-[0.2em]">
+            <i data-feather="zap" class="w-3 h-3 mr-2 fill-current"></i> Most Popular
+          </div>
+          <h3 class="text-2xl font-bold text-yellow-400 mb-1">Growth</h3>
+          <p class="text-xs text-gray-500 mb-4 uppercase tracking-widest font-semibold">Up to 5 Users</p>
+          <div class="mb-6">
+            <div class="flex items-baseline">
+              <span class="text-5xl font-black text-white price-val" data-usd="181" data-inr="15000">₹15,000</span>
+              <span class="text-gray-500 ml-2 font-bold uppercase text-[10px]">/month</span>
+            </div>
+            <p class="text-[10px] text-gray-600 mt-1 font-bold price-approx">(≈ $181 USD)</p>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> Advanced CRM Access
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> Lead Management & Scoring
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> WhatsApp + Email Automation
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> Advanced Reporting
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> Priority Support
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> 5 GB Storage
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-300">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-yellow-400"></i> API Access
+            </li>
+            <li class="mt-4 pt-4 border-t border-white/10 text-[10px] text-yellow-400 font-black tracking-widest uppercase">
+              + ₹1,000 Per Additional User
+            </li>
+          </ul>
+          <a href="checkout.html?plan=Growth" class="btn-primary-theme w-full text-center block py-4 text-xs font-black uppercase tracking-[0.2em]">Upgrade Now</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="glass-card p-8 text-left border-white/5 bg-[#030308]/40">
+          <h3 class="text-2xl font-bold text-white mb-1">Pro</h3>
+          <p class="text-xs text-gray-500 mb-4 uppercase tracking-widest font-semibold">Up to 10 Users</p>
+          <div class="mb-6">
+            <div class="flex items-baseline">
+              <span class="text-5xl font-black text-white price-val" data-usd="301" data-inr="25000">₹25,000</span>
+              <span class="text-gray-500 ml-2 font-bold uppercase text-[10px]">/month</span>
+            </div>
+            <p class="text-[10px] text-gray-600 mt-1 font-bold price-approx">(≈ $301 USD)</p>
+          </div>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Full CRM Access
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Advanced Automation Flows
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Multi-Channel Integration
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Custom Reporting Dashboard
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Dedicated Support
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> 10 GB Storage
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Custom Integrations
+            </li>
+            <li class="flex items-center text-xs font-bold uppercase tracking-widest text-gray-400">
+              <i data-feather="check-circle" class="w-4 h-4 mr-3 text-blue-500"></i> Employee Tracking
+            </li>
+            <li class="mt-4 pt-4 border-t border-white/5 text-[10px] text-yellow-500/80 font-black tracking-widest uppercase">
+              + ₹1,000 Per Additional User
+            </li>
+          </ul>
+          <a href="checkout.html?plan=Pro" class="btn-outline-primary-theme w-full text-center block py-4 text-xs font-black uppercase tracking-[0.2em]">Upgrade Now</a>
+        </div>
+      </div>
+
+      <!-- Setup Costs -->
+      <div class="mt-20 max-w-6xl mx-auto space-y-12">
+        <h3 class="text-3xl font-bold text-yellow-400 text-center uppercase tracking-widest">One-Time Setup Packages</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Standard Setup -->
+          <div class="glass-card p-10 border-white/5 bg-[#030308]/40 relative overflow-hidden group text-left">
+            <h4 class="text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Standard Setup</h4>
+            <div class="text-4xl font-bold text-yellow-400 mb-8 setup-cost-val" id="setup1" data-usd="$3,000" data-inr="₹2,50,000">₹2,50,000</div>
+            
+            <ul class="space-y-4">
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Complete system setup</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Lead capture pages</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Automation setup</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">CRM configuration</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">WhatsApp / Email integration</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Basic follow-up flows</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-green-500 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Team training</span></li>
+            </ul>
+          </div>
+
+          <!-- Advanced Custom Setup -->
+          <div class="glass-card p-10 border-yellow-400/30 bg-[#030308]/60 relative overflow-hidden group transform hover:scale-[1.02] transition-all duration-500 text-left">
+            <div class="absolute top-0 right-0 bg-yellow-400 text-black text-[10px] font-black px-4 py-1 uppercase tracking-widest rounded-bl-xl shadow-lg shadow-yellow-400/20">RECOMMENDED</div>
+            <h4 class="text-2xl font-bold text-white mb-4 uppercase tracking-tighter">Advanced Custom Setup</h4>
+            <div class="text-4xl font-bold text-yellow-400 mb-8 setup-cost-val" id="setup2" data-usd="$4,200 – $6,000" data-inr="₹3,50,000 – ₹5,00,000">₹3,50,000 – ₹5,00,000</div>
+            
+            <ul class="space-y-4">
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Industry-specific system design (Real Estate / Hospital / Coaching, etc.)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Advanced automation flows (multi-step follow-up logic)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Lead scoring system (Hot / Warm / Cold classification)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Customer rating system (High value / Low value identification)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Employee tracking system (calls, performance, activity tracking)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Advanced reporting dashboard (leads, conversions, performance insights)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Smart follow-up structure (missed lead prevention system)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Multi-channel integration (Website + WhatsApp + Email combined flow)</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Custom workflows based on business process</span></li>
+              <li class="flex items-start"><i data-feather="check-circle" class="text-yellow-400 w-4 h-4 mr-3 mt-1 shrink-0"></i> <span class="text-[13px] font-medium text-gray-300 uppercase tracking-wide">Full system optimization setup</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  
+  <script>
+    feather.replace();
+    let currentPricing = [];
+
+    async function fetchPricing() {
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/pricing');
+        currentPricing = await res.json();
+        
+        // Update price values in dataset
+        const tiers = ['Basic', 'Growth', 'Pro'];
+        tiers.forEach(tierName => {
+          const tierData = currentPricing.find(t => t.tier === tierName);
+          if (tierData) {
+            const card = Array.from(document.querySelectorAll('.glass-card')).find(c => c.querySelector('h3').textContent.includes(tierName));
+            if (card) {
+              const priceSpan = card.querySelector('.price-val');
+              const priceApprox = card.querySelector('.price-approx');
+              
+              priceSpan.dataset.usd = tierData.usd;
+              priceSpan.dataset.inr = tierData.inr;
+              
+              if (priceApprox) {
+                priceApprox.textContent = `(≈ $${tierData.usd} USD)`;
+              }
+            }
+          }
+        });
+
+        // Update Setup Costs data attributes
+        const growthData = currentPricing.find(t => t.tier === 'Growth');
+        const proData = currentPricing.find(t => t.tier === 'Pro');
+        const s1 = document.getElementById('setup1');
+        const s2 = document.getElementById('setup2');
+        if (growthData) {
+          s1.dataset.inr = '₹' + growthData.setupInr;
+          s1.dataset.usd = '$' + (growthData.setupUsd || '3,000');
+        }
+        if (proData) {
+          s2.dataset.inr = '₹3,50,000 – ₹' + proData.setupInr;
+          s2.dataset.usd = '$4,200 – $' + (proData.setupUsd || '6,000');
+        }
+
+        // Initialize display with default INR if it was set before, or USD
+        const savedCurrency = localStorage.getItem('selectedCurrency') || 'USD';
+        setCurrency(savedCurrency);
+      } catch (err) {
+        console.error('Error fetching pricing:', err);
+      }
+    }
+
+    function setCurrency(currency) {
+      localStorage.setItem('selectedCurrency', currency);
+      const usdBtn = document.getElementById('toggleUSD');
+      const inrBtn = document.getElementById('toggleINR');
+      const prices = document.querySelectorAll('.price-val');
+      const setupCosts = document.querySelectorAll('.setup-cost-val');
+      const approxPrices = document.querySelectorAll('.price-approx');
+      
+      if (!usdBtn || !inrBtn) return;
+
+      if (currency === 'INR') {
+        inrBtn.classList.add('bg-yellow-400', 'text-black', 'font-semibold');
+        inrBtn.classList.remove('text-gray-300', 'hover:text-white');
+        usdBtn.classList.remove('bg-yellow-400', 'text-black', 'font-semibold');
+        usdBtn.classList.add('text-gray-300', 'hover:text-white');
+
+        prices.forEach(p => {
+          const val = p.dataset.inr || 0;
+          p.textContent = '₹' + parseInt(val).toLocaleString();
+        });
+        
+        setupCosts.forEach(s => {
+          s.textContent = s.dataset.inr;
+        });
+
+        approxPrices.forEach(a => a.style.display = 'block');
+      } else {
+        usdBtn.classList.add('bg-yellow-400', 'text-black', 'font-semibold');
+        usdBtn.classList.remove('text-gray-300', 'hover:text-white');
+        inrBtn.classList.remove('bg-yellow-400', 'text-black', 'font-semibold');
+        inrBtn.classList.add('text-gray-300', 'hover:text-white');
+
+        prices.forEach(p => {
+          const val = p.dataset.usd || 0;
+          p.textContent = '$' + val;
+        });
+        
+        setupCosts.forEach(s => {
+          s.textContent = s.dataset.usd;
+        });
+
+        approxPrices.forEach(a => a.style.display = 'none');
+      }
+    }
+
+    fetchPricing();
+  </script>
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center mb-6">
+            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+            <div>
+              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+          </p>
+          <div class="flex space-x-4 text-gray-600">
+            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Product Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Solutions Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="lg:col-span-1">
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+          <ul class="space-y-4 text-[11px]">
+            <li>
+              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest">+91 9985201116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest leading-relaxed">
+                  Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
+                  Miyapur, Hyderabad, Telangana - 500049
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+        </p>
+        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+          <span class="text-green-500 flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            SYSTEMS OPERATIONAL
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script>if(window.feather) feather.replace();</script>
+
+</body>
+</html>

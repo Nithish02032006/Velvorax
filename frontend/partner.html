@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partner Program - Velvorax Enterprise</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .step-number {
+      width: 3rem;
+      height: 3rem;
+      background: rgba(255, 215, 0, 0.1);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #FFD700;
+      margin-bottom: 1.5rem;
+    }
+    .benefit-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .benefit-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 215, 0, 0.3);
+      transform: translateY(-5px);
+    }
+  </style>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#020205] text-gray-300">
+
+  <!-- Navigation (Shared) -->
+  <nav class="glass-nav sticky top-0 z-50 w-full">
+    <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex items-center group">
+          <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 mr-3 group-hover:scale-105 transition-transform">
+          <div>
+            <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
+            <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
+          </div>
+        </a>
+        <div class="hidden md:flex space-x-8">
+          <a href="index.html" class="text-gray-300 hover:text-white transition">Home</a>
+          <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
+          <a href="services.html" class="text-gray-300 hover:text-white transition">Our Services</a>
+          <a href="pricing.html" class="text-gray-300 hover:text-white transition">Pricing</a>
+          <a href="partner.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Partner Program</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="login.html" class="btn-primary-theme">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-yellow-400/5 to-transparent pointer-events-none"></div>
+    <div class="max-w-[1600px] mx-auto px-6 text-center relative z-10">
+      <span class="px-4 py-1 bg-yellow-400/10 border border-yellow-400/20 rounded-full text-[10px] font-bold text-yellow-400 uppercase tracking-widest mb-6 inline-block">Global Ecosystem</span>
+      <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter">Grow Your Revenue with the <span class="text-yellow-400">Velvorax Network</span></h1>
+      <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed mb-12">
+        Join a world-class network of agencies, consultants, and developers. Together, we deliver high-performance enterprise automation that scales.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#apply" class="btn-primary-theme px-10 py-4 text-lg">Apply to Join</a>
+        <a href="#programs" class="btn-outline-primary-theme px-10 py-4 text-lg border-white/10 hover:border-yellow-400">Explore Programs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Programs Section -->
+  <section id="programs" class="py-24 bg-[#030308]/50">
+    <div class="max-w-[1600px] mx-auto px-6">
+      <div class="text-center mb-20">
+        <h2 class="text-3xl font-bold text-white mb-4">Partnership Opportunities</h2>
+        <p class="text-gray-500">Tailored programs designed for every business model.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Referral Partner -->
+        <div class="glass-card p-10 border-white/5 border rounded-3xl group">
+          <div class="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-400 mb-8 group-hover:scale-110 transition-transform">
+            <i data-feather="share-2" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4">Referral Partner</h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-8">
+            Ideal for consultants and individuals. Refer clients to Velvorax and earn competitive recurring commissions on every closed deal.
+          </p>
+          <ul class="space-y-4 mb-10 text-xs">
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> Up to 20% Recurring Commission</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> 90-Day Referral Window</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> Dedicated Affiliate Dashboard</li>
+          </ul>
+        </div>
+
+        <!-- Agency Partner -->
+        <div class="glass-card p-10 border-yellow-400/30 border-2 rounded-3xl relative scale-105 bg-white/5">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-black px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Most Popular</div>
+          <div class="w-16 h-16 bg-yellow-400/10 rounded-2xl flex items-center justify-center text-yellow-400 mb-8">
+            <i data-feather="users" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4">Agency Partner</h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-8">
+            For marketing and automation agencies. Deliver Velvorax solutions to your clients with priority support and co-marketing benefits.
+          </p>
+          <ul class="space-y-4 mb-10 text-xs text-yellow-400/80">
+            <li class="flex items-center"><i data-feather="check" class="text-yellow-400 mr-2 w-4"></i> Wholesale Platform Pricing</li>
+            <li class="flex items-center"><i data-feather="check" class="text-yellow-400 mr-2 w-4"></i> Co-Branded Marketing Assets</li>
+            <li class="flex items-center"><i data-feather="check" class="text-yellow-400 mr-2 w-4"></i> 24/7 Priority Support Lane</li>
+          </ul>
+        </div>
+
+        <!-- Technology Partner -->
+        <div class="glass-card p-10 border-white/5 border rounded-3xl group">
+          <div class="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-400 mb-8 group-hover:scale-110 transition-transform">
+            <i data-feather="layers" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4">Technology Partner</h3>
+          <p class="text-gray-400 text-sm leading-relaxed mb-8">
+            For SaaS and software providers. Build deep integrations with the Velvorax CRM engine and reach thousands of enterprise customers.
+          </p>
+          <ul class="space-y-4 mb-10 text-xs">
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> Marketplace Listing</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> Advanced API Access</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-400 mr-2 w-4"></i> Sandbox Development Env</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="py-24">
+    <div class="max-w-[1600px] mx-auto px-6">
+      <div class="text-center mb-20">
+        <h2 class="text-3xl font-bold text-white mb-4">Why Partner with Velvorax?</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto">We provide the tools, support, and financial incentives you need to succeed in the enterprise automation space.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="trending-up" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Passive Income</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Earn recurring revenue for every customer you bring to the platform. No caps on earnings.</p>
+        </div>
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="headphones" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Dedicated Manager</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Get a direct line to a partner success manager to help you close deals and integrate systems.</p>
+        </div>
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="tool" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Sales Enablement</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Access a library of pitch decks, demo environments, and case studies to speed up your sales cycle.</p>
+        </div>
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="zap" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Early Feature Access</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Test and provide feedback on our roadmap before it goes live to the general public.</p>
+        </div>
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="globe" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Global Exposure</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Get listed in our official partner directory and reach enterprise clients worldwide.</p>
+        </div>
+        <div class="benefit-card glass-card p-8 rounded-2xl border border-white/5">
+          <i data-feather="award" class="w-6 h-6 text-yellow-400 mb-4"></i>
+          <h4 class="text-white font-bold mb-2">Partner Events</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Exclusive invites to our annual partner summit and networking meetups.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section class="py-24 bg-[#030308]/50 border-y border-white/5">
+    <div class="max-w-[1600px] mx-auto px-6">
+      <div class="text-center mb-20">
+        <h2 class="text-3xl font-bold text-white mb-4">Your Path to Partnership</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+        <div class="hidden md:block absolute top-6 left-24 right-24 h-0.5 bg-gradient-to-r from-yellow-400/0 via-yellow-400/20 to-yellow-400/0"></div>
+        
+        <div class="relative text-center group">
+          <div class="step-number mx-auto group-hover:bg-yellow-400 group-hover:text-black transition-colors">1</div>
+          <h5 class="text-white font-bold mb-2">Apply Online</h5>
+          <p class="text-xs text-gray-500">Submit your application in less than 5 minutes.</p>
+        </div>
+        
+        <div class="relative text-center group">
+          <div class="step-number mx-auto group-hover:bg-yellow-400 group-hover:text-black transition-colors">2</div>
+          <h5 class="text-white font-bold mb-2">Interview</h5>
+          <p class="text-xs text-gray-500">Brief call to align our goals and strategies.</p>
+        </div>
+
+        <div class="relative text-center group">
+          <div class="step-number mx-auto group-hover:bg-yellow-400 group-hover:text-black transition-colors">3</div>
+          <h5 class="text-white font-bold mb-2">Onboarding</h5>
+          <p class="text-xs text-gray-500">Get access to your dashboard and marketing assets.</p>
+        </div>
+
+        <div class="relative text-center group">
+          <div class="step-number mx-auto group-hover:bg-yellow-400 group-hover:text-black transition-colors">4</div>
+          <h5 class="text-white font-bold mb-2">Earn Recurring</h5>
+          <p class="text-xs text-gray-500">Start referring clients and scaling your income.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Application CTA -->
+  <section id="apply" class="py-24 text-center">
+    <div class="max-w-4xl mx-auto px-6 glass-card p-16 border-yellow-400/20 border relative overflow-hidden">
+      <div class="absolute inset-0 bg-yellow-400/5 pointer-events-none"></div>
+      <h2 class="text-4xl font-bold text-white mb-6">Ready to Scale with Velvorax?</h2>
+      <p class="text-gray-400 mb-10">Our team is reviewing applications for the Q3 partner cohort. Secure your spot today.</p>
+      <a href="signup.html" class="btn-primary-theme px-12 py-5 text-xl inline-flex items-center shadow-2xl shadow-yellow-400/20">
+        Become a Partner <i data-feather="arrow-right" class="ml-3"></i>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer (Shared) -->
+  
+
+  <script>feather.replace();</script>
+
+  <!-- COMPACT MODERN FOOTER -->
+    
+    
+
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center mb-6">
+            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+            <div>
+              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+          </p>
+          <div class="flex space-x-4 text-gray-600">
+            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Product Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Solutions Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="lg:col-span-1">
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+          <ul class="space-y-4 text-[11px]">
+            <li>
+              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest">+91 9985201116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest leading-relaxed">
+                  Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
+                  Miyapur, Hyderabad, Telangana - 500049
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+        </p>
+        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+          <span class="text-green-500 flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            SYSTEMS OPERATIONAL
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script>if(window.feather) feather.replace();</script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Management - Velvorax Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      color: #6b7280;
+      border-radius: 0.75rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 3px solid transparent;
+      margin: 0.25rem 0.5rem;
+    }
+    .sidebar-link:hover {
+      background: rgba(255, 215, 0, 0.03);
+      color: #ffffff;
+    }
+    .sidebar-link.active {
+      background: rgba(255, 215, 0, 0.08);
+      color: #FFD700;
+      border-left-color: #FFD700;
+      box-shadow: inset 10px 0 20px -10px rgba(255, 215, 0, 0.1);
+    }
+    .glass-card {
+      background: rgba(10, 10, 35, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1.5rem;
+    }
+    input, select {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+      transition: all 0.3s;
+    }
+    input:focus {
+      border-color: #FFD700;
+      background: rgba(255,255,255,0.05);
+    }
+  </style>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+  <!-- Sidebar (Same as Dashboard) -->
+  <aside class="sidebar w-64 flex-shrink-0 flex flex-col h-full border-r border-white/5 bg-[#030308]">
+    <div class="p-8">
+      <a href="index.html" class="flex items-center group">
+        <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-10 mr-3">
+        <div>
+          <h1 class="text-xl font-bold text-yellow-400 tracking-tighter leading-none">Velvorax</h1>
+          <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+        </div>
+      </a>
+    </div>
+    <nav class="flex-1 px-3 space-y-1">
+      <a href="dashboard.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+      <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+      <a href="admin_pricing.html" class="sidebar-link active"><i data-feather="dollar-sign" class="w-4 h-4 mr-3"></i> Pricing Plan</a>
+<!--      <a href="registrations.html" class="sidebar-link"><i data-feather="user-plus" class="w-4 h-4 mr-3"></i> Registrations</a>-->
+      <div class="pt-6 pb-2 text-[10px] uppercase text-gray-600 font-bold px-5 tracking-[0.2em]">System</div>
+      <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col h-full overflow-hidden">
+    <header class="h-20 border-b border-white/5 bg-[#030308]/50 backdrop-blur-xl flex items-center justify-between px-8 z-20">
+      <div>
+        <h2 class="text-sm font-bold text-white tracking-widest uppercase">Pricing Management</h2>
+        <p class="text-[10px] text-gray-500 uppercase mt-1">Control global subscription tiers</p>
+      </div>
+      <button onclick="savePricing()" class="bg-yellow-400 text-black px-6 py-2 rounded-full text-xs font-bold hover:bg-yellow-500 transition-all flex items-center">
+        <i data-feather="save" class="w-4 h-4 mr-2"></i> Save Changes
+      </button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-8 relative space-y-8">
+      
+      <div id="pricingGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Tiers will be loaded here -->
+      </div>
+
+    </div>
+  
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  <footer class="mt-auto py-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-100 transition-opacity">
+    <p class="text-[9px] text-gray-500 uppercase tracking-widest">
+      &copy; 2026 Velvorax Enterprise OS. All rights reserved.
+    </p>
+    <div class="flex space-x-6 text-[9px] text-gray-600 uppercase tracking-widest">
+      <a href="privacy.html" class="hover:text-white transition">Privacy</a>
+      <a href="terms.html" class="hover:text-white transition">Terms</a>
+      <span class="text-green-500 flex items-center">
+        <span class="w-1 h-1 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> SECURE SESSION
+      </span>
+    </div>
+  </footer>
+
+</main>
+
+  <script>
+    feather.replace();
+
+    async function loadPricing() {
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/pricing');
+        const data = await res.json();
+        
+        const grid = document.getElementById('pricingGrid');
+        grid.innerHTML = '';
+        
+        data.forEach(tier => {
+          grid.innerHTML += `
+            <div class="glass-card p-8 border-white/5 border relative group overflow-hidden">
+              <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                <i data-feather="edit-3" class="w-10 h-10 text-yellow-400"></i>
+              </div>
+              <h3 class="text-xl font-bold text-yellow-400 mb-6 uppercase tracking-widest">${tier.tier}</h3>
+              
+              <div class="space-y-6">
+                <div class="space-y-2">
+                  <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Monthly Cost (USD)</label>
+                  <div class="flex items-center">
+                    <span class="text-xl font-bold text-white mr-2">$</span>
+                    <input type="number" id="usd-${tier.tier}" value="${tier.usd}" class="w-full px-4 py-2 rounded-lg font-bold text-white text-lg">
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Monthly Cost (INR)</label>
+                  <div class="flex items-center">
+                    <span class="text-xl font-bold text-white mr-2">₹</span>
+                    <input type="number" id="inr-${tier.tier}" value="${tier.inr}" class="w-full px-4 py-2 rounded-lg font-bold text-white text-lg">
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Setup Cost (INR)</label>
+                  <input type="text" id="setup-${tier.tier}" value="${tier.setupInr || ''}" class="w-full px-4 py-2 rounded-lg font-bold text-white">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        feather.replace();
+      } catch (err) {
+        console.error('Error loading pricing:', err);
+      }
+    }
+
+    async function savePricing() {
+      const tiers = ['Basic', 'Growth', 'Pro'];
+      const data = tiers.map(t => ({
+        tier: t,
+        usd: document.getElementById(`usd-${t}`).value,
+        inr: document.getElementById(`inr-${t}`).value,
+        setupInr: document.getElementById(`setup-${t}`).value
+      }));
+
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/pricing/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token
+          },
+          body: JSON.stringify({ tiers: data })
+        });
+
+        if (res.ok) {
+          alert('Pricing updated successfully! Changes will reflect on the public page.');
+        } else {
+          alert('Error updating pricing.');
+        }
+      } catch (err) {
+        console.error('Error saving pricing:', err);
+      }
+    }
+
+    loadPricing();
+  </script>
+</body>
+</html>

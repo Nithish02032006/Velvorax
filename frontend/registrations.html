@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrations - Velvorax Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (!VelvoraxAuth.isAuthenticated() || !VelvoraxAuth.hasRole(['super_admin', 'admin'])) window.location.href = 'login.html';
+  </script>
+  <script src="js/config.js"></script>
+  <style>
+    .side-panel {
+      position: fixed; top: 0; right: -400px;
+      width: 350px; height: 100%;
+      background: #08080c; border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 30px; backdrop-filter: blur(20px);
+      overflow-y: auto;
+    }
+    .side-panel.open { right: 0; }
+    .panel-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: none; z-index: 90;
+    }
+    .panel-overlay.show { display: block; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+    }
+    .sidebar-link.active {
+      background: rgba(250, 204, 21, 0.1);
+      color: #facc15;
+      border-right: 2px solid #facc15;
+    }
+    .filter-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    select option {
+      background: #08080c;
+      color: white;
+    }
+    /* Kanban Styles */
+    .kanban-column {
+      min-width: 300px;
+      width: 300px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+      max-height: calc(100vh - 250px);
+    }
+    .kanban-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: grab;
+      transition: all 0.2s;
+    }
+    .kanban-card:active { cursor: grabbing; }
+    .kanban-card:hover {
+      border-color: #facc15;
+      background: rgba(255,255,255,0.08);
+    }
+    .kanban-scroll {
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+      padding-bottom: 20px;
+    }
+    .kanban-scroll::-webkit-scrollbar { width: 4px; }
+    .kanban-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+  </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+<!-- Sidebar -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+  <div class="p-8 border-b border-white/5">
+    <a href="dashboard-super.html" class="flex items-center group">
+      <div class="brand-logo-box group-hover:scale-105 transition-transform">
+        <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+      </div>
+      <div class="ml-3">
+        <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+        <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+      </div>
+    </a>
+  </div>
+  <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+    <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+    <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+    
+    <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+    <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+    <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+    <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+    <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+    <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+    <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+    <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+    <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+    <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+  </nav>
+  <div class="p-4 border-t border-white/5">
+    <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+      <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-[#050505] relative">
+  <div class="p-8">
+    <!-- Header -->
+    <header class="flex flex-wrap items-center justify-between gap-6 mb-8">
+      <div class="flex items-center gap-4">
+        <h1 class="text-4xl font-bold text-white tracking-tight">Registrations</h1>
+        <span class="text-sm text-gray-600 mt-2 font-medium" id="regCountText">0 of 0 requests</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="flex bg-white/5 p-1 rounded-xl border border-white/10">
+          <button onclick="switchView('table')" id="tableBtn" class="flex items-center px-4 py-2 rounded-lg bg-white/10 text-white text-xs font-bold transition-all">
+            <i data-feather="list" class="w-3.5 h-3.5 mr-2"></i> Table
+          </button>
+          <button onclick="switchView('kanban')" id="kanbanBtn" class="flex items-center px-4 py-2 rounded-lg text-gray-500 hover:text-white text-xs font-bold transition-all">
+            <i data-feather="grid" class="w-3.5 h-3.5 mr-2"></i> Kanban
+          </button>
+        </div>
+
+        <div class="flex bg-white/5 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md" id="quickFilters">
+          <button onclick="filterByStatus('All')" id="btn-all" class="px-6 py-2 rounded-xl text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all filter-btn active">All <span id="chip-all" class="ml-1 opacity-50">0</span></button>
+          <button onclick="filterByStatus('Pending')" id="btn-pending" class="px-6 py-2 rounded-xl text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all filter-btn">Pending <span id="chip-pending" class="ml-1 opacity-50">0</span></button>
+          <button onclick="filterByStatus('Approved')" id="btn-approved" class="px-6 py-2 rounded-xl text-gray-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all filter-btn">Approved <span id="chip-approved" class="ml-1 opacity-50">0</span></button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button onclick="toggleSidePanel('filterPanel')" class="flex items-center px-4 py-2.5 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-xl border border-white/10 transition-all">
+            <i data-feather="filter" class="w-3.5 h-3.5 mr-2 text-yellow-500"></i> Filters
+          </button>
+          <button onclick="toggleSidePanel('columnPanel')" class="flex items-center px-4 py-2.5 bg-white/5 hover:bg-white/10 text-white text-xs font-bold rounded-xl border border-white/10 transition-all">
+            <i data-feather="eye" class="w-3.5 h-3.5 mr-2 text-yellow-500"></i> Columns <span id="colCount" class="ml-2 text-[8px] bg-yellow-500 text-black px-1.5 py-0.5 rounded-md shadow-lg shadow-yellow-500/20">7/7</span>
+          </button>
+          <button onclick="openAddModal()" class="btn-primary-theme flex items-center px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-yellow-400/20">
+            <i data-feather="plus" class="w-4 h-4 mr-2"></i> New Registration
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Table View -->
+    <div id="tableView" class="overflow-x-auto">
+      <table class="w-full text-left border-separate border-spacing-y-4">
+        <thead>
+          <tr class="text-gray-600 text-[11px] font-bold uppercase tracking-widest px-6">
+            <th class="pb-2 pl-4">Client</th>
+            <th class="pb-2">Company</th>
+            <th class="pb-2">Industry</th>
+            <th class="pb-2">Status</th>
+            <th class="pb-2">Date</th>
+            <th class="pb-2 text-center">Activity</th>
+            <th class="pb-2 text-right pr-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="registrationsTableBody" class="text-[13px]">
+          <!-- Dynamic content -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Kanban View -->
+    <div id="kanbanView" class="hidden overflow-x-auto pb-6">
+      <div class="flex gap-6 min-w-max" id="kanbanBoard">
+        <!-- Columns will be injected here -->
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden p-32 text-center">
+      <div class="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10">
+        <i data-feather="user-plus" class="w-8 h-8 text-gray-700"></i>
+      </div>
+      <p class="text-gray-500 font-bold uppercase tracking-[0.2em] text-xs">No registrations found</p>
+    </div>
+  </div>
+
+  <!-- Panels Overlay -->
+  <div id="panelOverlay" class="panel-overlay" onclick="closeAllPanels()"></div>
+
+  <!-- Filter Panel -->
+  <div id="filterPanel" class="side-panel">
+    <div class="flex justify-between items-center mb-8">
+      <h3 class="text-xl font-bold text-white">Filters</h3>
+      <button onclick="closeAllPanels()" class="text-gray-500 hover:text-white"><i data-feather="x"></i></button>
+    </div>
+    <form id="filterForm" class="space-y-6">
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Industry</label>
+        <select id="filterIndustry" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-400 outline-none">
+          <option value="All">All Industries</option>
+          <option value="Technology">Technology</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Finance">Finance</option>
+          <option value="Education">Education</option>
+          <option value="Manufacturing">Manufacturing</option>
+        </select>
+      </div>
+      <div class="space-y-2">
+        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Date Range</label>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="date" id="filterStartDate" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[10px] text-white focus:border-yellow-400 outline-none">
+          <input type="date" id="filterEndDate" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[10px] text-white focus:border-yellow-400 outline-none">
+        </div>
+      </div>
+      <div class="pt-4 flex gap-3">
+        <button type="button" onclick="resetFilters()" class="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold transition-all border border-white/10">Reset</button>
+        <button type="submit" class="flex-1 px-4 py-3 bg-yellow-400 text-black rounded-xl text-xs font-bold hover:bg-yellow-500 transition-all">Apply</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Column Visibility Panel -->
+  <div id="columnPanel" class="side-panel">
+    <div class="flex justify-between items-center mb-8">
+      <h3 class="text-xl font-bold text-white">Table Columns</h3>
+      <button onclick="closeAllPanels()" class="text-gray-500 hover:text-white"><i data-feather="x"></i></button>
+    </div>
+    <div class="space-y-4" id="columnToggleList">
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Client</span>
+        <input type="checkbox" checked onchange="toggleColumn(0)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Company</span>
+        <input type="checkbox" checked onchange="toggleColumn(1)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Industry</span>
+        <input type="checkbox" checked onchange="toggleColumn(2)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Status</span>
+        <input type="checkbox" checked onchange="toggleColumn(3)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Date</span>
+        <input type="checkbox" checked onchange="toggleColumn(4)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Activity</span>
+        <input type="checkbox" checked onchange="toggleColumn(5)" class="w-4 h-4 accent-yellow-400">
+      </label>
+      <label class="flex items-center justify-between p-3 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+        <span class="text-xs font-bold text-gray-400 uppercase">Actions</span>
+        <input type="checkbox" checked onchange="toggleColumn(6)" class="w-4 h-4 accent-yellow-400">
+      </label>
+    </div>
+  </div>
+</main>
+
+<script>
+  let allRegistrations = [];
+  let currentFilter = 'All';
+  let currentView = 'table';
+  let filters = { industry: 'All', startDate: '', endDate: '' };
+
+  function toggleSidePanel(id) {
+    document.getElementById(id).classList.add('open');
+    document.getElementById('panelOverlay').classList.add('show');
+    if(window.feather) feather.replace();
+  }
+
+  function closeAllPanels() {
+    document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('open'));
+    document.getElementById('panelOverlay').classList.remove('show');
+  }
+
+  async function fetchRegistrations() {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(CONFIG.API_BASE_URL + '/api/dashboard/registrations', {
+        headers: { 'x-auth-token': token }
+      });
+      if (!res.ok) throw new Error('Failed');
+      let data = await res.json();
+
+      allRegistrations = data.filter(r => r.role !== 'super_admin' && r.companyId && r.companyId._id);
+
+      updateCounters();
+      renderCurrentView();
+    } catch (err) {
+      console.error(err);
+      document.getElementById('registrationsTableBody').innerHTML = '<tr><td colspan="7" class="text-center py-10 text-red-400">Error loading registrations</td></tr>';
+    }
+  }
+
+  function updateCounters() {
+    const displayList = getFilteredList();
+    document.getElementById('chip-all').textContent = allRegistrations.length;
+    document.getElementById('chip-pending').textContent = allRegistrations.filter(r => (r.companyId.approvalStatus || 'Pending') === 'Pending').length;
+    document.getElementById('chip-approved').textContent = allRegistrations.filter(r => r.companyId.approvalStatus === 'Approved').length;
+    document.getElementById('regCountText').textContent = `${displayList.length} of ${allRegistrations.length} requests`;
+  }
+
+  function getFilteredList() {
+    return allRegistrations.filter(r => {
+      const s = r.companyId.approvalStatus || 'Pending';
+      if (currentFilter !== 'All' && s !== currentFilter) return false;
+      if (filters.industry !== 'All' && r.companyId.industry !== filters.industry) return false;
+      if (filters.startDate && new Date(r.createdAt) < new Date(filters.startDate)) return false;
+      if (filters.endDate && new Date(r.createdAt) > new Date(filters.endDate)) return false;
+      return true;
+    });
+  }
+
+  function renderCurrentView() {
+    if (currentView === 'table') renderTable();
+    else renderKanban();
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('registrationsTableBody');
+    const emptyState = document.getElementById('emptyState');
+    tbody.innerHTML = '';
+
+    const displayList = getFilteredList();
+
+    if (displayList.length === 0) {
+      emptyState.classList.remove('hidden');
+      return;
+    }
+    emptyState.classList.add('hidden');
+
+    displayList.forEach(reg => {
+      const initials = reg.name.split(' ').map(n => n[0]).join('').toUpperCase();
+      const date = new Date(reg.createdAt).toLocaleDateString();
+      const status = reg.companyId.approvalStatus || 'Pending';
+      const companyId = reg.companyId._id;
+
+      const statusClass = status === 'Approved' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
+                        status === 'Rejected' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
+                        'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+
+      const row = document.createElement('tr');
+      row.className = "group hover:bg-white/[0.02] transition-all border-b border-white/5";
+
+      let actionButtons = '';
+      if (status === 'Pending') {
+        actionButtons = `
+          <button onclick="doAction('${companyId}','approve')" class="p-2 text-green-500 hover:bg-green-500/10 rounded-lg transition-all" title="Approve"><i data-feather="check" class="w-4 h-4"></i></button>
+          <button onclick="doAction('${companyId}','reject')" class="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-all" title="Reject"><i data-feather="x" class="w-4 h-4"></i></button>
+        `;
+      }
+      actionButtons += `<button onclick="doDelete('${companyId}')" class="p-2 text-gray-600 hover:text-red-500 transition-colors"><i data-feather="trash-2" class="w-4 h-4"></i></button>`;
+
+      row.innerHTML = `
+        <td class="py-4 pl-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-yellow-400 font-bold border border-white/10 text-xs">${initials}</div>
+            <div>
+              <div class="font-bold text-white capitalize">${reg.name}</div>
+              <div class="text-[10px] text-gray-500">${reg.email}</div>
+            </div>
+          </div>
+        </td>
+        <td class="py-4 text-gray-400 font-bold">${reg.companyId.name || 'N/A'}</td>
+        <td class="py-4 text-gray-500 font-bold">${reg.companyId.industry || 'N/A'}</td>
+        <td class="py-4">
+          <span class="px-3 py-1 rounded-full text-[10px] font-bold border ${statusClass}">${status}</span>
+        </td>
+        <td class="py-4 text-gray-500 font-bold">${date}</td>
+        <td class="py-4 text-center text-gray-600 text-[10px]">
+          <div>Reg: ${date}</div>
+        </td>
+        <td class="py-4 text-right pr-4">
+          <div class="flex items-center justify-end gap-1">${actionButtons}</div>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    applyColumnVisibility();
+    feather.replace();
+  }
+
+  function renderKanban() {
+    const board = document.getElementById('kanbanBoard');
+    const emptyState = document.getElementById('emptyState');
+    board.innerHTML = '';
+
+    const displayList = getFilteredList();
+
+    if (displayList.length === 0) {
+      emptyState.classList.remove('hidden');
+      return;
+    }
+    emptyState.classList.add('hidden');
+
+    const statuses = ['Pending', 'Approved', 'Rejected'];
+    statuses.forEach(status => {
+      const colRegs = displayList.filter(r => (r.companyId.approvalStatus || 'Pending') === status);
+      const col = document.createElement('div');
+      col.className = 'kanban-column';
+      col.innerHTML = `
+        <div class="p-4 border-b border-white/5 flex justify-between items-center bg-white/5 rounded-t-2xl">
+          <h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400">${status}</h4>
+          <span class="px-2 py-0.5 bg-white/5 rounded text-[10px] text-gray-500 font-bold">${colRegs.length}</span>
+        </div>
+        <div class="p-4 kanban-scroll flex-1" ondrop="drop(event, '${status}')" ondragover="allowDrop(event)">
+          ${colRegs.map(reg => `
+            <div class="kanban-card group" draggable="true" ondragstart="drag(event, '${reg.companyId._id}')">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-yellow-400 font-bold border border-white/10 uppercase text-xs">${reg.name.charAt(0)}</div>
+                <div>
+                  <h5 class="text-sm font-bold text-white group-hover:text-yellow-400 transition-colors">${reg.name}</h5>
+                  <p class="text-[9px] text-gray-500">${reg.email}</p>
+                </div>
+              </div>
+              <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/5">
+                <span class="text-[9px] font-bold text-gray-500 uppercase tracking-tighter">${reg.companyId.name}</span>
+                <span class="text-[9px] text-gray-600">${reg.companyId.industry}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      board.appendChild(col);
+    });
+    feather.replace();
+  }
+
+  function allowDrop(ev) { ev.preventDefault(); }
+  function drag(ev, id) { ev.dataTransfer.setData("companyId", id); }
+  async function drop(ev, newStatus) {
+    ev.preventDefault();
+    const id = ev.dataTransfer.getData("companyId");
+    const action = newStatus.toLowerCase();
+    if(action === 'pending') return;
+    doAction(id, action);
+  }
+
+  async function doAction(companyId, action) {
+    if (!confirm(`Are you sure you want to ${action} this registration?`)) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/dashboard/registrations/${companyId}/${action}`, {
+        method: 'PUT',
+        headers: { 'x-auth-token': token }
+      });
+      if (res.ok) fetchRegistrations();
+      else { const d = await res.json(); alert(d.msg || 'Failed'); }
+    } catch (err) { console.error(err); }
+  }
+
+  async function doDelete(companyId) {
+    if (!confirm('PERMANENTLY delete this business?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/dashboard/registrations/${companyId}`, {
+        method: 'DELETE',
+        headers: { 'x-auth-token': token }
+      });
+      if (res.ok) fetchRegistrations();
+    } catch (err) { console.error(err); }
+  }
+
+  function filterByStatus(status) {
+    currentFilter = status;
+    document.querySelectorAll('#quickFilters .filter-btn').forEach(btn => btn.classList.remove('active'));
+    const btnId = status === 'All' ? 'btn-all' : status === 'Pending' ? 'btn-pending' : 'btn-approved';
+    const btn = document.getElementById(btnId);
+    if(btn) btn.classList.add('active');
+    updateCounters();
+    renderCurrentView();
+  }
+
+  function switchView(view) {
+    currentView = view;
+    document.getElementById('tableBtn').classList.toggle('bg-white/10', view === 'table');
+    document.getElementById('tableBtn').classList.toggle('text-white', view === 'table');
+    document.getElementById('tableBtn').classList.toggle('text-gray-500', view !== 'table');
+    document.getElementById('kanbanBtn').classList.toggle('bg-white/10', view === 'kanban');
+    document.getElementById('kanbanBtn').classList.toggle('text-white', view === 'kanban');
+    document.getElementById('kanbanBtn').classList.toggle('text-gray-500', view !== 'kanban');
+
+    document.getElementById('tableView').classList.toggle('hidden', view !== 'table');
+    document.getElementById('kanbanView').classList.toggle('hidden', view !== 'kanban');
+    renderCurrentView();
+  }
+
+  document.getElementById('filterForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    filters.industry = document.getElementById('filterIndustry').value;
+    filters.startDate = document.getElementById('filterStartDate').value;
+    filters.endDate = document.getElementById('filterEndDate').value;
+    updateCounters();
+    renderCurrentView();
+    closeAllPanels();
+  });
+
+  function resetFilters() {
+    document.getElementById('filterForm').reset();
+    filters = { industry: 'All', startDate: '', endDate: '' };
+    updateCounters();
+    renderCurrentView();
+    closeAllPanels();
+  }
+
+  function toggleColumn(index) {
+    const table = document.querySelector('table');
+    if(!table) return;
+    const rows = table.rows;
+    for (let i = 0; i < rows.length; i++) {
+      const cell = rows[i].cells[index];
+      if (cell) cell.classList.toggle('hidden');
+    }
+    updateVisibleCount();
+  }
+
+  function applyColumnVisibility() {
+    const checkboxes = document.querySelectorAll('#columnToggleList input[type="checkbox"]');
+    checkboxes.forEach((cb, index) => {
+      const table = document.querySelector('table');
+      if (!table) return;
+      const rows = table.rows;
+      for (let i = 0; i < rows.length; i++) {
+        const cell = rows[i].cells[index];
+        if (cell) {
+          if (!cb.checked) cell.classList.add('hidden');
+          else cell.classList.remove('hidden');
+        }
+      }
+    });
+    updateVisibleCount();
+  }
+
+  function updateVisibleCount() {
+    const total = 7;
+    const hidden = document.querySelectorAll('thead th.hidden').length;
+    document.getElementById('colCount').innerText = `${total - hidden}/${total}`;
+  }
+
+  function openAddModal() { alert('Manual registration creation coming soon.'); }
+
+  fetchRegistrations();
+  feather.replace();
+</script>
+</body>
+</html>

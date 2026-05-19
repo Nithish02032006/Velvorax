@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Tracking - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
+  </script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#0a0a0f] h-screen overflow-hidden flex text-gray-300">
+
+        <!-- Sidebar -->
+  <aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+      <a href="dashboard-super.html" class="flex items-center group">
+        <div class="brand-logo-box group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+        </div>
+        <div class="ml-3">
+          <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+          <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+        </div>
+      </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+      <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+      <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+      
+      <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+      <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+      <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+      <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+      <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+      <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+      <a href="employee_tracking.html" class="sidebar-link active"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+      <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+      <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+      <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+      <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+      <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+        <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-8 relative">
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold text-white">Workforce Analytics</h1>
+      <p class="text-gray-500 text-sm mt-1">Monitor staff productivity and track real-time activity timelines.</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Employee List Section -->
+      <div class="lg:col-span-2 space-y-6">
+        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Active Staff Members</h3>
+        <div id="employeeGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Dynamic Employee Cards -->
+        </div>
+      </div>
+
+      <!-- Detail Timeline Section -->
+      <div class="lg:col-span-1">
+        <div class="glass-card p-8 border-white/5 bg-white/[0.02]">
+          <h3 class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-8 flex items-center">
+            <i data-feather="clock" class="w-4 h-4 mr-3 text-yellow-500"></i> Daily Activity Timeline
+          </h3>
+          <div id="activityTimeline" class="space-y-2">
+            <!-- Dynamic Timeline Items -->
+            <p class="text-gray-600 text-xs text-center py-10 italic">Select an employee to view their detailed activity log.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Footer -->
+    
+  
+  
+
+
+  
+
+
+  
+
+
+  <footer class="mt-auto py-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-100 transition-opacity">
+    <p class="text-[9px] text-gray-500 uppercase tracking-widest">
+      &copy; 2026 Velvorax Enterprise OS. All rights reserved.
+    </p>
+    <div class="flex space-x-6 text-[9px] text-gray-600 uppercase tracking-widest">
+      <a href="privacy.html" class="hover:text-white transition">Privacy</a>
+      <a href="terms.html" class="hover:text-white transition">Terms</a>
+      <span class="text-green-500 flex items-center">
+        <span class="w-1 h-1 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> SECURE SESSION
+      </span>
+    </div>
+  </footer>
+
+</main>
+
+  <script>
+    feather.replace();
+
+    async function fetchEmployees() {
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/employee/stats', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const employees = await res.json();
+        renderEmployees(employees);
+      } catch (err) { console.error(err); }
+    }
+
+    function renderEmployees(employees) {
+      const grid = document.getElementById('employeeGrid');
+      grid.innerHTML = '';
+      
+      // If no employees, show a placeholder
+      if (employees.length === 0) {
+        grid.innerHTML = '<p class="text-gray-500 text-sm italic col-span-2 text-center py-20 bg-white/5 rounded-2xl border border-dashed border-white/10">No staff members found. Add team members in Settings.</p>';
+        return;
+      }
+
+      employees.forEach(emp => {
+        grid.innerHTML += `
+          <div onclick="viewTimeline('${emp._id}')" class="glass-card p-6 border-white/5 bg-white/[0.02] hover:bg-white/[0.05] transition-all cursor-pointer group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center text-black font-bold text-lg">
+                ${emp.name.charAt(0)}
+              </div>
+              <div>
+                <h4 class="font-bold text-white">${emp.name}</h4>
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest">${emp.role}</p>
+              </div>
+              <div class="ml-auto text-right">
+                <p class="text-[10px] text-gray-500 uppercase">Quality Score</p>
+                <p class="text-lg font-bold text-green-500">${emp.qualityScore}%</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+              <div>
+                <p class="text-[10px] text-gray-600 uppercase mb-1">Total Calls</p>
+                <p class="text-sm font-bold text-white">${emp.totalCalls}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-600 uppercase mb-1">Talk Time</p>
+                <p class="text-sm font-bold text-white">${formatTime(emp.talkTimeSeconds)}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function formatTime(seconds) {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    async function viewTimeline(userId) {
+      const timeline = document.getElementById('activityTimeline');
+      timeline.innerHTML = '<p class="text-center text-gray-600 py-10">Loading timeline...</p>';
+      
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/employee/stats', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const employees = await res.json();
+        const emp = employees.find(e => e._id === userId);
+        
+        timeline.innerHTML = '';
+        if (emp.dailyActivityLog.length === 0) {
+          timeline.innerHTML = '<p class="text-center text-gray-600 py-10 italic">No activity recorded for today.</p>';
+          return;
+        }
+
+        emp.dailyActivityLog.forEach(log => {
+          const time = new Date(log.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          timeline.innerHTML += `
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="flex justify-between items-start">
+                <div>
+                  <p class="text-[11px] font-bold text-white">${log.activity}</p>
+                  <p class="text-[9px] text-gray-600 uppercase tracking-widest">${log.type}</p>
+                </div>
+                <span class="text-[10px] text-yellow-500 font-bold">${time}</span>
+              </div>
+            </div>
+          `;
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    fetchEmployees();
+  </script>
+</body>
+</html>

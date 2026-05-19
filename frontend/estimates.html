@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estimates - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#0a0a0f] h-screen overflow-hidden flex text-gray-300">
+  <aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-6 border-b border-white/5">
+      <div class="flex items-center group cursor-pointer" onclick="window.location.href='dashboard-super.html'">
+        <div class="brand-logo-box group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+        </div>
+        <div class="ml-3">
+          <h2 class="brand-text uppercase">Velvorax</h2>
+          <p class="brand-subtext uppercase">Enterprise OS</p>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4 px-3">
+       <div class="sidebar-section-title">FINANCE</div>
+       <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="sidebar-icon"></i> Invoices</a>
+       <a href="estimates.html" class="sidebar-link active"><i data-feather="briefcase" class="sidebar-icon"></i> Estimates</a>
+       <a href="products.html" class="sidebar-link"><i data-feather="box" class="sidebar-icon"></i> Products</a>
+       <a href="recurring.html" class="sidebar-link"><i data-feather="repeat" class="sidebar-icon"></i> Recurring</a>
+    </nav>
+  </aside>
+  <main class="flex-1 overflow-y-auto p-8 relative">
+    <header class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Auto-generated Estimates</h1>
+        <p class="text-gray-500 text-sm mt-1">Quotes generated from active invoice templates.</p>
+      </div>
+    </header>
+    <div class="glass-card overflow-hidden">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-gray-500 text-[10px] font-bold uppercase tracking-widest bg-white/5">
+            <th class="p-6">Estimate #</th>
+            <th class="p-6">Date</th>
+            <th class="p-6">Account</th>
+            <th class="p-6 text-right">Amount</th>
+            <th class="p-6">Status</th>
+          </tr>
+        </thead>
+        <tbody id="estimateTableBody" class="text-sm">
+          <tr class="border-b border-white/5 text-gray-500"><td colspan="5" class="p-10 text-center italic">No estimates generated yet. Create an invoice to auto-generate quotes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script>feather.replace();</script>
+
+    
+    
+
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center mb-6">
+            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+            <div>
+              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+          </p>
+          <div class="flex space-x-4 text-gray-600">
+            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Product Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Solutions Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="lg:col-span-1">
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+          <ul class="space-y-4 text-[11px]">
+            <li>
+              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest">+91 9985201116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest leading-relaxed">
+                  Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
+                  Miyapur, Hyderabad, Telangana - 500049
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+        </p>
+        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+          <span class="text-green-500 flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            SYSTEMS OPERATIONAL
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script>if(window.feather) feather.replace();</script>
+
+</body>
+</html>

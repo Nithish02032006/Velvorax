@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunities - Velvorax</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <style>
+
+  .side-panel {
+  position: fixed; top: 0; right: -400px;
+  width: 350px; height: 100%;
+  background: #08080c; border-left: 1px solid rgba(255,255,255,0.1);
+  z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 30px; backdrop-filter: blur(20px);
+  overflow-y: auto;
+  }
+  .side-panel.open { right: 0; }
+  .panel-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: none; z-index: 90;
+  }
+  .panel-overlay.show { display: block; }
+
+  .glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  }
+  .sidebar-link.active {
+  background: rgba(250, 204, 21, 0.1);
+  color: #facc15;
+  border-right: 2px solid #facc15;
+  }
+  .status-select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+  }
+  .status-select option {
+  background: #08080c;
+  color: white;
+  }
+  .status-select.hot { color: #ef4444; border-color: rgba(239,68,68,0.2); }
+  .status-select.warm { color: #fb923c; border-color: rgba(251,146,60,0.2); }
+  .status-select.cold { color: #facc15; border-color: rgba(250,204,21,0.2); }
+  .status-select.dealclosed { color: #22c55e; border-color: rgba(34,197,94,0.2); }
+  </style>
+
+  <script>
+    if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
+  </script>
+</head>
+
+<body class="antialiased bg-[#0a0a0f] h-screen overflow-hidden flex text-gray-300">
+
+<!-- SIDEBAR (UNCHANGED) -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+  <div class="p-8 border-b border-white/5">
+    <a href="dashboard-super.html" class="flex items-center group">
+      <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+      <div class="ml-3">
+        <h2 class="uppercase font-bold text-yellow-400">Velvorax</h2>
+        <p class="text-[0.5rem] text-gray-500 uppercase">Enterprise OS</p>
+      </div>
+    </a>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+    <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+    <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+    <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+    <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+    <a href="opportunities.html" class="sidebar-link active"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+    <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+    <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+    <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+    <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+    <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+    <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+    <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+    <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+  </nav>
+  <div class="p-4 border-t border-white/5">
+    <button onclick="VelvoraxAuth.logout()" class="text-red-500 w-full text-left">
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="flex-1 overflow-y-auto p-8">
+
+  <header class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-white">Opportunities</h1>
+      <p class="text-gray-500 text-sm">Manage your sales pipeline</p>
+    </div>
+
+<!--    <button onclick="toggleSideModal('createOppModal')" class="bg-yellow-400 text-black px-6 py-2 rounded-xl font-bold">-->
+<!--      + New Opportunity-->
+<!--    </button>-->
+  </header>
+
+  <!-- KANBAN -->
+  <div class="flex gap-4 overflow-x-auto">
+
+    <div class="kanban-column">
+      <div class="kanban-header">Prospecting <span id="count-Prospecting">0</span></div>
+      <div id="Prospecting-cards"></div>
+    </div>
+
+    <div class="kanban-column">
+      <div class="kanban-header">Qualification <span id="count-Qualification">0</span></div>
+      <div id="Qualification-cards"></div>
+    </div>
+
+    <div class="kanban-column">
+      <div class="kanban-header">Proposal <span id="count-Proposal">0</span></div>
+      <div id="Proposal-cards"></div>
+    </div>
+
+    <div class="kanban-column">
+      <div class="kanban-header">Negotiation <span id="count-Negotiation">0</span></div>
+      <div id="Negotiation-cards"></div>
+    </div>
+
+    <div class="kanban-column">
+      <div class="kanban-header">Closed Won <span id="count-Closed Won">0</span></div>
+      <div id="Won-cards"></div>
+    </div>
+
+  </div>
+
+  <!-- CLOSED DEALS TABLE -->
+  <div class="mt-10 bg-white/5 rounded-2xl overflow-hidden">
+
+    <div class="p-6 border-b border-white/5">
+      <h2 class="text-xl font-bold text-white">Closed Deals</h2>
+    </div>
+
+    <table class="w-full text-left">
+      <thead>
+      <tr class="text-xs uppercase text-gray-400">
+        <th class="p-4">Deal</th>
+        <th>Amount</th>
+        <th>Stage</th>
+        <th>Type</th>
+        <th>Probability</th>
+        <th>Assigned</th>
+        <th>Close Date</th>
+      </tr>
+      </thead>
+      <tbody id="closedDealsTableBody"></tbody>
+    </table>
+
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div id="createOppModal" class="hidden fixed right-0 top-0 w-96 h-full bg-[#111] p-6 overflow-y-auto">
+
+  <h2 class="text-white text-xl mb-4">New Opportunity</h2>
+
+  <form id="oppForm" class="space-y-4">
+
+    <input name="name" placeholder="Deal Name" class="w-full p-2 bg-black text-white">
+
+    <input name="amount" type="number" placeholder="Amount" class="w-full p-2 bg-black text-white">
+
+    <select name="stage" class="w-full p-2 bg-black text-white">
+      <option>Prospecting</option>
+      <option>Qualification</option>
+      <option>Proposal</option>
+      <option>Negotiation</option>
+      <option>Closed Won</option>
+    </select>
+
+    <input name="probability" type="number" placeholder="Probability %" class="w-full p-2 bg-black text-white">
+
+    <input name="closeDate" type="date" class="w-full p-2 bg-black text-white">
+
+    <button class="w-full bg-yellow-400 text-black p-2 font-bold">
+      Create
+    </button>
+
+  </form>
+
+</div>
+
+<script>
+
+  function toggleSideModal(id){
+    document.getElementById(id).classList.toggle("hidden");
+  }
+
+  /* ---------------- DATA FETCH ---------------- */
+
+/* ---------------- DATA FETCH & FILTER ---------------- */
+ async function fetchDeals(){
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${CONFIG.API_BASE_URL}/api/deals`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  const deals = await res.json();
+  // Simply render what the backend sends. The backend already did the filtering.
+  renderKanban(deals);
+  renderTable(deals);
+}
+  /* ---------------- KANBAN ---------------- */
+
+  function renderKanban(deals){
+
+    const map = {
+      "Prospecting": "Prospecting-cards",
+      "Qualification": "Qualification-cards",
+      "Proposal": "Proposal-cards",
+      "Negotiation": "Negotiation-cards",
+      "Closed Won": "Won-cards"
+    };
+
+    Object.values(map).forEach(id => document.getElementById(id).innerHTML = "");
+
+    Object.keys(map).forEach(stage => {
+      document.getElementById(`count-${stage}`).innerText = 0;
+    });
+
+    deals.forEach(d => {
+
+      const col = document.getElementById(map[d.stage]);
+      if(!col) return;
+
+      col.innerHTML += `
+        <div class="bg-white/5 p-3 rounded mb-2">
+          <div class="text-white font-bold">${d.name}</div>
+          <div class="text-xs text-gray-400">₹${d.amount}</div>
+        </div>
+      `;
+
+      const c = document.getElementById(`count-${d.stage}`);
+      if(c) c.innerText = parseInt(c.innerText) + 1;
+
+    });
+
+  }
+
+  /* ---------------- TABLE ---------------- */
+
+  function renderTable(deals){
+
+    const body = document.getElementById("closedDealsTableBody");
+    body.innerHTML = "";
+
+    deals.filter(d => d.stage === "Closed Won")
+    .forEach(d => {
+
+      body.innerHTML += `
+        <tr class="border-t border-white/5 text-sm">
+          <td class="p-4 text-white">${d.name}</td>
+          <td>₹${d.amount}</td>
+          <td>${d.stage}</td>
+          <td>${d.type || '-'}</td>
+          <td>${d.probability || 0}%</td>
+          <td>${d.assignedTo?.name || '-'}</td>
+          <td>${d.closeDate ? new Date(d.closeDate).toLocaleDateString() : '-'}</td>
+        </tr>
+      `;
+
+    });
+
+  }
+
+  /* ---------------- FORM ---------------- */
+
+  /* ---------------- FORM---------------- */
+  document.getElementById("oppForm").onsubmit = async (e) => {
+    e.preventDefault();
+
+    const data = Object.fromEntries(new FormData(e.target));
+
+    // ATTACH YOUR ID SO YOU OWN THIS DEAL
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+        const user = JSON.parse(userStr);
+        data.assignedTo = user.id || user._id;
+    }
+
+    const token = localStorage.getItem("token");
+
+    await fetch(`${CONFIG.API_BASE_URL}/api/deals`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    toggleSideModal("createOppModal");
+    fetchDeals();
+    e.target.reset();
+  };
+
+  fetchDeals();
+  feather.replace();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacts Command Center - Velvorax</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <script src="js/auth.js"></script>
+
+  <script>
+    if (!VelvoraxAuth.isAuthenticated()) {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <script src="js/config.js"></script>
+
+  <style>
+    body::-webkit-scrollbar,
+    .overflow-y-auto::-webkit-scrollbar,
+    .overflow-x-auto::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    body::-webkit-scrollbar-thumb,
+    .overflow-y-auto::-webkit-scrollbar-thumb,
+    .overflow-x-auto::-webkit-scrollbar-thumb {
+      background: rgba(250,204,21,0.35);
+      border-radius: 20px;
+    }
+    body::-webkit-scrollbar-track,
+    .overflow-y-auto::-webkit-scrollbar-track,
+    .overflow-x-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+    }
+    .sidebar-link.active {
+      background: rgba(250, 204, 21, 0.1);
+      color: #facc15;
+      border-right: 2px solid #facc15;
+    }
+    .status-select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      outline: none;
+      cursor: pointer;
+    }
+    .status-select option {
+      background: #08080c;
+      color: white;
+    }
+    .status-select.hot { color: #ef4444; border-color: rgba(239,68,68,0.2); }
+    .status-select.warm { color: #fb923c; border-color: rgba(251,146,60,0.2); }
+    .status-select.cold { color: #facc15; border-color: rgba(250,204,21,0.2); }
+    .status-select.dealclosed { color: #22c55e; border-color: rgba(34,197,94,0.2); }
+    .dial-key {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.05);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 14px;
+      border-radius: 16px;
+      transition: .2s ease;
+    }
+    .dial-key:hover { background: rgba(255,255,255,0.1); }
+    .side-panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100%;
+      background: #08080c;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      z-index: 100;
+      transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 30px;
+      backdrop-filter: blur(20px);
+      overflow-y: auto;
+    }
+    .side-panel.open { right: 0; }
+    .panel-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: none; z-index: 90;
+    }
+    .panel-overlay.show { display: block; }
+  </style>
+
+
+</head>
+
+<body class="bg-[#02020a] text-gray-300 h-screen overflow-hidden flex">
+
+<!-- SIDEBAR -->
+
+<aside class="w-64 bg-[#030308] border-r border-white/5 flex flex-col shrink-0">
+
+  <div class="p-8 border-b border-white/5">
+
+    <a href="dashboard-super.html" class="flex items-center">
+
+      <img src="assets/logo.jpg" class="w-10 h-10 rounded-full">
+
+      <div class="ml-3">
+
+        <h2 class="uppercase font-bold text-yellow-400 tracking-wide">
+          Velvorax
+        </h2>
+
+        <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em]">
+          Enterprise OS
+        </p>
+
+      </div>
+
+    </a>
+
+  </div>
+
+  <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+    <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+    <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+    <a href="contacts.html" class="sidebar-link active"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+    <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+    <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+    <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+    <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+    <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+    <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+    <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+    <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+    <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+    <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+  </nav>
+
+  <div class="p-4 border-t border-white/5">
+
+    <button
+            onclick="VelvoraxAuth.logout()"
+            class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left"
+    >
+      <i data-feather="log-out" class="w-4 h-4 mr-3"></i>
+      Sign Out
+    </button>
+
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="flex-1 overflow-y-auto bg-[#050510] relative">
+
+  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-400/5 rounded-full blur-[120px] -mr-64 -mt-64"></div>
+
+  <div class="p-8 relative z-10">
+
+    <!-- HEADER -->
+
+    <header class="flex flex-wrap items-center justify-between gap-6 mb-10">
+
+      <div>
+
+        <div class="flex items-center gap-4">
+
+          <div class="w-14 h-14 rounded-2xl bg-yellow-400 flex items-center justify-center text-black shadow-2xl shadow-yellow-400/20">
+
+            <i data-feather="phone-call" class="w-7 h-7"></i>
+
+          </div>
+
+          <div>
+
+            <h1 class="text-4xl font-black text-white">
+              Telecaller Command Center
+            </h1>
+
+            <p class="text-sm text-gray-500 mt-1">
+              Prioritized leads • Real-time calling • CRM followups
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="flex items-center gap-4">
+
+        <button
+                onclick="toggleColumnPanel()"
+                class="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-5 py-3 rounded-2xl text-xs font-bold flex items-center"
+        >
+
+          <i data-feather="columns" class="w-4 h-4 mr-2"></i>
+
+          Columns
+
+        </button>
+
+        <button
+                onclick="toggleDialPad()"
+                class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-2xl text-xs font-bold flex items-center"
+        >
+
+          <i data-feather="phone" class="w-4 h-4 mr-2"></i>
+
+          Quick Dial
+
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- STATS -->
+
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-10">
+
+      <div class="glass-card p-6 text-center">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Total</p>
+        <h3 class="text-3xl font-bold text-white" id="stat-total">0</h3>
+      </div>
+
+      <div class="glass-card p-6 text-center border-red-500/10 bg-red-500/[0.02]">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-red-400 mb-2">Hot</p>
+        <h3 class="text-3xl font-bold text-red-500" id="stat-p0">0</h3>
+      </div>
+
+      <div class="glass-card p-6 text-center border-orange-500/10 bg-orange-500/[0.02]">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-orange-400 mb-2">Warm</p>
+        <h3 class="text-3xl font-bold text-orange-500" id="stat-p1">0</h3>
+      </div>
+
+      <div class="glass-card p-6 text-center border-yellow-400/10 bg-yellow-400/[0.02]">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-yellow-400 mb-2">Cold</p>
+        <h3 class="text-3xl font-bold text-yellow-400" id="stat-p2">0</h3>
+      </div>
+
+      <div class="glass-card p-6 text-center border-green-500/10 bg-green-500/[0.02]">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-green-400 mb-2">Closed</p>
+        <h3 class="text-3xl font-bold text-green-500" id="stat-connected">0</h3>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="glass-card overflow-hidden">
+
+      <div class="overflow-x-auto">
+
+        <table class="w-full text-left">
+
+          <thead>
+
+          <tr class="bg-white/[0.04] text-[10px] uppercase tracking-widest text-white font-bold">
+
+            <th class="p-6">Priority</th>
+            <th class="p-6">Name</th>
+            <th class="p-6">Company</th>
+            <th class="p-6">Phone</th>
+            <th class="p-6">Assigned</th>
+            <th class="p-6">Address</th>
+            <th class="p-6">Notes</th>
+            <th class="p-6 text-center">Action</th>
+            <th class="p-6">Status</th>
+
+          </tr>
+
+          </thead>
+
+          <tbody id="commandTableBody" class="text-[13px] text-gray-400">
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<!-- COLUMN PANEL -->
+
+<div id="columnPanel" class="side-panel">
+
+  <div class="p-6 border-b border-white/10 flex items-center justify-between">
+
+    <h3 class="text-lg font-bold text-white">
+      Manage Columns
+    </h3>
+
+    <button onclick="toggleColumnPanel()">
+      <i data-feather="x"></i>
+    </button>
+
+  </div>
+
+  <div id="columnToggleList" class="p-6 space-y-4">
+
+    <label class="flex items-center justify-between">
+      <span>Priority</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Name</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Company</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Phone</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Assigned</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Address</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Notes</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Action</span>
+      <input type="checkbox" checked>
+    </label>
+
+    <label class="flex items-center justify-between">
+      <span>Status</span>
+      <input type="checkbox" checked>
+    </label>
+
+  </div>
+
+</div>
+
+<!-- DIAL PAD -->
+
+<div id="dialPadModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+
+  <div class="glass-card w-80 p-8 relative">
+
+    <button onclick="toggleDialPad()" class="absolute top-4 right-4 text-gray-500 hover:text-white">
+
+      <i data-feather="x"></i>
+
+    </button>
+
+    <div class="mb-6">
+
+      <input
+              type="text"
+              id="dialDisplay"
+              readonly
+              class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 text-center text-2xl font-bold tracking-widest text-white outline-none"
+              placeholder="0000000000"
+      >
+
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+
+      <button onclick="pressKey('1')" class="dial-key">1</button>
+      <button onclick="pressKey('2')" class="dial-key">2</button>
+      <button onclick="pressKey('3')" class="dial-key">3</button>
+
+      <button onclick="pressKey('4')" class="dial-key">4</button>
+      <button onclick="pressKey('5')" class="dial-key">5</button>
+      <button onclick="pressKey('6')" class="dial-key">6</button>
+
+      <button onclick="pressKey('7')" class="dial-key">7</button>
+      <button onclick="pressKey('8')" class="dial-key">8</button>
+      <button onclick="pressKey('9')" class="dial-key">9</button>
+
+      <button onclick="clearDialer()" class="dial-key text-red-500">C</button>
+
+      <button onclick="pressKey('0')" class="dial-key">0</button>
+
+      <button onclick="startCall()" class="dial-key text-green-500">
+        GO
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- NOTES MODAL -->
+<div id="notesModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+  <div class="glass-card w-96 p-8 relative">
+    <button onclick="toggleNotesModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">
+      <i data-feather="x"></i>
+    </button>
+    <h3 class="text-xl font-bold text-white mb-6">Edit Notes</h3>
+    <input type="hidden" id="notesLeadId">
+    <textarea
+      id="notesTextarea"
+      class="w-full h-40 bg-white/5 border border-white/10 rounded-2xl p-4 text-white outline-none focus:border-yellow-400/50"
+      placeholder="Enter notes here..."
+    ></textarea>
+    <button
+      onclick="saveNotes()"
+      class="w-full mt-6 bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-3 rounded-2xl transition-all"
+    >
+      Save Notes
+    </button>
+  </div>
+</div>
+
+<script>
+
+  let currentLeadId = null;
+  let allLeads = [];
+
+  function toggleDialPad(number = '') {
+
+    const modal = document.getElementById('dialPadModal');
+
+    const display = document.getElementById('dialDisplay');
+
+    modal.classList.toggle('hidden');
+
+    if (number) {
+      display.value = number;
+    }
+
+    feather.replace();
+  }
+
+  function toggleNotesModal(id = null, notes = '') {
+    const modal = document.getElementById('notesModal');
+    modal.classList.toggle('hidden');
+    if (id) {
+      document.getElementById('notesLeadId').value = id;
+      document.getElementById('notesTextarea').value = notes;
+    }
+    feather.replace();
+  }
+
+  function openNotesModal(id) {
+    const lead = allLeads.find(l => l._id === id);
+    if (lead) {
+      toggleNotesModal(lead._id, lead.notes || '');
+    }
+  }
+
+  async function saveNotes() {
+    const id = document.getElementById('notesLeadId').value;
+    const notes = document.getElementById('notesTextarea').value;
+    const token = localStorage.getItem('token');
+
+    try {
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/leads/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ notes })
+      });
+
+      if (res.ok) {
+        toggleNotesModal();
+        fetchCommandCenterData();
+      } else {
+        const error = await res.json();
+        alert('Error saving notes: ' + (error.message || 'Unknown error'));
+      }
+    } catch (err) {
+      console.error('Error updating notes:', err);
+      alert('Error updating notes. See console for details.');
+    }
+  }
+
+  function pressKey(key) {
+
+    const display = document.getElementById('dialDisplay');
+
+    display.value += key;
+  }
+
+  function clearDialer() {
+
+    document.getElementById('dialDisplay').value = '';
+  }
+
+  function startCall() {
+
+    const num = document.getElementById('dialDisplay').value;
+
+    if (!num) return;
+
+    alert('Dialing ' + num);
+
+    toggleDialPad();
+  }
+
+  function toggleColumnPanel() {
+
+    const panel = document.getElementById('columnPanel');
+
+    panel.classList.toggle('open');
+
+    feather.replace();
+  }
+
+  async function updateStatus(id, value) {
+
+  let priority = 'Cold';
+  let status = 'In Process';
+
+  if (value === 'Hot') priority = 'Hot';
+  else if (value === 'Warm') priority = 'Warm';
+  else if (value === 'Cold') priority = 'Cold';
+  else if (value === 'Deal Closed') status = 'Closed';
+
+  try {
+
+    const token = localStorage.getItem('token');
+
+    // UPDATE LEAD
+    const res = await fetch(`${CONFIG.API_BASE_URL}/api/leads/${id}`, {
+
+      method: 'PUT',
+
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+
+      body: JSON.stringify({
+        priority,
+        status
+      })
+
+    });
+
+const updatedLead = await res.json();
+
+console.log('UPDATED LEAD:', updatedLead);
+
+   // IF DEAL CLOSED -> ADD TO DEALS
+// ... inside updateStatus function ...
+if (value === 'Deal Closed') {
+  const token = localStorage.getItem('token');
+  const userStr = localStorage.getItem('user'); // Get logged in user
+  const currentUser = userStr ? JSON.parse(userStr) : null;
+  const currentUserId = currentUser ? (currentUser.id || currentUser._id) : null;
+
+  // 1. Fetch existing deals to prevent duplicates
+  const existingDealsRes = await fetch(`${CONFIG.API_BASE_URL}/api/deals`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  const existingDeals = await existingDealsRes.json();
+  const alreadyExists = existingDeals.find(d => d.leadId === updatedLead._id || d.leadId?._id === updatedLead._id);
+
+  if (!alreadyExists) {
+    // 2. Create the deal and FORCE it to be assigned to YOU
+    await fetch(`${CONFIG.API_BASE_URL}/api/deals`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        leadId: updatedLead._id,
+        name: updatedLead.name,
+        amount: updatedLead.budget || 0,
+        stage: 'Closed Won',
+        type: 'New Business',
+        probability: 100,
+        closeDate: new Date(),
+        source: updatedLead.source || 'Direct',
+        // FIX: Ensure it uses YOUR ID so it shows up in your "Opportunities" list
+        assignedTo: currentUserId
+      })
+    });
+  }
+}
+
+    fetchCommandCenterData();
+
+  } catch(err) {
+
+    console.error(err);
+  }
+}
+
+  async function fetchCommandCenterData() {
+
+    try {
+
+      const token = localStorage.getItem('token');
+
+      const res = await fetch(
+        CONFIG.API_BASE_URL + '/api/leads',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      const leads = await res.json();
+      allLeads = leads;
+
+      document.getElementById('stat-total').innerText =
+        leads.length;
+
+      document.getElementById('stat-p0').innerText =
+        leads.filter(l => l.priority === 'Hot').length;
+
+      document.getElementById('stat-p1').innerText =
+        leads.filter(l => l.priority === 'Warm').length;
+
+      document.getElementById('stat-p2').innerText =
+        leads.filter(l => l.priority === 'Cold').length;
+
+      document.getElementById('stat-connected').innerText =
+        leads.filter(l => l.status === 'Closed').length;
+
+      const tbody =
+        document.getElementById('commandTableBody');
+
+      tbody.innerHTML = '';
+
+      leads.forEach(lead => {
+
+        const pPill =
+          lead.priority === 'Hot'
+            ? 'bg-red-500/10 text-red-500 border border-red-500/20'
+            : lead.priority === 'Warm'
+            ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20'
+            : 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/20';
+
+        const pLabel =
+          lead.priority === 'Hot'
+            ? 'P0'
+            : lead.priority === 'Warm'
+            ? 'P1'
+            : 'P2';
+
+        const currentDisplayStatus =
+          lead.status === 'Closed'
+            ? 'Deal Closed'
+            : (lead.priority || 'Cold');
+
+        const statusClass =
+          currentDisplayStatus
+            .toLowerCase()
+            .replace(' ', '');
+
+        tbody.innerHTML += `
+
+          <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-all">
+
+            <td class="p-6">
+
+              <span class="px-3 py-1 rounded-lg text-[10px] font-bold ${pPill}">
+                ${pLabel}
+              </span>
+
+            </td>
+
+            <td class="p-6 font-bold text-white">
+              ${lead.name || 'Unknown'}
+            </td>
+
+            <td class="p-6 text-gray-400">
+              ${lead.company || 'Individual'}
+            </td>
+
+            <td class="p-6 font-mono text-yellow-400">
+              ${lead.phone || '—'}
+            </td>
+
+            <td class="p-6 text-gray-300 font-semibold">
+              ${lead.assignedTo?.name || 'Unassigned'}
+            </td>
+
+            <td class="p-6 text-gray-400 max-w-[220px] truncate"
+                title="${(lead.address || '').replace(/"/g, '&quot;')}">
+
+              ${lead.address || '—'}
+
+            </td>
+
+            <td class="p-6">
+
+  <div class="flex items-center gap-2 group">
+
+    <span
+      class="text-[11px] text-gray-200 truncate max-w-[180px]"
+      title="${(lead.notes || '').replace(/"/g, '&quot;')}"
+    >
+      ${lead.notes || '—'}
+    </span>
+
+    <button
+      onclick="openNotesModal('${lead._id}')"
+      class="opacity-0 group-hover:opacity-100 p-1 hover:text-yellow-400 transition-all"
+    >
+
+      <i data-feather="edit-3" class="w-3 h-3"></i>
+
+    </button>
+
+  </div>
+
+</td>
+
+            <td class="p-6 text-center">
+
+              <button
+                onclick="toggleDialPad('${lead.phone || ''}')"
+                class="bg-yellow-400 hover:bg-yellow-500 text-black p-2.5 rounded-xl"
+              >
+
+                <i data-feather="phone" class="w-4 h-4"></i>
+
+              </button>
+
+            </td>
+
+            <td class="p-6">
+
+              <select
+                onchange="updateStatus('${lead._id}', this.value)"
+                class="status-select ${statusClass}"
+              >
+
+                <option value="Hot"
+                  ${currentDisplayStatus === 'Hot' ? 'selected' : ''}>
+                  Hot
+                </option>
+
+                <option value="Warm"
+                  ${currentDisplayStatus === 'Warm' ? 'selected' : ''}>
+                  Warm
+                </option>
+
+                <option value="Cold"
+                  ${currentDisplayStatus === 'Cold' ? 'selected' : ''}>
+                  Cold
+                </option>
+
+                <option value="Deal Closed"
+                  ${currentDisplayStatus === 'Deal Closed' ? 'selected' : ''}>
+                  Deal Closed
+                </option>
+
+              </select>
+
+            </td>
+
+          </tr>
+
+        `;
+      });
+
+      feather.replace();
+
+      applyColumnVisibility();
+
+    } catch(err) {
+
+      console.error(err);
+    }
+  }
+
+  function applyColumnVisibility() {
+
+    const checkboxes =
+      document.querySelectorAll(
+        '#columnToggleList input[type="checkbox"]'
+      );
+
+    const table = document.querySelector('table');
+
+    if (!table) return;
+
+    const rows = table.rows;
+
+    checkboxes.forEach((cb, index) => {
+
+      for (let i = 0; i < rows.length; i++) {
+
+        const cell = rows[i].cells[index];
+
+        if (cell) {
+
+          if (!cb.checked) {
+            cell.classList.add('hidden');
+          } else {
+            cell.classList.remove('hidden');
+          }
+
+        }
+
+      }
+
+    });
+
+  }
+
+  document.querySelectorAll(
+    '#columnToggleList input[type="checkbox"]'
+  ).forEach(cb => {
+
+    cb.addEventListener('change', () => {
+
+      applyColumnVisibility();
+
+    });
+
+  });
+
+  fetchCommandCenterData();
+
+  feather.replace();
+
+</script>
+
+</body>
+</html>

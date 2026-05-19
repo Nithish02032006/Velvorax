@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Approvals- Velvorax</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const user = VelvoraxAuth.getUser();
+
+        if (
+          !VelvoraxAuth.isAuthenticated() ||
+          user?.role !== 'super_admin'
+        ) {
+          window.location.href = 'dashboard-super.html';
+        }
+    </script>
+    <script>
+        if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
+    </script>
+    <script src="js/config.js"></script>
+    <style>
+        .side-panel {
+          position: fixed; top: 0; right: -400px;
+          width: 350px; height: 100%;
+          background: #08080c; border-left: 1px solid rgba(255,255,255,0.1);
+          z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 30px; backdrop-filter: blur(20px);
+          overflow-y: auto;
+        }
+        .side-panel.open { right: 0; }
+        .panel-overlay {
+          position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+          display: none; z-index: 90;
+        }
+        .panel-overlay.show { display: block; }
+
+        .glass-card {
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 24px;
+        }
+        .sidebar-link.active {
+          background: rgba(250, 204, 21, 0.1);
+          color: #facc15;
+          border-right: 2px solid #facc15;
+        }
+        .filter-btn.active {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+        select option {
+          background: #08080c;
+          color: white;
+        }
+        /* Kanban Styles */
+        .kanban-column {
+          min-width: 300px;
+          width: 300px;
+          background: rgba(255,255,255,0.02);
+          border-radius: 16px;
+          display: flex;
+          flex-direction: column;
+          height: fit-content;
+          max-height: calc(100vh - 250px);
+        }
+        .kanban-card {
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 12px;
+          padding: 16px;
+          margin-bottom: 12px;
+          cursor: grab;
+          transition: all 0.2s;
+        }
+        .kanban-card:active { cursor: grabbing; }
+        .kanban-card:hover {
+          border-color: #facc15;
+          background: rgba(255,255,255,0.08);
+        }
+        /* Horizontal scrollbar */
+    #tableView::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    #tableView::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+    }
+
+    #tableView::-webkit-scrollbar-thumb {
+      background: rgba(250,204,21,0.4);
+      border-radius: 10px;
+    }
+
+    #tableView::-webkit-scrollbar-thumb:hover {
+      background: rgba(250,204,21,0.7);
+    }
+        .kanban-scroll {
+          overflow-y: auto;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,0.1) transparent;
+          padding-bottom: 20px;
+        }
+        .kanban-scroll::-webkit-scrollbar { width: 4px; }
+        .kanban-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+<!-- Sidebar -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+        <a href="dashboard-super.html" class="flex items-center group">
+            <div class="brand-logo-box group-hover:scale-105 transition-transform">
+                <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+            </div>
+            <div class="ml-3">
+                <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+                <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+            </div>
+        </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+        <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+        <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+        <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+        <a href="user-approvals.html" class="sidebar-link active">
+            <i data-feather="user-check" class="w-4 h-4 mr-3"></i>
+            User Approvals
+        </a>
+        <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+        <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+        <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+        <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+        <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+        <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+        <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+        <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+        <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+        <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+        <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+
+    </nav>
+    <div class="p-4 border-t border-white/5">
+        <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+            <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+        </button>
+    </div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-8">
+
+    <!-- Header -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+
+        <div>
+
+            <div class="flex items-center gap-3 mb-2">
+
+                <i data-feather="shield" class="w-6 h-6 text-yellow-400"></i>
+
+                <h1 class="text-3xl font-black text-white tracking-tight">
+                    User Approvals
+                </h1>
+
+            </div>
+
+            <p class="text-sm text-gray-500">
+                Company wise user approvals
+            </p>
+
+        </div>
+
+        <button
+                onclick="fetchUsers()"
+                class="px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-bold transition flex items-center">
+
+            <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i>
+            Refresh
+
+        </button>
+
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <div class="glass-card p-6">
+
+            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">
+                Total Users
+            </p>
+
+            <h2 class="text-4xl font-black text-white" id="total-users">
+                0
+            </h2>
+
+        </div>
+
+        <div class="glass-card p-6">
+
+            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">
+                Pending Users
+            </p>
+
+            <h2 class="text-4xl font-black text-yellow-400" id="pending-users">
+                0
+            </h2>
+
+        </div>
+
+        <div class="glass-card p-6">
+
+            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-4">
+                Approved Users
+            </p>
+
+            <h2 class="text-4xl font-black text-green-400" id="approved-users">
+                0
+            </h2>
+
+        </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="glass-card overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="bg-white/[0.02] border-b border-white/5">
+
+                <tr class="text-left text-[11px] uppercase tracking-[0.15em] text-gray-500">
+
+                    <th class="px-6 py-5">User</th>
+                    <th class="px-6 py-5">Email</th>
+                    <th class="px-6 py-5">Phone</th>
+                    <th class="px-6 py-5">Company</th>
+                    <th class="px-6 py-5">Role</th>
+                    <th class="px-6 py-5">Status</th>
+                    <th class="px-6 py-5 text-center">Actions</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="company-wise-users"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+
+    feather.replace();
+
+    async function fetchUsers() {
+
+        try {
+
+            const token = localStorage.getItem('token');
+
+            const res = await fetch(
+                CONFIG.API_BASE_URL + '/api/admin/users',
+                {
+                    headers: {
+                        'x-auth-token': token
+                    }
+                }
+            );
+
+            const users = await res.json();
+
+            console.log(users);
+
+            let pendingCount = 0;
+            let approvedCount = 0;
+
+            document.getElementById('total-users').textContent = users.length;
+
+            // GROUP COMPANY WISE
+            const grouped = {};
+
+            users.forEach(user => {
+
+                if (user.status === 'pending') pendingCount++;
+
+                if (
+                    user.status === 'approved' ||
+                    user.status === 'active'
+                ) approvedCount++;
+
+                const companyName =
+                    user.companyId?.companyName ||
+                    user.companyId?.name ||
+                    'No Company';
+
+                if (!grouped[companyName]) {
+                    grouped[companyName] = [];
+                }
+
+                grouped[companyName].push(user);
+
+            });
+
+            document.getElementById('pending-users').textContent = pendingCount;
+            document.getElementById('approved-users').textContent = approvedCount;
+
+            const container = document.getElementById('company-wise-users');
+
+            container.innerHTML = '';
+
+            Object.keys(grouped).forEach(company => {
+
+                const companyUsers = grouped[company];
+
+                // COMPANY HEADER
+                container.innerHTML += `
+                    <tr class="folder-row">
+
+                        <td colspan="7" class="px-6 py-5">
+
+                            <div class="flex items-center gap-3">
+
+                                <i data-feather="folder" class="w-5 h-5 text-yellow-400"></i>
+
+                                <span class="text-yellow-400 font-black uppercase tracking-wider">
+                                    ${company}
+                                </span>
+
+                                <span class="text-xs text-gray-400">
+                                    (${companyUsers.length} Users)
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+                // USERS
+                companyUsers.forEach(user => {
+
+                    container.innerHTML += `
+                        <tr class="table-row border-b border-white/5 transition">
+
+                            <td class="px-6 py-5">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="w-11 h-11 rounded-xl bg-yellow-500/10 text-yellow-400 flex items-center justify-center font-black uppercase">
+
+                                        ${user.name?.charAt(0) || 'U'}
+
+                                    </div>
+
+                                    <div>
+
+                                        <p class="text-white font-semibold">
+                                            ${user.name || '-'}
+                                        </p>
+
+                                        <p class="text-xs text-gray-500">
+                                            ID: ${user._id}
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-6 py-5 text-sm">
+                                ${user.email || '-'}
+                            </td>
+
+                            <td class="px-6 py-5 text-sm">
+                                ${user.phone || '-'}
+                            </td>
+
+                            <td class="px-6 py-5 text-sm">
+                                ${company}
+                            </td>
+
+                            <td class="px-6 py-5">
+
+                                <span class="text-xs bg-white/5 px-3 py-1 rounded-full">
+
+                                    ${user.role || 'user'}
+
+                                </span>
+
+                            </td>
+
+                            <td class="px-6 py-5">
+
+                                <span class="status-badge
+                                    ${
+                                        user.status === 'approved' ||
+                                        user.status === 'active'
+                                        ? 'bg-green-500/10 text-green-400'
+                                        : user.status === 'pending'
+                                        ? 'bg-yellow-500/10 text-yellow-400'
+                                        : 'bg-red-500/10 text-red-400'
+                                    }">
+
+                                    ${user.status}
+
+                                </span>
+
+                            </td>
+
+                            <td class="px-6 py-5">
+
+                                <div class="flex items-center justify-center gap-3">
+
+                                    <button
+                                        onclick="updateStatus('${user._id}','approved')"
+                                        class="px-4 py-2 rounded-lg bg-green-500/10 text-green-400 hover:bg-green-500/20 text-xs font-bold transition">
+
+                                        Approve
+
+                                    </button>
+
+                                    <button
+                                        onclick="updateStatus('${user._id}','rejected')"
+                                        class="px-4 py-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 text-xs font-bold transition">
+
+                                        Reject
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    `;
+                });
+
+            });
+
+            feather.replace();
+
+        } catch (err) {
+
+            console.error(err);
+
+        }
+
+    }
+
+    async function updateStatus(userId, status) {
+
+        try {
+
+            const token = localStorage.getItem('token');
+
+            const res = await fetch(
+                CONFIG.API_BASE_URL + `/api/admin/users/${userId}/status`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token
+                    },
+                    body: JSON.stringify({ status })
+                }
+            );
+
+            const data = await res.json();
+
+            alert(data.msg || 'Status updated');
+
+            fetchUsers();
+
+        } catch (err) {
+
+            console.error(err);
+
+        }
+
+    }
+
+    fetchUsers();
+
+</script>
+
+</body>
+</html>

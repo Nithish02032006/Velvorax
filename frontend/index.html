@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velvorax - Business Automation Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation -->
+  <nav class="glass-nav sticky top-0 z-50 w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <a href="index.html" class="flex-shrink-0 flex items-center group">
+          <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 mr-3 group-hover:scale-105 transition-all duration-300 shadow-lg shadow-yellow-400/10">
+          <div class="hidden sm:block">
+            <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
+            <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
+          </div>
+        </a>
+        
+        <!-- Menu Items -->
+        <div class="hidden md:flex space-x-8">
+          <a href="index.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Home</a>
+          <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
+          <a href="services.html" class="text-gray-300 hover:text-white transition">Our Services</a>
+          <a href="pricing.html" class="text-gray-300 hover:text-white transition">Pricing</a>
+          <a href="partner.html" class="text-gray-300 hover:text-white transition">Partner Program</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+        </div>
+
+        <!-- Auth Buttons -->
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="login.html" class="btn-outline-primary-theme">Login</a>
+          <a href="signup.html" class="btn-primary-theme">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="relative overflow-hidden pt-16 pb-24 lg:pt-32">
+    <!-- Cosmic Background / Milky Way Effect -->
+    <div class="cosmic-bg absolute inset-0 z-0">
+      <div class="milky-way"></div>
+      <div id="stars"></div>
+      <div id="stars2"></div>
+      <div id="stars3"></div>
+      <div class="nebula-glow"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Text -->
+        <div>
+          <h2 class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            We help <span class="text-yellow-400">businesses generate customers</span> using websites, apps, and smart systems.
+          </h2>
+          <p class="text-lg text-gray-300 mb-8 max-w-xl">
+            Automate follow-ups, track leads, and close more deals with our all-in-one platform.
+          </p>
+          <div class="flex space-x-4">
+            <a href="signup.html" class="btn-primary-theme text-lg px-8 py-3">Start Your Project</a>
+            <a href="https://wa.me/919985201116" target="_blank" class="btn-outline-primary-theme text-lg px-8 py-3">Talk to Our Team</a>
+          </div>
+        </div>
+        
+        <!-- Right Dashboard Mockup (8K High Fidelity) -->
+        <div class="relative group">
+          <!-- Background Glow -->
+          <div class="absolute -inset-10 bg-yellow-400/10 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+          
+          <!-- Image Frame -->
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#050510] shadow-[0_0_80px_rgba(0,0,0,0.8)] transform lg:rotate-2 hover:rotate-0 transition-all duration-700">
+            <img src="assets/dashboard_hero.png" alt="Velvorax Enterprise Dashboard" class="w-full h-auto block high-res-logo">
+            
+            <!-- Floating Settings Icon -->
+            <div class="absolute right-[-15px] top-1/2 -translate-y-1/2 w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center text-black shadow-2xl shadow-yellow-400/50 transform rotate-12 group-hover:rotate-0 transition-all duration-500">
+              <i data-feather="settings" class="w-6 h-6"></i>
+            </div>
+
+            <!-- Floating Logo Icon -->
+            <div class="absolute left-[-20px] top-[-20px] w-16 h-16 bg-[#0a0a0a] border-2 border-yellow-400 rounded-full flex items-center justify-center shadow-2xl shadow-yellow-400/30 p-2">
+              <img src="assets/logo.jpg" class="w-full h-full rounded-full object-cover high-res-logo">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Services Overview Section -->
+  <section class="py-24 bg-[#0A0A0A] relative z-10 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.5em] mb-4">THE VELVORAX ECOSYSTEM</h2>
+      <h3 class="text-4xl font-bold text-white mb-6">Expertise & Innovation</h3>
+      <p class="text-gray-400 mb-16 max-w-2xl mx-auto">Strategic innovation and autonomous solutions designed for the modern visionary.</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- 1. Web Development -->
+        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
+          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
+            <i data-feather="layout" class="text-yellow-400 w-5 h-5"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2">Web Development</h4>
+          <p class="text-sm text-gray-500">Custom business websites and high-converting landing pages.</p>
+        </div>
+        
+        <!-- 2. AI Automation -->
+        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
+          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
+            <i data-feather="cpu" class="text-yellow-400 w-5 h-5"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2">AI Automation</h4>
+          <p class="text-sm text-gray-500">Autonomous systems and intelligent business workflows.</p>
+        </div>
+
+        <!-- 3. Digital Marketing -->
+        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
+          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
+            <i data-feather="trending-up" class="text-yellow-400 w-5 h-5"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2">Digital Marketing</h4>
+          <p class="text-sm text-gray-500">Scale leads through precision SEO and multi-channel ads.</p>
+        </div>
+
+        <!-- 4. CRM Solutions -->
+        <div class="group bg-[#111827] border border-[#1F2937] p-8 rounded-2xl hover:border-yellow-400/50 transition-all duration-300 text-left">
+          <div class="w-10 h-10 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-6">
+            <i data-feather="users" class="text-yellow-400 w-5 h-5"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-2">CRM Solutions</h4>
+          <p class="text-sm text-gray-500">Automated sales funnels and lead tracking ecosystems.</p>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <a href="services.html" class="inline-flex items-center text-yellow-400 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
+          View All 11 Specializations <i data-feather="arrow-right" class="ml-2 w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section with Chart.js -->
+  <section class="py-20 bg-gray-900/50 relative z-10 border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-bold text-yellow-400 mb-4">Our Results</h2>
+      <p class="text-xl text-gray-300 mb-12">Turn leads into customers while you focus on your business.</p>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Before Chart -->
+        <div class="glass-card p-6 relative">
+          <h3 class="text-2xl font-bold text-yellow-400 mb-4">Before: 10 Leads</h3>
+          <canvas id="beforeChart" height="200"></canvas>
+        </div>
+        <!-- After Chart -->
+        <div class="glass-card p-6 relative overflow-hidden">
+          <h3 class="text-2xl font-bold text-yellow-400 mb-4">After: 50 Leads</h3>
+          <canvas id="afterChart" height="200"></canvas>
+          <div class="absolute right-8 top-1/2 transform -translate-y-1/2 text-right">
+            <div class="text-3xl font-bold text-yellow-400">+400%</div>
+            <div class="text-sm text-gray-300">More Conversions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    feather.replace();
+
+    // Chart.js Configuration
+    const commonOptions = {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.1)' } },
+        x: { grid: { display: false } }
+      }
+    };
+
+    // Before Chart
+    const ctxBefore = document.getElementById('beforeChart').getContext('2d');
+    new Chart(ctxBefore, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Leads',
+          data: [2, 4, 3, 5, 8, 10],
+          borderColor: '#FFD700',
+          backgroundColor: 'rgba(255, 215, 0, 0.1)',
+          borderWidth: 2,
+          tension: 0.4,
+          pointBackgroundColor: '#fff',
+          fill: true
+        }]
+      },
+      options: commonOptions
+    });
+
+    // After Chart
+    const ctxAfter = document.getElementById('afterChart').getContext('2d');
+    new Chart(ctxAfter, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Leads',
+          data: [10, 25, 35, 45, 48, 50],
+          borderColor: '#FFD700',
+          backgroundColor: 'rgba(255, 215, 0, 0.2)',
+          borderWidth: 3,
+          tension: 0.4,
+          pointBackgroundColor: '#fff',
+          fill: true
+        }]
+      },
+      options: commonOptions
+    });
+  </script>
+
+  
+
+
+  
+
+
+  
+  
+
+
+  <!-- PREMIER FOOTER -->
+  
+  
+
+
+  <!-- WORLD CLASS PREMIER FOOTER -->
+  
+  
+
+
+  <!-- COMPACT MODERN FOOTER -->
+  
+  
+
+
+  <!-- COMPACT MODERN FOOTER -->
+  
+  
+
+
+  <!-- COMPACT MODERN FOOTER -->
+  
+  <!-- COMPACT MODERN FOOTER -->
+  
+
+  <script>feather.replace();</script>
+
+  <!-- COMPACT MODERN FOOTER -->
+    
+    
+
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center mb-6">
+            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+            <div>
+              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+          </p>
+          <div class="flex space-x-4 text-gray-600">
+            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Product Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Solutions Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="lg:col-span-1">
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+          <ul class="space-y-4 text-[11px]">
+            <li>
+              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest">+91 9985201116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest leading-relaxed">
+                  Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
+                  Miyapur, Hyderabad, Telangana - 500049
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+        </p>
+        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+          <span class="text-green-500 flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            SYSTEMS OPERATIONAL
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script>if(window.feather) feather.replace();</script>
+
+</body>
+</html>

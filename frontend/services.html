@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services - Velvorax Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased">
+
+  <!-- Navigation (Shared) -->
+  <nav class="glass-nav sticky top-0 z-50 w-full">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="index.html" class="flex-shrink-0 flex items-center group">
+          <img src="assets/logo.jpg" alt="Velvorax Logo" class="high-res-logo rounded-full object-cover aspect-square h-12 object-contain mr-3 group-hover:scale-105 transition-transform">
+          <div class="hidden sm:block">
+            <h1 class="text-2xl font-bold text-yellow-400 tracking-wider leading-none">Velvorax</h1>
+            <p class="text-[0.6rem] text-gray-400 tracking-[0.2em] uppercase mt-1">Software Solution</p>
+          </div>
+        </a>
+        <div class="hidden md:flex space-x-8">
+          <a href="index.html" class="text-gray-300 hover:text-white transition">Home</a>
+          <a href="features.html" class="text-gray-300 hover:text-white transition">Features</a>
+          <a href="services.html" class="text-yellow-400 border-b-2 border-yellow-400 pb-1">Our Services</a>
+          <a href="pricing.html" class="text-gray-300 hover:text-white transition">Pricing</a>
+          <a href="partner.html" class="text-gray-300 hover:text-white transition">Partner Program</a>
+          <a href="about.html" class="text-gray-300 hover:text-white transition">About</a>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="login.html" class="btn-primary-theme">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="py-24 relative z-10 bg-[#0A0A0A]">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <!-- Section Heading -->
+      <h2 class="text-[10px] font-bold text-yellow-400 uppercase tracking-[0.5em] mb-4">THE VELVORAX ECOSYSTEM</h2>
+      <h1 class="text-4xl md:text-5xl font-bold text-yellow-400 mb-6 leading-tight">Elevate Your Digital Frontier</h1>
+      <p class="text-xl text-gray-300 mb-20 max-w-2xl mx-auto font-light">Strategic innovation and autonomous solutions designed for the modern visionary.</p>
+
+      <!-- Services Grid (Attractive Layout) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- 1. Website & Web Development -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-yellow-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,215,0,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="layout" class="text-yellow-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Website & Web Development</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Website Development</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Business & E-Commerce</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Landing Pages & Portfolios</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Custom Web Applications</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Redesign & Maintenance</li>
+          </ul>
+        </div>
+
+        <!-- 2. Mobile App Development -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-blue-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-blue-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="smartphone" class="text-blue-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Mobile App Development</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> Android & iOS Apps</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> Hybrid & Flutter Apps</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> React Native Solutions</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></span> App Maintenance</li>
+          </ul>
+        </div>
+
+        <!-- 3. Software Development -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-purple-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(168,85,247,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-purple-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="code" class="text-purple-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Software Development</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Custom Software / CRM / ERP</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Billing & Inventory Systems</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> HR Management (HRMS)</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-purple-400 rounded-full mr-2"></span> Educational Software</li>
+          </ul>
+        </div>
+
+        <!-- 4. UI/UX & Design -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-pink-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(236,72,153,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-pink-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="pen-tool" class="text-pink-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">UI/UX & Design</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> UI/UX for Web & Mobile</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Graphic & Logo Design</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Brand Identity Systems</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-pink-400 rounded-full mr-2"></span> Social Media Creatives</li>
+          </ul>
+        </div>
+
+        <!-- 5. Digital Marketing -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-green-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(34,197,94,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-green-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="trending-up" class="text-green-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Digital Marketing</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> SEO & Content Marketing</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Google, FB & Insta Ads</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Social Media & YouTube</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></span> Lead Generation</li>
+          </ul>
+        </div>
+
+        <!-- 6. Business Automation -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-orange-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(251,146,60,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-orange-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="zap" class="text-orange-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Business Automation</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> CRM & Sales Funnels</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Email & WhatsApp Automation</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Marketing Automation</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-orange-400 rounded-full mr-2"></span> Lead Tracking Systems</li>
+          </ul>
+        </div>
+
+        <!-- 7. IT & Technical Services -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-cyan-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-cyan-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="server" class="text-cyan-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">IT & Technical Services</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> Cloud Solutions & Hosting</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> Server Setup & API Dev</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> System Integration</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full mr-2"></span> IT Consulting</li>
+          </ul>
+        </div>
+
+        <!-- 8. Advanced Technologies -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-indigo-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(129,140,248,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-indigo-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="cpu" class="text-indigo-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Advanced Technologies</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> AI Integration & ML</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Chatbot Development</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Data Analytics</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-indigo-400 rounded-full mr-2"></span> Automation Tools</li>
+          </ul>
+        </div>
+
+        <!-- 9. Testing & Support -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-red-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(239,68,68,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-red-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="shield" class="text-red-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Testing & Support</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Software & QA Testing</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Bug Fixing</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Technical Support</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span> Maintenance & Support</li>
+          </ul>
+        </div>
+
+        <!-- 10. E-Commerce & Sales Systems -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-amber-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(251,191,36,0.05)] text-left flex flex-col">
+          <div class="w-11 h-11 bg-amber-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="shopping-cart" class="text-amber-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">E-Commerce & Sales</h3>
+          <ul class="text-xs text-gray-400 space-y-2 flex-1">
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> E-Commerce Setup</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Payment Integrations</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Order Management</li>
+            <li class="flex items-center"><span class="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2"></span> Marketplace Integration</li>
+          </ul>
+        </div>
+
+        <!-- 11. Branding & Growth -->
+        <div class="group relative bg-[#111111] border border-white/5 p-6 rounded-xl hover:border-yellow-400/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,215,0,0.05)] text-left flex flex-col lg:col-span-2">
+          <div class="w-11 h-11 bg-yellow-400/10 rounded-lg flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+            <i data-feather="award" class="text-yellow-400 w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-4">Branding & Growth</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <ul class="text-xs text-gray-400 space-y-2">
+              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Brand Strategy</li>
+              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Business Consulting</li>
+            </ul>
+            <ul class="text-xs text-gray-400 space-y-2">
+              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Startup & Growth Support</li>
+              <li class="flex items-center"><span class="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-2"></span> Performance Optimization</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  
+  
+
+  
+
+
+  
+
+
+  
+  
+
+
+  <!-- PREMIER FOOTER -->
+  
+  
+
+
+  <!-- WORLD CLASS PREMIER FOOTER -->
+  
+  
+
+
+  <!-- COMPACT MODERN FOOTER -->
+  
+  
+
+
+  <!-- COMPACT MODERN FOOTER -->
+  
+  <!-- COMPACT MODERN FOOTER -->
+  
+
+  <script>feather.replace();</script>
+
+  <!-- COMPACT MODERN FOOTER -->
+    
+    
+
+
+    <!-- Enterprise Multi-Column Footer -->
+    <footer class="mt-auto py-16 border-t border-white/5 bg-[#030308] relative overflow-hidden z-10">
+      <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-[120px] -z-10"></div>
+      
+      <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-12 mb-16">
+        <!-- Brand Column -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center mb-6">
+            <img src="assets/logo.jpg" class="w-10 h-10 rounded-full border border-yellow-500/20 mr-3">
+            <div>
+              <h2 class="text-white font-black text-xl tracking-tight uppercase leading-none">Velvorax</h2>
+              <p class="text-[8px] text-yellow-500 font-bold tracking-[0.2em] uppercase mt-1">Software Solution</p>
+            </div>
+          </div>
+          <p class="text-[11px] text-gray-500 leading-relaxed mb-8 max-w-xs">
+            Intelligent automation for the modern enterprise. We empower businesses to generate customers using websites, apps, and autonomous CRM systems.
+          </p>
+          <div class="flex space-x-4 text-gray-600">
+            <a href="https://www.linkedin.com/company/velvoro-software-solutions/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="linkedin" class="w-4 h-4"></i></a>
+            <a href="https://x.com/VelvoroO" target="_blank" class="hover:text-yellow-400 transition-colors">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.248 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.045 4.126H5.078z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/velvoro_software?igsh=MWRyczU3Z2ZicWVtbA==" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="instagram" class="w-4 h-4"></i></a>
+            <a href="https://www.facebook.com/share/1NqjdZAKo2/" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="facebook" class="w-4 h-4"></i></a>
+            <a href="https://youtube.com/@velvorosoftwaresolution?si=7fMvTlRsIZ9UK9C0" target="_blank" class="hover:text-yellow-400 transition-colors"><i data-feather="youtube" class="w-4 h-4"></i></a>
+          </div>
+        </div>
+
+        <!-- Product Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Product</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="features.html" class="hover:text-yellow-500 transition-colors">Features</a></li>
+            <li><a href="pricing.html" class="hover:text-yellow-500 transition-colors">Pricing</a></li>
+            <li><a href="partner.html" class="hover:text-yellow-500 transition-colors">Partners</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Blog</a></li>
+          </ul>
+        </div>
+
+        <!-- Solutions Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Solutions</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">AI Automation</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">Web Development</a></li>
+            <li><a href="services.html" class="hover:text-yellow-500 transition-colors">CRM Systems</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Column -->
+        <div class="lg:col-span-1">
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Contact</h3>
+          <ul class="space-y-4 text-[11px]">
+            <li>
+              <a href="mailto:raraju@velvorax.tech" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="mail" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest truncate">raraju@velvorax.tech</span>
+              </a>
+            </li>
+            <li>
+              <a href="tel:+919985201116" class="flex items-center text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="phone" class="w-4 h-4 mr-3 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest">+91 9985201116</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://www.google.com/maps/search/?api=1&query=Flat+303,+Sri+Mani+Sai+Arcade,+X+Road,+Miyapur,+Hyderabad,+Telangana+500049" target="_blank" class="flex items-start text-gray-500 hover:text-white transition-colors group">
+                <i data-feather="map-pin" class="w-4 h-4 mr-3 mt-1 text-yellow-500 group-hover:scale-110 transition-transform shrink-0"></i>
+                <span class="font-bold tracking-widest leading-relaxed">
+                  Flat 303, Sri Mani Sai Arcade, 'X' Road<br>
+                  Miyapur, Hyderabad, Telangana - 500049
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Company Column -->
+        <div>
+          <h3 class="text-white font-black text-[10px] uppercase tracking-[0.2em] mb-6">Company</h3>
+          <ul class="space-y-4 text-[11px] text-gray-500 font-bold uppercase tracking-widest">
+            <li><a href="about.html" class="hover:text-yellow-500 transition-colors">About Us</a></li>
+            <li><a href="privacy.html" class="hover:text-yellow-500 transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="hover:text-yellow-500 transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-yellow-500 transition-colors text-gray-700">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="max-w-7xl mx-auto px-8 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+        <p class="text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          &copy; 2026 VELVORAX SOFTWARE SOLUTIONS. ALL RIGHTS RESERVED.
+        </p>
+        <div class="flex items-center space-x-8 text-[9px] text-gray-700 font-black uppercase tracking-[0.3em]">
+          <span class="hover:text-white transition-colors cursor-default">SECURE</span>
+          <span class="hover:text-white transition-colors cursor-default">ENCRYPTED</span>
+          <span class="text-green-500 flex items-center">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-2 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            SYSTEMS OPERATIONAL
+          </span>
+        </div>
+      </div>
+    </footer>
+    <script>if(window.feather) feather.replace();</script>
+
+</body>
+</html>
+
+</body>
+</html>

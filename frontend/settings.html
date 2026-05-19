@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Settings - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+  <style>
+    .side-panel {
+      position: fixed; top: 0; right: -400px;
+      width: 350px; height: 100%;
+      background: #08080c; border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 30px; backdrop-filter: blur(20px);
+      overflow-y: auto;
+    }
+    .side-panel.open { right: 0; }
+    .panel-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: none; z-index: 90;
+    }
+    .panel-overlay.show { display: block; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+    }
+    .sidebar-link.active {
+      background: rgba(250, 204, 21, 0.1);
+      color: #facc15;
+      border-right: 2px solid #facc15;
+    }
+    .filter-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    select option {
+      background: #08080c;
+      color: white;
+    }
+    /* Kanban Styles */
+    .kanban-column {
+      min-width: 300px;
+      width: 300px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+      max-height: calc(100vh - 250px);
+    }
+    .kanban-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: grab;
+      transition: all 0.2s;
+    }
+    .kanban-card:active { cursor: grabbing; }
+    .kanban-card:hover {
+      border-color: #facc15;
+      background: rgba(255,255,255,0.08);
+    }
+    /* Horizontal scrollbar */
+#tableView::-webkit-scrollbar {
+  height: 8px;
+}
+
+#tableView::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+}
+
+#tableView::-webkit-scrollbar-thumb {
+  background: rgba(250,204,21,0.4);
+  border-radius: 10px;
+}
+
+#tableView::-webkit-scrollbar-thumb:hover {
+  background: rgba(250,204,21,0.7);
+}
+    .kanban-scroll {
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+      padding-bottom: 20px;
+    }
+    .kanban-scroll::-webkit-scrollbar { width: 4px; }
+    .kanban-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+  </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+<!-- Sidebar -->
+<aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+  <div class="p-8 border-b border-white/5">
+    <a href="dashboard-super.html" class="flex items-center group">
+      <div class="brand-logo-box group-hover:scale-105 transition-transform">
+        <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+      </div>
+      <div class="ml-3">
+        <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+        <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+      </div>
+    </a>
+  </div>
+  <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+    <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+    <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+    <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+    <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+    <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+    <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+    <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+    <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+    <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+    <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+    <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+    <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+    <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+    <a href="settings.html" class="sidebar-link active"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+  </nav>
+  <div class="p-4 border-t border-white/5">
+    <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+      <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+    </button>
+  </div>
+</aside>
+  <script>
+    if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
+  </script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+    }
+    .settings-nav-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #94a3b8;
+      transition: all 0.2s;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .settings-nav-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+    }
+    .settings-nav-link.active {
+      background: rgba(250, 204, 21, 0.1);
+      color: #facc15;
+    }
+    input, select, textarea {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: white !important;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #facc15 !important;
+      outline: none;
+    }
+    /* Toggle Switch */
+    .switch {
+      position: relative; display: inline-block; width: 44px; height: 22px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; inset: 0;
+      background-color: rgba(255,255,255,0.1); transition: .4s; border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background-color: white; transition: .4s; border-radius: 50%;
+    }
+    input:checked + .slider { background-color: #facc15; }
+    input:checked + .slider:before { transform: translateX(22px); }
+  </style>
+</head>
+<body class="antialiased bg-[#02020a] h-screen overflow-hidden flex text-gray-300">
+
+</aside>
+
+<!-- Main -->
+<main class="flex-1 overflow-hidden flex flex-col">
+  <header class="p-8 border-b border-white/5 flex justify-between items-center bg-[#050507]">
+    <div>
+      <h1 class="text-2xl font-bold text-white tracking-tight">System Configuration</h1>
+      <p class="text-xs text-gray-500 mt-1">Global workspace settings and automations</p>
+    </div>
+    <button onclick="saveAllSettings()" class="bg-yellow-400 text-black px-8 py-3 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-yellow-400/20 hover:scale-105 transition-all">
+      Apply Global Changes
+    </button>
+  </header>
+
+  <div class="flex-1 flex overflow-hidden">
+    <!-- Sub-Nav -->
+    <aside class="w-64 border-r border-white/5 p-6 space-y-2 bg-[#08080c]/30">
+      <div onclick="switchSection('general')" class="settings-nav-link active" id="nav-general"><i data-feather="sliders" class="w-4 h-4 mr-3"></i> General</div>
+      <div onclick="switchSection('workflow')" class="settings-nav-link" id="nav-workflow"><i data-feather="zap" class="w-4 h-4 mr-3"></i> Workflow</div>
+      <div onclick="switchSection('branding')" class="settings-nav-link" id="nav-branding"><i data-feather="image" class="w-4 h-4 mr-3"></i> Branding</div>
+      <div onclick="switchSection('integrations')" class="settings-nav-link" id="nav-integrations"><i data-feather="layers" class="w-4 h-4 mr-3"></i> Connectors</div>
+      <div onclick="switchSection('data')" class="settings-nav-link" id="nav-data"><i data-feather="database" class="w-4 h-4 mr-3"></i> Data & Export</div>
+    </aside>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto p-12 space-y-16" id="settings-content">
+
+      <!-- General Section -->
+      <section id="section-general" class="space-y-8">
+        <div class="border-b border-white/5 pb-4">
+          <h2 class="text-xl font-bold text-white">General Settings</h2>
+          <p class="text-sm text-gray-500">Regional and localization preferences</p>
+        </div>
+        <div class="grid grid-cols-2 gap-8">
+          <div class="space-y-2">
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Base Currency</label>
+            <select id="set-currency" class="w-full px-4 py-3 rounded-xl border border-white/10">
+              <option value="INR">Indian Rupee (₹)</option>
+              <option value="USD">US Dollar ($)</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Workspace Timezone</label>
+            <select id="set-timezone" class="w-full px-4 py-3 rounded-xl border border-white/10">
+              <option value="Asia/Kolkata">IST (Kolkata)</option>
+              <option value="UTC">UTC (Universal)</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Workflow Section -->
+      <section id="section-workflow" class="space-y-8 hidden">
+        <div class="border-b border-white/5 pb-4">
+          <h2 class="text-xl font-bold text-white">Automated Workflows</h2>
+          <p class="text-sm text-gray-500">Let the system handle repetitive tasks</p>
+        </div>
+        <div class="space-y-6">
+          <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+              <h4 class="text-white font-bold">Auto-Convert Hot Leads</h4>
+              <p class="text-xs text-gray-500">Automatically create a deal when a lead priority is set to "Hot"</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-autoConvert">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+              <h4 class="text-white font-bold">Email Notifications</h4>
+              <p class="text-xs text-gray-500">Notify assigned employees when a new lead/task is created</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-emailNotify" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data Section -->
+      <section id="section-data" class="space-y-8 hidden">
+        <div class="border-b border-white/5 pb-4">
+          <h2 class="text-xl font-bold text-white">Data Management</h2>
+          <p class="text-sm text-gray-500">Backup and export your workspace data</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <button class="glass-card p-6 text-center hover:bg-white/5 transition-all">
+            <i data-feather="download" class="mx-auto mb-3 text-yellow-400"></i>
+            <span class="text-xs font-bold text-white uppercase tracking-widest">Export Leads</span>
+          </button>
+          <button class="glass-card p-6 text-center hover:bg-white/5 transition-all">
+            <i data-feather="download" class="mx-auto mb-3 text-yellow-400"></i>
+            <span class="text-xs font-bold text-white uppercase tracking-widest">Export Deals</span>
+          </button>
+          <button class="glass-card p-6 text-center hover:bg-white/5 transition-all">
+            <i data-feather="download" class="mx-auto mb-3 text-yellow-400"></i>
+            <span class="text-xs font-bold text-white uppercase tracking-widest">Full Backup</span>
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  feather.replace();
+
+  function switchSection(id) {
+    document.querySelectorAll('#settings-content section').forEach(s => s.classList.add('hidden'));
+    document.getElementById('section-' + id).classList.remove('hidden');
+    document.querySelectorAll('.settings-nav-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('nav-' + id).classList.add('active');
+  }
+
+  async function loadSettings() {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/settings`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const settings = await res.json();
+      if(settings) {
+        document.getElementById('set-currency').value = settings.currency || 'INR';
+        document.getElementById('set-timezone').value = settings.timezone || 'Asia/Kolkata';
+        document.getElementById('set-autoConvert').checked = settings.leadAutoConversion || false;
+        document.getElementById('set-emailNotify').checked = settings.emailNotifications !== false;
+      }
+    } catch (err) { console.error(err); }
+  }
+
+  async function saveAllSettings() {
+    const data = {
+      currency: document.getElementById('set-currency').value,
+      timezone: document.getElementById('set-timezone').value,
+      leadAutoConversion: document.getElementById('set-autoConvert').checked,
+      emailNotifications: document.getElementById('set-emailNotify').checked
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/settings/general`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify(data)
+      });
+      if(res.ok) alert('Settings applied successfully');
+    } catch (err) { alert('Error saving settings'); }
+  }
+
+  loadSettings();
+</script>
+
+</body>
+</html>

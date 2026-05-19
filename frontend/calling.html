@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calling Dashboard - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (!VelvoraxAuth.isAuthenticated('super_admin')) window.location.href = 'login.html';
+  </script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#050510] h-screen overflow-hidden flex text-gray-300">
+
+        <!-- Sidebar -->
+  <aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+      <a href="dashboard-super.html" class="flex items-center group">
+        <div class="brand-logo-box group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+        </div>
+        <div class="ml-3">
+          <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+          <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+        </div>
+      </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+      <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+      <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+      
+      <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+      <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+      <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+      <a href="#" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+      <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+      <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+      <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+      <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+      <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+      <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+      <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+      <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+        <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <header class="h-16 border-b border-gray-800 bg-[#0a0a2a]/80 backdrop-blur flex items-center px-6 z-10">
+      <h2 class="text-xl font-semibold text-white">Calling Dashboard</h2>
+    </header>
+
+    <div class="flex-1 overflow-y-auto p-6 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+        <div class="glass-card p-4 border-l-4 border-l-blue-500"><p class="text-sm text-gray-400">Total Leads</p><h3 class="text-xl font-bold" id="totalLeads">0</h3></div>
+        <div class="glass-card p-4 border-l-4 border-l-red-500"><p class="text-sm text-gray-400">P0 - Call Now</p><h3 class="text-xl font-bold text-red-400" id="p0Count">0</h3></div>
+        <div class="glass-card p-4 border-l-4 border-l-orange-500"><p class="text-sm text-gray-400">P1 - Call Today</p><h3 class="text-xl font-bold text-orange-400" id="p1Count">0</h3></div>
+        <div class="glass-card p-4 border-l-4 border-l-yellow-500"><p class="text-sm text-gray-400">P2 - This Week</p><h3 class="text-xl font-bold text-yellow-400" id="p2Count">0</h3></div>
+        <div class="glass-card p-4 border-l-4 border-l-green-500"><p class="text-sm text-gray-400">Connected</p><h3 class="text-xl font-bold text-green-400" id="connectedCount">0</h3></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 glass-card p-6">
+          <h3 class="text-lg font-bold text-yellow-400 mb-4">Prioritized Call List</h3>
+          <div id="callList" class="space-y-4">
+            <!-- Empty State -->
+            <div class="p-10 text-center border border-dashed border-white/10 rounded-xl">
+              <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">No High Priority Calls Remaining</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-6 flex flex-col items-center">
+          <h3 class="text-lg font-bold text-yellow-400 mb-4 text-center">Quick Dial</h3>
+          <div class="bg-gray-900 p-4 rounded-lg w-full mb-4">
+            <input type="text" value="+1 " class="w-full bg-transparent text-2xl text-center text-white focus:outline-none" readonly>
+          </div>
+          <div class="grid grid-cols-3 gap-3 w-full max-w-xs mb-6">
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">1</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">2</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">3</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">4</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">5</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">6</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">7</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">8</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">9</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">*</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">0</button>
+            <button class="bg-gray-800 p-4 rounded text-xl hover:bg-gray-700">#</button>
+          </div>
+          <button class="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 w-full flex justify-center items-center font-bold text-lg" onclick="alert('Simulating Call...')">
+            <i data-feather="phone" class="mr-2"></i> Call Now
+          </button>
+        </div>
+      </div>
+    </div>
+  
+  
+
+
+    <!-- Footer -->
+    
+  
+  
+
+
+  
+
+
+  
+
+
+  <footer class="mt-auto py-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-100 transition-opacity">
+    <p class="text-[9px] text-gray-500 uppercase tracking-widest">
+      &copy; 2026 Velvorax Enterprise OS. All rights reserved.
+    </p>
+    <div class="flex space-x-6 text-[9px] text-gray-600 uppercase tracking-widest">
+      <a href="privacy.html" class="hover:text-white transition">Privacy</a>
+      <a href="terms.html" class="hover:text-white transition">Terms</a>
+      <span class="text-green-500 flex items-center">
+        <span class="w-1 h-1 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> SECURE SESSION
+      </span>
+    </div>
+  </footer>
+
+</main>
+
+  <script>feather.replace();</script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Management - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
+  </script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#0a0a0f] h-screen overflow-hidden flex text-gray-300">
+
+        <!-- Sidebar -->
+  <aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+      <a href="dashboard-super.html" class="flex items-center group">
+        <div class="brand-logo-box group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+        </div>
+        <div class="ml-3">
+          <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+          <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+        </div>
+      </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+      <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+      <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+      
+      <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+      <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+      <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+      <a href="#" onclick="alert('Goals Module Coming Soon')" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+      <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+      <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+      <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+      <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+      <a href="invoices.html" class="sidebar-link active"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+      <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+      <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+      <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+        <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 overflow-y-auto p-8 relative">
+    <header class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Financial Invoicing</h1>
+        <p class="text-gray-500 text-sm mt-1">Manage corporate billing, taxes, and revenue collection.</p>
+      </div>
+      <button onclick="toggleModal('invoiceFormModal')" class="bg-[#FFD700] text-black px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-yellow-500/20 transition-all hover:scale-105">
+        <i data-feather="plus" class="w-4 h-4 inline-block mr-2"></i> New Invoice
+      </button>
+    </header>
+
+    <!-- Invoices List -->
+    <div class="glass-card overflow-hidden">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-gray-500 text-[10px] font-bold uppercase tracking-widest bg-white/5">
+            <th class="p-6">Invoice #</th>
+            <th class="p-6">Client (Bill To)</th>
+            <th class="p-6">Amount</th>
+            <th class="p-6">Status</th>
+            <th class="p-6 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody id="invoiceTableBody" class="text-sm text-gray-400"></tbody>
+      </table>
+    </div>
+  
+    <!-- Footer -->
+    
+  
+  
+
+
+  
+
+
+  
+
+
+  <footer class="mt-auto py-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-100 transition-opacity">
+    <p class="text-[9px] text-gray-500 uppercase tracking-widest">
+      &copy; 2026 Velvorax Enterprise OS. All rights reserved.
+    </p>
+    <div class="flex space-x-6 text-[9px] text-gray-600 uppercase tracking-widest">
+      <a href="privacy.html" class="hover:text-white transition">Privacy</a>
+      <a href="terms.html" class="hover:text-white transition">Terms</a>
+      <span class="text-green-500 flex items-center">
+        <span class="w-1 h-1 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> SECURE SESSION
+      </span>
+    </div>
+  </footer>
+
+</main>
+
+  <!-- Invoice Form Modal (Full Screen) -->
+  <div id="invoiceFormModal" class="fixed inset-0 bg-[#0a0a0f] hidden z-50 overflow-y-auto p-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex justify-between items-center mb-12">
+        <h2 class="text-3xl font-bold text-white">Create New Invoice</h2>
+        <div class="flex gap-4">
+           <div class="flex bg-white/5 p-1 rounded-xl border border-white/10 items-center">
+             <button onclick="setCurrency('USD')" id="cur-USD" class="px-4 py-2 rounded-lg bg-white/10 text-white text-xs font-bold">USD</button>
+             <button onclick="setCurrency('INR')" id="cur-INR" class="px-4 py-2 rounded-lg text-gray-500 hover:text-white text-xs font-bold">INR</button>
+           </div>
+           <button onclick="toggleModal('invoiceFormModal')" class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-gray-500 hover:text-white border border-white/10"><i data-feather="x"></i></button>
+        </div>
+      </div>
+
+      <form id="invoiceForm" class="space-y-10">
+        <div class="grid grid-cols-2 gap-8">
+           <div class="space-y-4">
+             <div class="space-y-2">
+               <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Invoice Number</label>
+               <input type="text" name="invoiceNumber" required placeholder="INV-2026-001" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-500 outline-none">
+             </div>
+             <div class="space-y-2">
+               <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bill From</label>
+               <textarea name="billFrom" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-500 outline-none h-24">Velvorax Software Solutions
+123 Tech Blvd, Suite 500
+San Francisco, CA 94105</textarea>
+             </div>
+           </div>
+           <div class="space-y-4">
+             <div class="space-y-2">
+               <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">PO Number</label>
+               <input type="text" name="poNumber" placeholder="PO-998877" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-500 outline-none">
+             </div>
+             <div class="space-y-2">
+               <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Bill To</label>
+               <textarea name="billTo" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-yellow-500 outline-none h-24" placeholder="Client Name & Address"></textarea>
+             </div>
+           </div>
+        </div>
+
+        <!-- Line Items -->
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest">Line Items</h3>
+            <button type="button" onclick="addLineItem()" class="text-yellow-500 text-xs font-bold">+ Add Item</button>
+          </div>
+          <div id="lineItemsContainer" class="space-y-4">
+             <!-- Dynamic Row Header -->
+             <div class="grid grid-cols-12 gap-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest px-4">
+               <div class="col-span-6">Description</div>
+               <div class="col-span-2 text-center">Qty</div>
+               <div class="col-span-2 text-right">Rate</div>
+               <div class="col-span-2 text-right">Amount</div>
+             </div>
+             <!-- Rows Added Here -->
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="flex justify-end pt-8 border-t border-white/5">
+           <div class="w-64 space-y-3 text-sm">
+             <div class="flex justify-between text-gray-500">
+               <span>Subtotal</span>
+               <span id="summary-subtotal">$0.00</span>
+             </div>
+             <div class="flex justify-between items-center gap-4 text-gray-500">
+               <span>Tax (%)</span>
+               <input type="number" id="taxInput" value="18" onchange="calculateTotals()" class="w-16 bg-white/5 border border-white/10 rounded px-2 py-1 text-right outline-none">
+             </div>
+             <div class="flex justify-between text-xl font-bold text-white pt-3 border-t border-white/10">
+               <span>Total</span>
+               <span id="summary-total" class="text-yellow-500">$0.00</span>
+             </div>
+           </div>
+        </div>
+
+        <div class="flex justify-end gap-4">
+          <button type="button" onclick="toggleModal('invoiceFormModal')" class="px-8 py-3 rounded-xl text-gray-500 font-bold">Cancel</button>
+          <button type="submit" class="bg-[#FFD700] text-black px-10 py-4 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-yellow-500/20">Create & Send Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail Modal for View/Print -->
+  <div id="invoiceDetailModal" class="fixed inset-0 bg-[#0a0a0f] hidden z-50 overflow-y-auto p-12">
+    <div class="max-w-4xl mx-auto bg-white text-black p-16 rounded-sm shadow-2xl" id="invoice-content">
+       <!-- Invoice PDF Content Rendered Here -->
+    </div>
+    <div class="max-w-4xl mx-auto mt-8 flex justify-center gap-4 no-print">
+      <button onclick="window.print()" class="bg-gray-800 text-white px-8 py-3 rounded-xl font-bold">Print Invoice</button>
+      <button onclick="downloadPDF()" class="bg-yellow-500 text-black px-8 py-3 rounded-xl font-bold">Download PDF</button>
+      <button onclick="toggleModal('invoiceDetailModal')" class="bg-white/5 text-white px-8 py-3 rounded-xl font-bold border border-white/10">Close Preview</button>
+    </div>
+  </div>
+
+  <script>
+    feather.replace();
+    let currentCurrency = 'USD';
+
+    function toggleModal(id) {
+      document.getElementById(id).classList.toggle('hidden');
+    }
+
+    function setCurrency(cur) {
+      currentCurrency = cur;
+      document.getElementById('cur-USD').classList.toggle('bg-white/10', cur === 'USD');
+      document.getElementById('cur-INR').classList.toggle('bg-white/10', cur === 'INR');
+      calculateTotals();
+    }
+
+    function addLineItem() {
+      const container = document.getElementById('lineItemsContainer');
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-12 gap-4 items-center bg-white/[0.02] p-4 rounded-xl border border-white/5';
+      row.innerHTML = `
+        <div class="col-span-6"><input type="text" placeholder="Service/Product Description" class="w-full bg-transparent outline-none text-white text-xs item-desc"></div>
+        <div class="col-span-2"><input type="number" value="1" onchange="calculateTotals()" class="w-full bg-transparent outline-none text-center text-white text-xs item-qty"></div>
+        <div class="col-span-2"><input type="number" value="0" onchange="calculateTotals()" class="w-full bg-transparent outline-none text-right text-white text-xs item-rate"></div>
+        <div class="col-span-2 text-right font-bold text-white text-xs item-amount">$0.00</div>
+      `;
+      container.appendChild(row);
+    }
+
+    function calculateTotals() {
+      const rows = document.querySelectorAll('#lineItemsContainer > div.grid');
+      let subtotal = 0;
+      const symbol = currentCurrency === 'USD' ? '$' : '₹';
+      const rate = currentCurrency === 'INR' ? 83 : 1;
+
+      rows.forEach(row => {
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+        const baseRate = parseFloat(row.querySelector('.item-rate').value) || 0;
+        const convertedRate = baseRate * rate;
+        const amount = qty * convertedRate;
+        subtotal += amount;
+        row.querySelector('.item-amount').textContent = symbol + amount.toLocaleString();
+      });
+
+      const taxPercent = parseFloat(document.getElementById('taxInput').value) || 0;
+      const taxAmount = (subtotal * taxPercent) / 100;
+      const total = subtotal + taxAmount;
+
+      document.getElementById('summary-subtotal').textContent = symbol + subtotal.toLocaleString();
+      document.getElementById('summary-total').textContent = symbol + total.toLocaleString();
+    }
+
+    async function fetchInvoices() {
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/invoices', {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const invoices = await res.json();
+        renderInvoices(invoices);
+      } catch (err) { console.error(err); }
+    }
+
+    function renderInvoices(invoices) {
+      const tbody = document.getElementById('invoiceTableBody');
+      tbody.innerHTML = '';
+      invoices.forEach(inv => {
+        const symbol = inv.currency === 'USD' ? '$' : '₹';
+        tbody.innerHTML += `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-all">
+            <td class="p-6 font-bold text-white">${inv.invoiceNumber}</td>
+            <td class="p-6 text-gray-400 line-clamp-1">${inv.billTo}</td>
+            <td class="p-6 text-white font-bold">${symbol}${inv.total.toLocaleString()}</td>
+            <td class="p-6"><span class="px-2 py-1 rounded text-[10px] font-bold ${inv.status === 'Paid' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${inv.status}</span></td>
+            <td class="p-6 text-center">
+              <button onclick="viewInvoice('${inv._id}')" class="text-yellow-500 hover:underline text-xs">View/Print</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+      
+      const lineItems = Array.from(document.querySelectorAll('#lineItemsContainer > div.grid')).map(row => ({
+        description: row.querySelector('.item-desc').value,
+        quantity: parseFloat(row.querySelector('.item-qty').value),
+        rate: parseFloat(row.querySelector('.item-rate').value),
+        amount: parseFloat(row.querySelector('.item-amount').textContent.replace(/[$,₹]/g, '').replace(/,/g, ''))
+      }));
+
+      data.lineItems = lineItems;
+      data.currency = currentCurrency;
+      data.taxPercent = parseFloat(document.getElementById('taxInput').value);
+      data.subtotal = parseFloat(document.getElementById('summary-subtotal').textContent.replace(/[$,₹]/g, '').replace(/,/g, ''));
+      data.total = parseFloat(document.getElementById('summary-total').textContent.replace(/[$,₹]/g, '').replace(/,/g, ''));
+
+      try {
+        const res = await fetch(CONFIG.API_BASE_URL + '/api/invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          toggleModal('invoiceFormModal');
+          fetchInvoices();
+        }
+      } catch (err) { console.error(err); }
+    });
+
+    async function viewInvoice(id) {
+      try {
+        const res = await fetch(`/api/invoices/${id}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const inv = await res.json();
+        const symbol = inv.currency === 'USD' ? '$' : '₹';
+        
+        const content = `
+          <div class="flex justify-between items-start mb-16">
+            <div>
+              <h1 class="text-4xl font-black text-black uppercase tracking-tighter mb-4">INVOICE</h1>
+              <p class="text-sm font-bold text-gray-400"># ${inv.invoiceNumber}</p>
+            </div>
+            <div class="text-right">
+              <h2 class="text-xl font-bold">Velvorax Software</h2>
+              <p class="text-xs text-gray-500 whitespace-pre-line">${inv.billFrom}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-12 mb-16">
+             <div>
+               <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Billed To</p>
+               <p class="text-sm font-bold whitespace-pre-line">${inv.billTo}</p>
+             </div>
+             <div class="text-right">
+               <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">PO Number</p>
+               <p class="text-sm font-bold">${inv.poNumber || 'N/A'}</p>
+             </div>
+          </div>
+          <table class="w-full mb-12">
+            <thead>
+              <tr class="border-b-2 border-black text-left text-[10px] font-bold uppercase tracking-widest">
+                <th class="py-4">Description</th>
+                <th class="py-4 text-center">Qty</th>
+                <th class="py-4 text-right">Rate</th>
+                <th class="py-4 text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${inv.lineItems.map(item => `
+                <tr class="border-b border-gray-100">
+                  <td class="py-4 text-sm font-medium">${item.description}</td>
+                  <td class="py-4 text-center text-sm">${item.quantity}</td>
+                  <td class="py-4 text-right text-sm">${symbol}${item.rate.toLocaleString()}</td>
+                  <td class="py-4 text-right text-sm font-bold">${symbol}${item.amount.toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="flex justify-end">
+            <div class="w-64 space-y-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400 font-bold uppercase">Subtotal</span>
+                <span class="font-bold">${symbol}${inv.subtotal.toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-400 font-bold uppercase">Tax (${inv.taxPercent}%)</span>
+                <span class="font-bold">${symbol}${((inv.subtotal * inv.taxPercent)/100).toLocaleString()}</span>
+              </div>
+              <div class="flex justify-between text-2xl font-black border-t-2 border-black pt-4">
+                <span>TOTAL</span>
+                <span>${symbol}${inv.total.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('invoice-content').innerHTML = content;
+        toggleModal('invoiceDetailModal');
+      } catch (err) { console.error(err); }
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById('invoice-content');
+      html2pdf().from(element).save();
+    }
+
+    addLineItem();
+    fetchInvoices();
+  </script>
+</body>
+</html>

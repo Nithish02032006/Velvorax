@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - Velvorax</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="antialiased bg-[#0a0a0f] h-screen overflow-hidden flex text-gray-300">
+      <!-- Sidebar -->
+  <aside class="sidebar w-64 border-r border-white/5 bg-[#030308] flex flex-col shrink-0">
+    <div class="p-8 border-b border-white/5">
+      <a href="dashboard-super.html" class="flex items-center group">
+        <div class="brand-logo-box group-hover:scale-105 transition-transform">
+          <img src="assets/logo.jpg" class="w-8 h-8 rounded-full">
+        </div>
+        <div class="ml-3">
+          <h2 class="brand-text uppercase font-bold text-yellow-400">Velvorax</h2>
+          <p class="text-[0.5rem] text-gray-500 tracking-[0.2em] uppercase mt-1">Enterprise OS</p>
+        </div>
+      </a>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 sidebar-nav scrollbar-hide px-3 space-y-1">
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">CRM</div>
+      <a href="dashboard-super.html" class="sidebar-link"><i data-feather="grid" class="w-4 h-4 mr-3"></i> Dashboard</a>
+      <a href="leads.html" class="sidebar-link"><i data-feather="users" class="w-4 h-4 mr-3"></i> Leads</a>
+<!--      <a href="registrations.html" class="sidebar-link"><i data-feather="user-plus" class="w-4 h-4 mr-3"></i> Registrations</a>-->
+      <a href="contacts.html" class="sidebar-link"><i data-feather="phone" class="w-4 h-4 mr-3"></i> Contacts</a>
+      <a href="accounts.html" class="sidebar-link"><i data-feather="briefcase" class="w-4 h-4 mr-3"></i> Accounts</a>
+      <a href="opportunities.html" class="sidebar-link"><i data-feather="target" class="w-4 h-4 mr-3"></i> Deals</a>
+      <a href="#" class="sidebar-link"><i data-feather="award" class="w-4 h-4 mr-3"></i> Goals</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">PERFORMANCE</div>
+      <a href="cases.html" class="sidebar-link"><i data-feather="life-buoy" class="w-4 h-4 mr-3"></i> Tickets</a>
+      <a href="tasks.html" class="sidebar-link"><i data-feather="check-square" class="w-4 h-4 mr-3"></i> Tasks</a>
+      <a href="employee_tracking.html" class="sidebar-link"><i data-feather="activity" class="w-4 h-4 mr-3"></i> Employee Tracking</a>
+      <a href="social.html" class="sidebar-link"><i data-feather="share-2" class="w-4 h-4 mr-3"></i> Social Media</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">FINANCE</div>
+      <a href="invoices.html" class="sidebar-link"><i data-feather="file-text" class="w-4 h-4 mr-3"></i> Invoices</a>
+      <a href="reports.html" class="sidebar-link"><i data-feather="bar-chart-2" class="w-4 h-4 mr-3"></i> Reports</a>
+      <div class="sidebar-section-title px-4 mt-6 mb-2 text-[10px] uppercase text-gray-600 font-bold tracking-[0.2em] first:mt-0">ADMIN</div>
+      <a href="settings.html" class="sidebar-link"><i data-feather="settings" class="w-4 h-4 mr-3"></i> Settings</a>
+    </nav>
+    <div class="p-4 border-t border-white/5">
+      <button onclick="VelvoraxAuth.logout()" class="sidebar-link text-red-500 hover:bg-red-500/10 w-full text-left flex items-center">
+        <i data-feather="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+  <main class="flex-1 overflow-y-auto p-12 relative flex flex-col items-center">
+    <div class="max-w-2xl w-full">
+      <header class="mb-12">
+        <h1 class="text-3xl font-bold text-white">My Profile</h1>
+        <p class="text-gray-500 text-sm mt-1">Manage your personal information and security settings.</p>
+      </header>
+
+      <div class="glass-card p-10 border-white/5 bg-white/[0.02] space-y-10">
+        <div class="flex items-center gap-6">
+           <div class="w-24 h-24 bg-yellow-400 rounded-2xl flex items-center justify-center text-black font-black text-3xl">SA</div>
+           <div>
+             <h2 class="text-2xl font-bold text-white" id="profile-name">Super Admin</h2>
+             <p class="text-gray-500 uppercase text-[10px] font-bold tracking-widest">Administrator</p>
+           </div>
+           <button class="ml-auto text-yellow-500 text-xs font-bold border border-yellow-500/20 px-4 py-2 rounded-lg hover:bg-yellow-500/10 transition-all">Change Avatar</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10 border-t border-white/5">
+           <div class="space-y-2">
+             <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Full Name</label>
+             <input type="text" id="input-name" value="Super Admin" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none">
+           </div>
+           <div class="space-y-2">
+             <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Email Address</label>
+             <input type="email" id="input-email" value="admin@velvorax.com" disabled class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-500 outline-none cursor-not-allowed">
+           </div>
+           <div class="space-y-2">
+             <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">New Password</label>
+             <input type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none">
+           </div>
+           <div class="space-y-2">
+             <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Confirm Password</label>
+             <input type="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none">
+           </div>
+        </div>
+
+        <div class="pt-6">
+          <button class="w-full bg-[#FFD700] text-black py-4 rounded-xl text-xs font-black uppercase tracking-widest shadow-xl shadow-yellow-500/20">Save Profile Settings</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Footer -->
+    
+  
+  <footer class="mt-auto py-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50 hover:opacity-100 transition-opacity">
+    <p class="text-[9px] text-gray-500 uppercase tracking-widest">
+      &copy; 2026 Velvorax Enterprise OS. All rights reserved.
+    </p>
+    <div class="flex space-x-6 text-[9px] text-gray-600 uppercase tracking-widest">
+      <a href="privacy.html" class="hover:text-white transition">Privacy</a>
+      <a href="terms.html" class="hover:text-white transition">Terms</a>
+      <span class="text-green-500 flex items-center">
+        <span class="w-1 h-1 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> SECURE SESSION
+      </span>
+    </div>
+  </footer>
+
+</main>
+  <script>
+    feather.replace();
+    const user = VelvoraxAuth.getUser();
+    if (user) {
+      document.getElementById('profile-name').textContent = user.name;
+      document.getElementById('input-name').value = user.name;
+      document.getElementById('input-email').value = user.email;
+    }
+  </script>
+
+    
+    
+
+</body>
+</html>
