@@ -9,19 +9,31 @@ const { Ticket } = require('../models');
 // @route   GET api/tickets
 // @desc    Get all tickets
 router.get('/', auth, async (req, res) => {
-
   try {
-    console.log('TICKETS GET HIT', req.user && { id: req.user.id, role: req.user.role, companyId: req.user.companyId });
+    const role = req.user?.role;
+    const companyId = req.user?.companyId;
+    const userId = req.user?.id;
+
+    console.log('TICKETS GET HIT', { userId, role, companyId });
 
     const { status, priority, type } = req.query;
 
     let query = {};
 
-    // SUPER ADMIN CAN SEE ALL TICKETS
-    if (req.user.role !== 'super_admin') {
-      query = {
-        companyId: req.user.companyId
-      };
+    // ROLE-BASED ACCESS CONTROL
+    if (role === 'super_admin') {
+      // Sees all
+    } else if (role === 'admin' || role === 'client') {
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized: No company associated' });
+      query.companyId = companyId;
+    } else {
+      // Staff/StandardUser sees only their own or assigned tickets
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized: No company associated' });
+      query.companyId = companyId;
+      query.$or = [
+        { assignedTo: userId },
+        { createdBy: userId }
+      ];
     }
 
     if (status) {
@@ -41,13 +53,11 @@ router.get('/', auth, async (req, res) => {
       .populate('assignedTo', 'name email')
       .sort({ createdAt: -1 });
 
-    res.json(tickets);
+    res.json(tickets || []);
 
   } catch (err) {
-
-    console.error(err.message);
-
-    res.status(500).json({ msg: 'Server Error' });
+    console.error('TICKETS GET ERROR:', err.message);
+    res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 });
 

@@ -699,8 +699,8 @@ function openEditModal(id) {
   async function fetchEmployees() {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${CONFIG.API_BASE_URL}/api/employee/stats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      const res = await fetch(`${CONFIG.API_BASE_URL}/api/tasks/users/list`, {
+        headers: { 'x-auth-token': token }
       });
       if (!res.ok) return;
       allEmployees = await res.json();

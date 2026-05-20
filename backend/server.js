@@ -10,7 +10,6 @@ const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 const fs = require('fs');
-const dealRoutes = require('./routes/deals');
 
 // Load environment variables
 const loadEnv = () => {
@@ -35,6 +34,22 @@ if (!loadEnv()) {
   console.warn('No .env or .env.txt file found. Using default/system environment variables.');
 }
 
+// Import routes
+const authRoutes = require('./routes/auth');
+const dashboardRoutes = require('./routes/dashboard');
+const leadRoutes = require('./routes/leads');
+const pricingRoutes = require('./routes/pricing');
+const companyRoutes = require('./routes/companies');
+const dealRoutes = require('./routes/deals');
+const taskRoutes = require('./routes/tasks');
+const ticketRoutes = require('./routes/tickets');
+const caseRoutes = require('./routes/cases');
+const userAuthRoutes = require('./routes/userAuth');
+const adminRoutes = require('./routes/admin-users');
+const reportRoutes = require('./routes/reports');
+const partnerRoutes = require('./routes/partners');
+const accountRoutes = require('./routes/accounts');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -53,6 +68,22 @@ app.use(cors({
 // Increase limit for logo uploads (Base64 strings can be large)
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// API Routes (Before static files)
+app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/leads', leadRoutes);
+app.use('/api/pricing', pricingRoutes);
+app.use('/api/companies', companyRoutes);
+app.use('/api/deals', dealRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/tickets', ticketRoutes);
+app.use('/api/cases', caseRoutes);
+app.use('/api/user-auth', userAuthRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/partners', partnerRoutes);
+app.use('/api/accounts', accountRoutes);
 
 // Serve static files from the frontend folder
 app.use(express.static(path.join(__dirname, '../frontend'), { extensions: ['html'] }));
@@ -73,22 +104,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-// Import and use routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/leads', require('./routes/leads'));
-app.use('/api/pricing', require('./routes/pricing'));
-app.use('/api/companies', require('./routes/companies'));
-app.use('/api/deals', dealRoutes);
-app.use('/api/tasks', require('./routes/tasks'));
-app.use('/api/tickets', require('./routes/tickets'));
-app.use('/api/cases', require('./routes/cases'));
-app.use('/api/user-auth', require('./routes/userAuth'));
-app.use('/api/admin', require('./routes/admin-users'));
-app.use('/api/reports', require('./routes/reports'));
-app.use('/api/partners', require('./routes/partners'));
-const accountsRoute = require('./routes/accounts');
-app.use('/api/accounts', accountsRoute);
 
 // Global error handler
 app.use((err, req, res, next) => {

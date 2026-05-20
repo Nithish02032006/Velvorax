@@ -7,8 +7,12 @@ const { Deal } = require('../models');
 // @desc    Create a new deal
 router.post('/', auth, async (req, res) => {
   try {
-    // Ensure the deal is assigned to the person creating it if not specified
     const dealData = { ...req.body };
+
+    // Auto-fill system fields
+    dealData.createdBy = req.user.id;
+    dealData.companyId = req.user.companyId;
+
     if (!dealData.assignedTo) {
       dealData.assignedTo = req.user.id;
     }
@@ -42,31 +46,32 @@ router.patch('/:id', auth, async (req, res) => {
 // @descGet deals belonging to the logged-in user
 router.get('/', auth, async (req, res) => {
   try {
-    // 1. Fetch all deals
-    const deals = await Deal.find()
+    const role = req.user?.role;
+    const companyId = req.user?.companyId;
+    const userId = req.user?.id;
+
+    let query = {};
+
+    if (role === 'super_admin') {
+      // Sees all
+    } else if (role === 'admin' || role === 'client') {
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
+      query.companyId = companyId;
+    } else {
+      // Staff sees only their own or assigned deals
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
+      query.companyId = companyId;
+      query.$or = [
+        { assignedTo: userId },
+        { createdBy: userId } // Assuming createdBy exists or we use assignedTo
+      ];
+    }
+
+    const deals = await Deal.find(query)
       .populate('assignedTo', 'name')
       .populate('leadId');
 
-    const currentUserId = req.user.id.toString();
-
-    // 2. Filter: Show deal if User is the Deal Owner OR the Lead Owner
-    const filteredDeals = deals.filter(deal => {
-
-      // Get the Deal's assigned user ID (check if it's an object from populate or a raw ID)
-      const dealAssignedId = deal.assignedTo?._id
-        ? deal.assignedTo._id.toString()
-        : (deal.assignedTo ? deal.assignedTo.toString() : null);
-
-      // Get the Lead's assigned user ID
-      const leadAssignedId = deal.leadId?.assignedTo
-        ? deal.leadId.assignedTo.toString()
-        : null;
-
-      // Logic: Show it if I own the deal OR I own the lead it came from
-      return (dealAssignedId === currentUserId) || (leadAssignedId === currentUserId);
-    });
-
-    res.json(filteredDeals);
+    res.json(deals);
   } catch(err) {
     res.status(500).json({ error: err.message });
   }

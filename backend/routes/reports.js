@@ -56,9 +56,19 @@ router.get('/tasks', auth, async (req, res) => {
     const { role, companyId, id } = req.user;
     let query = {};
 
-    if (role !== 'super_admin') {
+    if (role === 'super_admin') {
+      // Sees all
+    } else if (role === 'admin' || role === 'client') {
       if (!companyId) return res.status(403).json({ message: 'Unauthorized' });
       query.companyId = companyId;
+    } else {
+      // Staff sees only their own or assigned tasks
+      if (!companyId) return res.status(403).json({ message: 'Unauthorized' });
+      query.companyId = companyId;
+      query.$or = [
+        { assignedTo: id },
+        { assignedBy: id }
+      ];
     }
 
     const tasks = await Task.find(query)

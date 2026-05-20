@@ -23,25 +23,43 @@ router.get('/', auth, async (req, res) => {
       converted
     } = req.query;
 
+    // ROLE-BASED ACCESS CONTROL
     const role = req.user?.role;
     const userId = req.user?.id;
     const companyId = req.user?.companyId;
 
     let query = {};
 
-    // SUPER ADMIN: sees all leads
-    if (role !== 'super_admin') {
-      if (!companyId) {
-        return res.status(403).json({ message: 'Unauthorized' });
-      }
-      query.companyId = companyId;
+    if (role === 'super_admin') {
+      // Super Admin: sees everything
+    } else if (role === 'admin' || role === 'client') {
+      // Admin/Client: sees all leads in their company
+      if (!companyId) return res.status(403).json({ message: 'Unauthorized: No Company ID' });
+      query.companyId = new mongoose.Types.ObjectId(companyId);
+    } else {
+      // Staff/Others: only see leads assigned to them OR created by them WITHIN their company
+      if (!companyId) return res.status(403).json({ message: 'Unauthorized: No Company ID' });
+      query.companyId = new mongoose.Types.ObjectId(companyId);
+      query.$or = [
+        { assignedTo: new mongoose.Types.ObjectId(userId) },
+        { createdBy: new mongoose.Types.ObjectId(userId) }
+      ];
     }
 
     // ============ FILTER SAFE MERGE ============
     if (status) query.status = status;
 
+    // Only apply assignedTo filter if it doesn't conflict with existing constraints
     if (assignedTo && mongoose.Types.ObjectId.isValid(assignedTo)) {
-      query.assignedTo = new mongoose.Types.ObjectId(assignedTo);
+      const assignedToId = new mongoose.Types.ObjectId(assignedTo);
+      if (query.$or) {
+        // If we already have an $or (staff), we must ensure the requested assignedTo is the same as the user
+        // OR we just append it to the query which will act as AND.
+        // Actually, if a staff member filters by 'assignedTo', they can only filter for themselves.
+        query.assignedTo = assignedToId;
+      } else {
+        query.assignedTo = assignedToId;
+      }
     }
 
     if (source) query.source = new RegExp(source, 'i');

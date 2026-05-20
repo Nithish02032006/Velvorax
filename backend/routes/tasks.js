@@ -46,9 +46,26 @@ router.get('/leads/list', auth, async (req, res) => {
 // ================= GET TASKS =================
 router.get('/', auth, async (req, res) => {
   try {
-    const query = req.user.role === 'super_admin'
-      ? {}
-      : { companyId: req.user.companyId };
+    const role = req.user?.role;
+    const companyId = req.user?.companyId;
+    const userId = req.user?.id;
+
+    let query = {};
+
+    if (role === 'super_admin') {
+      // Sees all
+    } else if (role === 'admin' || role === 'client') {
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
+      query.companyId = companyId;
+    } else {
+      // Staff sees only their own or assigned tasks
+      if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
+      query.companyId = companyId;
+      query.$or = [
+        { assignedTo: userId },
+        { assignedBy: userId }
+      ];
+    }
 
     const tasks = await Task.find(query)
       .populate('leadId', 'leadId name')
