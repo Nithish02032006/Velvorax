@@ -27,8 +27,19 @@ module.exports = async function(req, res, next) {
       : require('../models/User');
 
     const storedUser = await Model.findById(decoded.user.id).select('isLoggedIn activeToken');
-    if (!storedUser || !storedUser.isLoggedIn || storedUser.activeToken !== token) {
-      return res.status(401).json({ msg: 'Session invalid. Please login again.' });
+    if (!storedUser) {
+      console.warn(`AUTH: User ${decoded.user.id} not found in model ${userType}`);
+      return res.status(401).json({ msg: 'User no longer exists. Please login again.' });
+    }
+
+    if (!storedUser.isLoggedIn) {
+      console.warn(`AUTH: User ${decoded.user.id} is marked as logged out`);
+      return res.status(401).json({ msg: 'Session expired (logged out). Please login again.' });
+    }
+
+    if (storedUser.activeToken !== token) {
+      console.warn(`AUTH: Token mismatch for user ${decoded.user.id}`);
+      return res.status(401).json({ msg: 'Session invalid (multiple logins). Please login again.' });
     }
 
     req.user = decoded.user;

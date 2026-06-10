@@ -32,8 +32,24 @@ const LeadSchema = new mongoose.Schema({
   followUpDate: Date,
   notes: String,
 
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'createdByModel'
+  },
+  createdByModel: {
+    type: String,
+    enum: ['User', 'StandardUser'],
+    default: 'User'
+  },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'assignedToModel'
+  },
+  assignedToModel: {
+    type: String,
+    enum: ['User', 'StandardUser'],
+    default: 'User'
+  },
   companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
 
   lastActivity: { type: Date, default: Date.now }

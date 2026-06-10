@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const { Company, User } = require('../models');
 const { sendApprovalNotification } = require('../utils/emailService');
+const { sendApprovalWhatsApp } = require('../utils/whatsappService');
 
 // @route   GET api/companies
 // @desc    Get companies based on role with filters
@@ -110,6 +111,14 @@ router.patch('/:id/:status', auth, async (req, res) => {
     if (user && (status === 'Approved' || status === 'Rejected')) {
       sendApprovalNotification(user.email, user.name, status).catch(err => {
         console.error('Failed to send approval email:', err.message);
+      });
+
+      sendApprovalWhatsApp({
+        name: user.name,
+        phone: user.phone,
+        companyName: company.name
+      }, status).catch(err => {
+        console.error('Failed to send approval WhatsApp:', err.message);
       });
     }
 

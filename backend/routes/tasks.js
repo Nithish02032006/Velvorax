@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const { Task, User, Lead, StandardUser } = require('../models');
 
@@ -9,21 +10,23 @@ router.get('/users/list', auth, async (req, res) => {
     const companyId = req.user.companyId;
     const isSuperAdmin = req.user.role === 'super_admin';
 
-    const users = isSuperAdmin
-      ? await User.find({}, 'name email role')
-      : await User.find({ companyId }, 'name email role');
+    console.log('USERS LIST FETCH:', { companyId, isSuperAdmin, role: req.user.role });
 
-    const standardUsers = isSuperAdmin
-      ? await StandardUser.find({}, 'name email role')
-      : await StandardUser.find({ companyId }, 'name email role');
+    const query = isSuperAdmin ? {} : { companyId: new mongoose.Types.ObjectId(companyId) };
+
+    const users = await User.find(query, 'name email role');
+    const standardUsers = await StandardUser.find(query, 'name email role');
 
     const combined = [
       ...users.map(u => ({ _id: u._id, name: u.name, role: u.role, type: 'User' })),
       ...standardUsers.map(u => ({ _id: u._id, name: u.name, role: u.role, type: 'StandardUser' }))
     ];
+
+    console.log(`Found ${combined.length} users`);
     res.json(combined);
   } catch (err) {
-    res.status(500).json({ msg: 'Server Error' });
+    console.error('USERS LIST ERROR:', err);
+    res.status(500).json({ msg: 'Server Error', error: err.message });
   }
 });
 
@@ -54,17 +57,9 @@ router.get('/', auth, async (req, res) => {
 
     if (role === 'super_admin') {
       // Sees all
-    } else if (role === 'admin' || role === 'client') {
-      if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
-      query.companyId = companyId;
     } else {
-      // Staff sees only their own or assigned tasks
       if (!companyId) return res.status(403).json({ msg: 'Unauthorized' });
-      query.companyId = companyId;
-      query.$or = [
-        { assignedTo: userId },
-        { assignedBy: userId }
-      ];
+      query.companyId = new mongoose.Types.ObjectId(companyId);
     }
 
     const tasks = await Task.find(query)

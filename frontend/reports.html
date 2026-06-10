@@ -10,7 +10,7 @@
   <script>
     if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
   </script>
-  <script src="js/config.js"></script>
+  <script src="js/api-config.js"></script>
   <style>
     .glass-card {
       background: rgba(255, 255, 255, 0.03);
@@ -221,11 +221,24 @@
       const myId = user._id || user.id;
 
       const [lRes, tRes] = await Promise.all([
-        fetch(`${CONFIG.API_BASE_URL}/api/leads`, { headers: { 'Authorization': `Bearer ${token}` } }),
-        fetch(`${CONFIG.API_BASE_URL}/api/tasks`, { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(CONFIG.API_BASE_URL + '/api/leads', { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(CONFIG.API_BASE_URL + '/api/tasks', { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
 
-      if (!lRes.ok || !tRes.ok) throw new Error("Failed to fetch data");
+      if (!lRes.ok) {
+        const errText = await lRes.text();
+        console.error("Leads Fetch Failed:", lRes.status, errText);
+        // If it's a 401, redirect to login
+        if (lRes.status === 401) window.location.href = 'login.html';
+      }
+      if (!tRes.ok) {
+        const errText = await tRes.text();
+        console.error("Tasks Fetch Failed:", tRes.status, errText);
+      }
+
+      if (!lRes.ok || !tRes.ok) {
+         throw new Error(`Data access denied (Leads: ${lRes.status}, Tasks: ${tRes.status}). Please check your permissions.`);
+      }
 
       const leads = await lRes.json();
       const tasks = await tRes.json();

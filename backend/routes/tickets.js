@@ -20,20 +20,11 @@ router.get('/', auth, async (req, res) => {
 
     let query = {};
 
-    // ROLE-BASED ACCESS CONTROL
     if (role === 'super_admin') {
       // Sees all
-    } else if (role === 'admin' || role === 'client') {
-      if (!companyId) return res.status(403).json({ msg: 'Unauthorized: No company associated' });
-      query.companyId = companyId;
     } else {
-      // Staff/StandardUser sees only their own or assigned tickets
       if (!companyId) return res.status(403).json({ msg: 'Unauthorized: No company associated' });
-      query.companyId = companyId;
-      query.$or = [
-        { assignedTo: userId },
-        { createdBy: userId }
-      ];
+      query.companyId = new mongoose.Types.ObjectId(companyId);
     }
 
     if (status) {

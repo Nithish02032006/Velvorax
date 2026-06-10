@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 const { User, Company } = require('../models');
 const { generateRegistrationPDF } = require('../utils/pdfGenerator');
 const { sendRegistrationNotification, sendRegistrationConfirmation } = require('../utils/emailService');
+const { sendRegistrationWhatsApp } = require('../utils/whatsappService');
 const fs = require('fs');
 
 // @route   POST api/auth/register
@@ -76,6 +77,9 @@ router.post('/register', async (req, res) => {
         // Notify User (Registration Confirmation)
         await sendRegistrationConfirmation(email, name);
 
+        // Notify User via WhatsApp
+        await sendRegistrationWhatsApp({ name, phone, email });
+
         console.log('Background: Notifications sent for', companyName);
       } catch (error) {
         console.error('Background Error: Notification failed:', error.message);
@@ -92,7 +96,7 @@ router.post('/register', async (req, res) => {
     await user.save();
     console.log('Result: REGISTRATION SUCCESSFUL - Token generated');
     console.log('-----------------------------------------');
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, type: 'User' } });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, companyId: user.companyId, type: 'User' } });
   } catch (err) {
     console.error('Registration Error:', err.message);
     res.status(500).send('Server error');
@@ -179,7 +183,7 @@ router.post('/login', async (req, res) => {
     user.activeToken = token;
     await user.save();
 
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, type: 'User' } });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, companyId: user.companyId, type: 'User' } });
   } catch (err) {
     console.error('Login Error:', err.message);
     res.status(500).send('Server error');

@@ -11,7 +11,7 @@
   <script>
     if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
   </script>
-  <script src="js/config.js"></script>
+  <script src="js/api-config.js"></script>
   <style>
     .side-panel {
       position: fixed; top: 0; right: -400px;
@@ -263,6 +263,10 @@
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const users = await res.json();
+      if (!Array.isArray(users)) {
+        console.error("Users API did not return an array:", users);
+        return;
+      }
       const select = document.getElementById('assignedToSelect');
       const currentUser = VelvoraxAuth.getUser();
       const currentUserId = currentUser._id || currentUser.id;
@@ -293,6 +297,10 @@
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const leads = await res.json();
+      if (!Array.isArray(leads)) {
+        console.error("Leads API did not return an array:", leads);
+        return;
+      }
       const select = document.getElementById('leadIdSelect');
       select.innerHTML = '<option value="">Select Lead</option>';
       leads.forEach(lead => {
@@ -312,7 +320,12 @@
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const tasks = await res.json();
-      renderTasks(tasks);
+      if (Array.isArray(tasks)) {
+        renderTasks(tasks);
+      } else {
+        console.error("Tasks API did not return an array:", tasks);
+        document.getElementById('taskTableBody').innerHTML = `<tr><td colspan="8" class="p-10 text-center text-red-500">Failed to load tasks: ${tasks.msg || 'Invalid response'}</td></tr>`;
+      }
     } catch (err) {
       console.error("Error fetching tasks:", err);
     }

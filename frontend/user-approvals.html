@@ -21,7 +21,7 @@
     <script>
         if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
     </script>
-    <script src="js/config.js"></script>
+    <script src="js/api-config.js?v=1.0.1"></script>
     <style>
         .side-panel {
           position: fixed; top: 0; right: -400px;
@@ -474,13 +474,13 @@
     });
 
     async function updateStatus(userId, status) {
-
         try {
-
             const token = localStorage.getItem('token');
+            const url = CONFIG.API_BASE_URL + `/api/admin/users/${userId}/status`;
+            console.log('UPDATING USER STATUS:', { url, status });
 
             const res = await fetch(
-                CONFIG.API_BASE_URL + `/api/admin/users/${userId}/status`,
+                url,
                 {
                     method: 'PATCH',
                     headers: {
@@ -491,18 +491,18 @@
                 }
             );
 
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.msg || 'Failed to update status');
+            }
+
             const data = await res.json();
-
-            alert(data.msg || 'Status updated');
-
+            alert(data.msg || 'Status updated successfully');
             fetchUsers();
-
         } catch (err) {
-
-            console.error(err);
-
+            console.error('Update Status Error:', err);
+            alert(`Error: ${err.message}`);
         }
-
     }
 
     fetchUsers();

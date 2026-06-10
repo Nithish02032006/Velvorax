@@ -2,7 +2,108 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
-const { Lead } = require('../models');
+const { Lead, User } = require('../models');
+const { sendWhatsAppMessage } = require('../utils/whatsappService');
+const {
+  sendLeadNotificationToAdmin,
+  sendLeadAutoResponseToLead
+} = require('../utils/emailService');
+
+// =========================
+// PUBLIC LEAD CAPTURE (For Web Forms)
+// =========================
+router.post('/capture/:companyId', async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
+      return res.status(400).json({ message: "Invalid Company ID" });
+    }
+
+    const {
+      name, email, phone, company, requirement, source, message,
+      address, budget, businessType, priority, industry, designation
+    } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    // SAFE LEAD ID GENERATION
+    const lastLead = await Lead.findOne().sort({ createdAt: -1 });
+    let nextNumber = 1;
+    if (lastLead?.leadId) {
+      const parts = lastLead.leadId.split('-');
+      const lastNumber = parseInt(parts[parts.length - 1]);
+      if (!isNaN(lastNumber)) nextNumber = lastNumber + 1;
+    }
+    const leadId = `LD-${String(nextNumber).padStart(5, '0')}`;
+
+    // AUTOMATION: Find primary admin to notify
+    const adminUser = await User.findOne({ companyId, role: 'client' });
+
+    const lead = new Lead({
+      name,
+      email,
+      phone,
+      company,
+      address,
+      budget: budget ? Number(budget) : 0,
+      businessType,
+      priority: priority || 'Warm',
+      industry,
+      designation,
+      requirement: requirement || message || '',
+      source: source || 'Web Form',
+      status: 'New',
+      leadId,
+      companyId: new mongoose.Types.ObjectId(companyId),
+      notes: message ? `Message from web form: ${message}` : 'Captured via Web Form',
+      assignedTo: undefined // Set to undefined so it's "Unassigned" and visible to everyone to pick up
+    });
+
+    await lead.save();
+
+    // AUTOMATION: Send Auto-Response to Lead (WhatsApp)
+    if (phone) {
+      const welcomeMsg = `Hello ${name}, thank you for contacting us! We have received your inquiry. Our team will get back to you shortly. Ref: ${leadId}`;
+      sendWhatsAppMessage(phone, welcomeMsg).catch(e => console.error("Auto-WhatsApp failed:", e));
+    }
+
+    // AUTOMATION: Send Email Confirmation
+    if (email) {
+      sendLeadAutoResponseToLead(email, name).catch(e => console.error("Auto-Email failed:", e));
+    }
+
+    // AUTOMATION: Notify Admin via WhatsApp & Email
+    if (adminUser) {
+      if (adminUser.phone) {
+        const notifyMsg = `🔔 New Lead Alert! ${name} has submitted a form on your website.`;
+        sendWhatsAppMessage(adminUser.phone, notifyMsg).catch(e => console.error("Admin notification failed:", e));
+      }
+      if (adminUser.email) {
+        sendLeadNotificationToAdmin(adminUser.email, { name, email, phone, company, requirement }).catch(e => console.error("Admin Email notification failed:", e));
+      }
+    }
+
+    // Support for redirects if provided in query or body
+    const redirectUrl = req.query.redirect || req.body.redirect;
+    if (redirectUrl) {
+      return res.redirect(redirectUrl);
+    }
+
+    res.status(201).json({
+      message: "Lead captured successfully",
+      leadId: lead.leadId
+    });
+
+  } catch (err) {
+    console.error("CAPTURE LEAD ERROR:", err);
+    res.status(500).json({
+      message: "Error capturing lead",
+      error: err.message
+    });
+  }
+});
 
 // =========================
 // GET LEADS
@@ -28,23 +129,21 @@ router.get('/', auth, async (req, res) => {
     const userId = req.user?.id;
     const companyId = req.user?.companyId;
 
+    console.log('GET LEADS DEBUG:', { userId, role, companyId });
+
     let query = {};
 
     if (role === 'super_admin') {
-      // Super Admin: sees everything
-    } else if (role === 'admin' || role === 'client') {
-      // Admin/Client: sees all leads in their company
-      if (!companyId) return res.status(403).json({ message: 'Unauthorized: No Company ID' });
-      query.companyId = new mongoose.Types.ObjectId(companyId);
+      console.log('Role is super_admin');
     } else {
-      // Staff/Others: only see leads assigned to them OR created by them WITHIN their company
-      if (!companyId) return res.status(403).json({ message: 'Unauthorized: No Company ID' });
+      if (!companyId) {
+        console.warn('GET LEADS: No companyId for user', userId);
+        return res.status(403).json({ message: 'Unauthorized: No Company ID' });
+      }
       query.companyId = new mongoose.Types.ObjectId(companyId);
-      query.$or = [
-        { assignedTo: new mongoose.Types.ObjectId(userId) },
-        { createdBy: new mongoose.Types.ObjectId(userId) }
-      ];
     }
+
+    console.log('FINAL LEADS QUERY:', JSON.stringify(query));
 
     // ============ FILTER SAFE MERGE ============
     if (status) query.status = status;
@@ -137,9 +236,11 @@ router.post('/', auth, async (req, res) => {
       ...req.body,
       leadId,
       createdBy: new mongoose.Types.ObjectId(userId),
+      createdByModel: req.user.type || 'User',
       assignedTo: req.body.assignedTo
         ? new mongoose.Types.ObjectId(req.body.assignedTo)
         : undefined,
+      assignedToModel: req.body.assignedToModel || 'User',
       companyId: companyId ? new mongoose.Types.ObjectId(companyId) : undefined
     });
 

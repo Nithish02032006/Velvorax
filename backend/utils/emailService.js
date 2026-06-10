@@ -36,6 +36,64 @@ const sendEmail = async (options) => {
 };
 
 /**
+ * Sends a notification to the business client when a new lead is captured
+ */
+const sendLeadNotificationToAdmin = async (adminEmail, leadData) => {
+    const emailOptions = {
+        to: adminEmail,
+        subject: `🔔 New Lead Captured: ${leadData.name}`,
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px; background: #fafafa;">
+                <h2 style="color: #FFD700; text-align: center; background: #000; padding: 15px; border-radius: 8px;">New Lead Alert</h2>
+                <p>Hello,</p>
+                <p>A new lead has just submitted a form on your website/LinkedIn post.</p>
+                <div style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <p><strong>Name:</strong> ${leadData.name}</p>
+                    <p><strong>Email:</strong> ${leadData.email || 'Not provided'}</p>
+                    <p><strong>Phone:</strong> ${leadData.phone || 'Not provided'}</p>
+                    <p><strong>Company:</strong> ${leadData.company || 'Not provided'}</p>
+                    <p><strong>Requirement:</strong> ${leadData.requirement || 'Not provided'}</p>
+                </div>
+                <p>Please log in to your dashboard to view more details and take action.</p>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="${process.env.FRONTEND_URL || 'http://localhost:5000'}/leads.html"
+                       style="background: #FFD700; color: black; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Lead in CRM</a>
+                </div>
+                <p style="font-size: 12px; color: #777; margin-top: 30px; text-align: center;">Velvorax Enterprise CRM Automation</p>
+            </div>
+        `
+    };
+    return await sendEmail(emailOptions);
+};
+
+/**
+ * Sends an auto-response email to the lead
+ */
+const sendLeadAutoResponseToLead = async (leadEmail, leadName) => {
+    const emailOptions = {
+        to: leadEmail,
+        subject: 'Thank you for your inquiry - Velvorax',
+        html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h2 style="color: #FFD700; text-align: center;">We've Received Your Inquiry!</h2>
+                <p>Hello ${leadName},</p>
+                <p>Thank you for reaching out to us. We have successfully received your inquiry and our team is currently reviewing your requirements.</p>
+                <p>One of our representatives will contact you shortly via email or WhatsApp to discuss this further.</p>
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                <p><b>What's next?</b></p>
+                <ul>
+                    <li>Our team reviews your request</li>
+                    <li>We prepare a customized response/proposal</li>
+                    <li>We get in touch for a quick discovery call</li>
+                </ul>
+                <p style="font-size: 12px; color: #777; margin-top: 30px;">Best Regards,<br>The Team</p>
+            </div>
+        `
+    };
+    return await sendEmail(emailOptions);
+};
+
+/**
  * Sends registration notification to all super admins
  * @param {Object} registrationData - The data submitted in the form
  * @param {string} pdfPath - Path to the generated PDF
@@ -155,4 +213,11 @@ const sendApprovalNotification = async (toEmail, userName, status) => {
     return await sendEmail(emailOptions);
 };
 
-module.exports = { sendEmail, sendRegistrationNotification, sendRegistrationConfirmation, sendApprovalNotification };
+module.exports = {
+    sendEmail,
+    sendRegistrationNotification,
+    sendRegistrationConfirmation,
+    sendApprovalNotification,
+    sendLeadNotificationToAdmin,
+    sendLeadAutoResponseToLead
+};

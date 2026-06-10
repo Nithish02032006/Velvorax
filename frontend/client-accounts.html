@@ -14,7 +14,7 @@
           window.location.href = 'login.html';
         }
     </script>
-    <script src="js/config.js"></script>
+    <script src="js/api-config.js?v=1.0.1"></script>
     <style>
         .glass-card {
           background: rgba(255, 255, 255, 0.03);
@@ -350,7 +350,10 @@
         if (!confirm(`Are you sure you want to ${status.toLowerCase()} this client account?`)) return;
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(CONFIG.API_BASE_URL + `/api/admin/clients/${id}/status`, {
+            const url = CONFIG.API_BASE_URL + `/api/admin/clients/${id}/status`;
+            console.log('UPDATING CLIENT STATUS:', { url, status });
+
+            const res = await fetch(url, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -358,12 +361,20 @@
                 },
                 body: JSON.stringify({ status })
             });
+
             if (res.ok) {
+                const data = await res.json();
+                alert(data.msg || 'Client status updated');
                 toggleModal('detailsModal', true); // Force hide
                 fetchClients();
+            } else {
+                const errorData = await res.json();
+                alert('Error: ' + (errorData.msg || 'Failed to update status'));
             }
-            else alert('Failed to update status');
-        } catch (err) { console.error(err); }
+        } catch (err) {
+            console.error('Update Client Error:', err);
+            alert('Network Error: Please check your connection and ensure you are on the correct domain.');
+        }
     }
 
     function toggleModal(id, forceHide = false) {

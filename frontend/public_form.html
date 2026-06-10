@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiry Form - Velvorax</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/api-config.js"></script>
+    <style>
+        :root {
+            --accent: #facc15;
+            --bg: #02020a;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #d1d5db;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-image: radial-gradient(circle at top right, rgba(250, 204, 21, 0.05), transparent 400px);
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid var(--border) !important;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.1);
+            outline: none;
+        }
+
+        label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: black;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(250, 204, 21, 0.5);
+            background: #fde047;
+        }
+
+        .success-animation {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-6">
+
+    <div class="max-w-2xl w-full">
+        <!-- Logo & Header -->
+        <div class="text-center mb-10">
+            <img src="assets/logo.jpg" alt="Logo" class="w-16 h-16 rounded-full mx-auto mb-4 border border-white/10 p-1">
+            <h1 class="text-3xl font-black text-white tracking-tight uppercase">Inquiry Portal</h1>
+            <p class="text-gray-500 mt-2 text-sm font-medium">Please provide your details to connect with us.</p>
+        </div>
+
+        <!-- The Form -->
+        <div id="formContainer" class="glass-card p-8 md:p-12">
+            <form id="publicLeadForm" class="space-y-6">
+                <!-- Row 1 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label>Full Name</label>
+                        <input type="text" name="name" required placeholder="John Doe" class="w-full px-4 py-3 rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" name="email" required placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl text-sm">
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" placeholder="+91 00000 00000" class="w-full px-4 py-3 rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label>Company Name</label>
+                        <input type="text" name="company" placeholder="Organization Ltd" class="w-full px-4 py-3 rounded-xl text-sm">
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label>Business Type</label>
+                        <select name="businessType" class="w-full px-4 py-3 rounded-xl text-sm">
+                            <option value="">Select Type</option>
+                            <option value="Private">Private</option>
+                            <option value="Government">Government</option>
+                            <option value="Non-Profit">Non-Profit</option>
+                            <option value="Startup">Startup</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Expected Budget</label>
+                        <input type="number" name="budget" placeholder="Amount (in INR)" class="w-full px-4 py-3 rounded-xl text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label>Office Address / Location</label>
+                    <input type="text" name="address" placeholder="City, Country" class="w-full px-4 py-3 rounded-xl text-sm">
+                </div>
+
+                <div>
+                    <label>Specific Requirement</label>
+                    <textarea name="requirement" rows="4" placeholder="How can we help you?" class="w-full px-4 py-3 rounded-xl text-sm resize-none"></textarea>
+                </div>
+
+                <!-- Priority (Hidden from user usually, but keeping it optional) -->
+                <input type="hidden" name="priority" value="Warm">
+                <input type="hidden" name="source" value="Public Website Form">
+
+                <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl btn-submit flex justify-center items-center gap-2 group">
+                    <span>Submit Inquiry</span>
+                    <i data-feather="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="success-animation glass-card p-12 text-center">
+            <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-feather="check" class="text-green-500 w-10 h-10"></i>
+            </div>
+            <h2 class="text-3xl font-black text-white uppercase tracking-tight mb-2">Submission Received</h2>
+            <p class="text-gray-500 max-w-sm mx-auto">Thank you for reaching out. A representative from our team will contact you shortly via WhatsApp or Email.</p>
+            <button onclick="window.location.reload()" class="mt-8 text-yellow-400 font-bold uppercase tracking-widest text-xs hover:underline">Submit another response</button>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center mt-10 text-[10px] text-gray-600 font-bold uppercase tracking-[0.2em]">
+            Powered by Velvorax Enterprise CRM
+        </p>
+    </div>
+
+    <script>
+        feather.replace();
+
+        // Get Company ID from URL Parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const companyId = urlParams.get('id');
+
+        if (!companyId) {
+            document.getElementById('formContainer').innerHTML = `
+                <div class="text-center py-10">
+                    <i data-feather="alert-triangle" class="w-12 h-12 text-red-500 mx-auto mb-4"></i>
+                    <h3 class="text-white font-bold">Invalid Form Link</h3>
+                    <p class="text-gray-500 text-sm mt-2">This form is missing a valid configuration ID. Please contact the administrator.</p>
+                </div>
+            `;
+            feather.replace();
+        }
+
+        document.getElementById('publicLeadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = btn.querySelector('span');
+
+            // Loading State
+            btn.disabled = true;
+            btnText.innerText = "Processing...";
+            btn.style.opacity = "0.7";
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/api/leads/capture/${companyId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    document.getElementById('formContainer').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    feather.replace();
+                } else {
+                    const err = await response.json();
+                    alert("Error: " + (err.message || "Failed to submit form"));
+                    btn.disabled = false;
+                    btnText.innerText = "Submit Inquiry";
+                    btn.style.opacity = "1";
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Connection failed. Please check your internet.");
+                btn.disabled = false;
+                btnText.innerText = "Submit Inquiry";
+                btn.style.opacity = "1";
+            }
+        };
+    </script>
+</body>
+</html>

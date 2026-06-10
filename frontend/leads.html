@@ -11,7 +11,7 @@
   <script>
     if (!VelvoraxAuth.isAuthenticated()) window.location.href = 'login.html';
   </script>
-  <script src="js/config.js"></script>
+  <script src="js/api-config.js"></script>
   <style>
     .side-panel {
       position: fixed; top: 0; right: -400px;
@@ -704,6 +704,10 @@ function openEditModal(id) {
       });
       if (!res.ok) return;
       allEmployees = await res.json();
+      if (!Array.isArray(allEmployees)) {
+        console.error("Employees API did not return an array:", allEmployees);
+        return;
+      }
 
       const selects = [document.getElementById('leadAssignedTo'), document.getElementById('filterAssignedTo')];
       selects.forEach(select => {
@@ -849,7 +853,8 @@ function renderTable() {
       </td>
 
       <td class="py-4 text-yellow-500 font-bold text-xs">
-${lead.assignedTo?.name || lead.createdBy?.name || 'Unassigned'}      </td>
+        ${lead.assignedTo ? lead.assignedTo.name : '<span class="text-gray-600 italic">Unassigned</span>'}
+      </td>
 
       <td class="py-4 text-gray-500 text-xs">
         ${lead.followUpDate

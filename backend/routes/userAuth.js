@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const auth = require('../middleware/auth');
 const StandardUser = require('../models/StandardUser');
 const { sendRegistrationConfirmation, sendApprovalNotification } = require('../utils/emailService');
+const { sendRegistrationWhatsApp, sendApprovalWhatsApp } = require('../utils/whatsappService');
+const { sendRegistrationCall, sendApprovalCall } = require('../utils/callService');
 
 // Helper to find the Company/Business model dynamically
 const getCompanyModel = () => {
@@ -40,9 +42,17 @@ router.post('/register', async (req, res) => {
         user.password = await bcrypt.hash(password, salt);
         await user.save();
 
-        // Send registration confirmation email in background
+        // Send registration confirmation email and WhatsApp in background
         sendRegistrationConfirmation(email, name).catch(err =>
             console.error('Email confirmation error:', err.message)
+        );
+
+        sendRegistrationWhatsApp({ name, phone, email }).catch(err =>
+            console.error('WhatsApp registration error:', err.message)
+        );
+
+        sendRegistrationCall({ name, phone }).catch(err =>
+            console.error('Call registration error:', err.message)
         );
 
         res.status(201).json({ msg: 'Registration successful. Pending approval.' });
@@ -140,9 +150,17 @@ router.put('/approve/:id', async (req, res) => {
         user.status = 'approved';
         await user.save();
 
-        // Send approval email
+        // Send approval email and WhatsApp
         sendApprovalNotification(user.email, user.name, 'Approved').catch(err =>
             console.error('Approval email error:', err.message)
+        );
+
+        sendApprovalWhatsApp({ name: user.name, phone: user.phone }, 'Approved').catch(err =>
+            console.error('Approval WhatsApp error:', err.message)
+        );
+
+        sendApprovalCall({ name: user.name, phone: user.phone }).catch(err =>
+            console.error('Approval Call error:', err.message)
         );
 
         res.json({ msg: 'User approved successfully' });
@@ -156,9 +174,13 @@ router.delete('/reject/:id', async (req, res) => {
         const user = await StandardUser.findById(req.params.id);
         if (!user) return res.status(404).json({ msg: 'User not found' });
 
-        // Send rejection email before deleting
+        // Send rejection email and WhatsApp before deleting
         sendApprovalNotification(user.email, user.name, 'Rejected').catch(err =>
             console.error('Rejection email error:', err.message)
+        );
+
+        sendApprovalWhatsApp({ name: user.name, phone: user.phone }, 'Rejected').catch(err =>
+            console.error('Rejection WhatsApp error:', err.message)
         );
 
         await user.deleteOne();

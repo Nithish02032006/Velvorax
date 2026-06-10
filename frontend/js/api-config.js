@@ -6,4 +6,4 @@ const CONFIG = {
 };
 
 window.CONFIG = CONFIG;
-console.log("Velvorax API Config Loaded (config.js fallback): Relative Mode");
+console.log("Velvorax API Config Loaded: Relative Mode");
