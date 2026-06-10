@@ -86,31 +86,8 @@ router.post('/login', async (req, res) => {
             }
         };
 
-    if (user.isLoggedIn && user.activeToken) {
-    try {
-        jwt.verify(user.activeToken, process.env.JWT_SECRET);
-
-        // If last activity older than 15 mins → clear stale session
-        const lastActive = user.updatedAt || user.createdAt;
-        const diff = Date.now() - new Date(lastActive).getTime();
-
-        if (diff < 15 * 60 * 1000) {
-            return res.status(403).json({
-                msg: 'User already logged in on another device'
-            });
-        }
-
-        // stale session
-        user.isLoggedIn = false;
-        user.activeToken = null;
-        await user.save();
-
-    } catch (verifyErr) {
-        user.isLoggedIn = false;
-        user.activeToken = null;
-        await user.save();
-    }
-}
+    // Allow login and simply overwrite previous token to allow new device logins
+    // (Removed strict single-device lock that was causing login failures)
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
         user.isLoggedIn = true;
